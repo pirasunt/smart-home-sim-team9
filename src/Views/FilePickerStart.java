@@ -28,6 +28,9 @@ public class FilePickerStart extends JFrame {
         goButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 HouseLayoutView pp = new HouseLayoutView();
+                Console c = new Console();
+                c.init();
+                c.print("Welcome to the sim!");
                 Pain2 pp2 = new Pain2();
                 pp2.setSize(250,250);
                 pp.setVisible(true);

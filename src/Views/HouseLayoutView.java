@@ -26,3 +26,20 @@ class HouseLayoutView extends JFrame {
 
 }
 
+class InsidePane extends JPanel {
+    private static final int SPA_WIDTH = 600;
+    private static final int SPA_HEIGHT = 600;
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.red);
+        g.drawRect(0,0,50,50);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(SPA_WIDTH, SPA_HEIGHT);
+    }
+}
+
