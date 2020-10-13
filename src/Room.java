@@ -5,16 +5,6 @@ public class Room {
 	private final String name;
 	private final UUID id;
 	
-	//TO REMOVE
-	public Room() {
-		this.name ="asdasdasd";
-		this.id = UUID.randomUUID();
-		this.left = new WindowWall();
-		this.right = new Wall();
-		this.top = new WindowWall();
-		this.bottom = new Wall();
-	}
-	
 	public Room(String name, Wall left, Wall right, Wall top, Wall bottom, UUID id) {
 		this.name = name;
 		this.left = left;
@@ -47,7 +37,7 @@ public class Room {
 	public UUID getId() {
 		return id;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name

@@ -4,8 +4,17 @@ public class House {
 	ArrayList<Room> rooms = new ArrayList<Room>();
 	//TO REMOVE
 	public House() {
-		Room room2 = new Room();
+		UUID room1ID = UUID.randomUUID();
+		UUID room2ID = UUID.randomUUID();
+		UUID room3ID = UUID.randomUUID();
+		
+		Room room1 = new Room("Room1", new RoomWall(room3ID), new OutsideWall(), new Wall(), new RoomWall(room2ID), room1ID);
+		Room room2 = new Room("Room2", new Wall(), new Wall(), new RoomWall(room1ID), new WindowWall(), room2ID);
+		Room room3 = new Room("Room3", new WindowWall(), new RoomWall(room1ID), new WindowWall(), new Wall(), room3ID);
+		
+		rooms.add(room1);
 		rooms.add(room2);
+		rooms.add(room3);
 	}
 	
 	public House(String houseJson) {

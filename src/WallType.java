@@ -1,6 +1,6 @@
-
 public enum WallType {
+	WINDOWS,
 	WALL,
-	ROOM,
-	WINDOWS
+	DOOR,
+	OUTSIDE
 }
