@@ -4,7 +4,9 @@ public class Room {
 	private final Wall left, right, top, bottom;
 	private final String name;
 	private final UUID id;
+	private int temperature = 20;
 	
+
 	public Room() {
 		this.name="asdasd";
 		this.left = new Wall();
@@ -14,7 +16,7 @@ public class Room {
 		this.id = UUID.randomUUID();
 	}
 	
-	public Room(String name, Wall left, Wall right, Wall top, Wall bottom, UUID id) {
+	public Room(String name, Wall left, Wall bottom, Wall right, Wall top, UUID id) {
 		this.name = name;
 		this.left = left;
 		this.right = right;
@@ -45,6 +47,14 @@ public class Room {
 
 	public UUID getId() {
 		return id;
+	}
+	
+	public int getTemperature() {
+		return temperature;
+	}
+
+	public void setTemperature(int temperature) {
+		this.temperature = temperature;
 	}
 	
 	@Override
