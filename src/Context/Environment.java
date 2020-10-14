@@ -5,22 +5,38 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Environment {
+    private static Environment instance = null;
 
     private double currentTemperature;
     private Date currentTime;
     private ArrayList<UserProfile> userProfileList;
 
 
-    public Environment(double temperature, Date time, ArrayList<UserProfile> profileList) {
+    public static Environment createSimulation(UserProfile... profiles){
+        if(instance == null) {
+            ArrayList<UserProfile> profileList = new ArrayList<UserProfile>();
+            for(UserProfile profile:profiles) {
+                profileList.add(profile);
+            }
+            instance = new Environment(profileList);
+
+
+        } else {
+            System.err.println("There already exists an instance of environment. Returning that instance");
+        }
+
+        return instance;
+    }
+
+    private Environment(double temperature, Date time, ArrayList<UserProfile> profileList) {
         this.currentTemperature = temperature;
         this.currentTime = time;
         this.userProfileList = profileList;
 
     }
 
-    public Environment(ArrayList<UserProfile> profileList) {
-        this.currentTemperature = 21;
-        this.currentTime = new Date();
+    private Environment(ArrayList<UserProfile> profileList) {
+       this(21, new Date(), profileList);
     }
 
     public void setTemperature(int newTemp){
