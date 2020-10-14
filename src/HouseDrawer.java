@@ -38,23 +38,15 @@ public class HouseDrawer extends JPanel {
 		g.drawString(room.getName(), xCoord + 2, yCoord + 15);
 		g.drawString(((Integer)room.getTemperature()).toString() + "\u00B0", xCoord + 2, yCoord + 30);
 		
-		DrawWall(room.getLeft(), "left", xCoord, yCoord, g);
-		DrawWall(room.getBottom(), "bottom", xCoord, yCoord, g);
-		DrawWall(room.getRight(), "right", xCoord, yCoord, g);
-		DrawWall(room.getTop(), "top", xCoord, yCoord, g);
+		DrawWallType(room.getLeft(), "left", xCoord, yCoord, g);
+		DrawWallType(room.getBottom(), "bottom", xCoord, yCoord, g);
+		DrawWallType(room.getRight(), "right", xCoord, yCoord, g);
+		DrawWallType(room.getTop(), "top", xCoord, yCoord, g);
 	}
 
-	public void DrawWall(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
+	public void DrawWallType(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
 		if (wall.getType() == WallType.WALL) {
-			if (direction.equals("top")) {
-				g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
-			} else if (direction.equals("bottom")) {
-				g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
-			} else if (direction.equals("left")) {
-				g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
-			} else if (direction.equals("right")) {
-				g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
-			}
+			DrawWall(direction, xCoord, yCoord, g);
 		}
 
 		else if (wall.getType() == WallType.WINDOWS) {
@@ -90,6 +82,18 @@ public class HouseDrawer extends JPanel {
 					}
 				}
 			}
+		}
+	}
+	
+	public void DrawWall(String direction, int xCoord, int yCoord, Graphics g) {
+		if (direction.equals("top")) {
+			g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
+		} else if (direction.equals("bottom")) {
+			g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
+		} else if (direction.equals("left")) {
+			g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
+		} else if (direction.equals("right")) {
+			g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
 		}
 	}
 	
