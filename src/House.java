@@ -15,6 +15,9 @@ public class House {
 		rooms.add(room1);
 		rooms.add(room2);
 		rooms.add(room3);
+		
+//		Room room = new Room();
+//		rooms.add(room);
 	}
 	
 	public House(String houseJson) {

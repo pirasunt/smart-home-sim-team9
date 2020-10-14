@@ -5,6 +5,15 @@ public class Room {
 	private final String name;
 	private final UUID id;
 	
+	public Room() {
+		this.name="asdasd";
+		this.left = new Wall();
+		this.bottom = new Wall();
+		this.right = new Wall();
+		this.top = new Wall();
+		this.id = UUID.randomUUID();
+	}
+	
 	public Room(String name, Wall left, Wall right, Wall top, Wall bottom, UUID id) {
 		this.name = name;
 		this.left = left;

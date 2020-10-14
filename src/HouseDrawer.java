@@ -9,10 +9,11 @@ public class HouseDrawer extends JPanel {
 	ArrayList<UUID> visitedRooms = new ArrayList<UUID>();
 	House house;
 
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
 		DrawHouse(g);
+		visitedRooms.clear();
 	}
 
 	public Dimension getPreferredSize() {
@@ -35,13 +36,9 @@ public class HouseDrawer extends JPanel {
 		visitedRooms.add(room.getId());
 		
 		DrawWall(room.getLeft(), "left", xCoord, yCoord, g);
-		System.out.println("Currently drawing left wall: " + room.getName() + " at x: " + xCoord + ", y: " + yCoord);
 		DrawWall(room.getBottom(), "bottom", xCoord, yCoord, g);
-		System.out.println("Currently drawing bottom wall: " + room.getName() + " at x: " + xCoord + ", y: " + yCoord);
 		DrawWall(room.getRight(), "right", xCoord, yCoord, g);
-		System.out.println("Currently drawing right wall: " + room.getName() + " at x: " + xCoord + ", y: " + yCoord);
 		DrawWall(room.getTop(), "top", xCoord, yCoord, g);
-		System.out.println("Currently drawing top wall: " + room.getName() + " at x: " + xCoord + ", y: " + yCoord);
 	}
 
 	public void DrawWall(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
