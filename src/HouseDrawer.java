@@ -35,6 +35,9 @@ public class HouseDrawer extends JPanel {
 		
 		visitedRooms.add(room.getId());
 		
+		g.drawString(room.getName(), xCoord + 2, yCoord + 15);
+		g.drawString(((Integer)room.getTemperature()).toString() + "\u00B0", xCoord + 2, yCoord + 30);
+		
 		DrawWall(room.getLeft(), "left", xCoord, yCoord, g);
 		DrawWall(room.getBottom(), "bottom", xCoord, yCoord, g);
 		DrawWall(room.getRight(), "right", xCoord, yCoord, g);
