@@ -58,54 +58,18 @@ public class HouseDrawer extends JPanel {
 		}
 
 		else if (wall.getType() == WallType.WINDOWS) {
-			if (direction.equals("top")) {
-				g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
-				g.drawRect(xCoord + 35, yCoord - 2, 30, 4);
-			} else if (direction.equals("bottom")) {
-				g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
-				g.drawRect(xCoord + 35, yCoord + 98, 30, 4);
-			} else if (direction.equals("left")) {
-				g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
-				g.drawRect(xCoord - 2, yCoord + 35, 4, 30);
-			} else if (direction.equals("right")) {
-				g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
-				g.drawRect(xCoord + 98, yCoord + 35, 4, 30);
-			}
+			DrawWindow(direction, xCoord, yCoord, g);
 		}
 
 		else if (wall.getType() == WallType.OUTSIDE) {
-			if (direction.equals("top")) {
-				g.drawLine(xCoord, yCoord, xCoord + 35, yCoord);
-				g.drawLine(xCoord + 65, yCoord, xCoord + 100, yCoord);
-			} else if (direction.equals("bottom")) {
-				g.drawLine(xCoord, yCoord + 100, xCoord + 35, yCoord + 100);
-				g.drawLine(xCoord + 65, yCoord + 100, xCoord + 100, yCoord + 100);
-			} else if (direction.equals("left")) {
-				g.drawLine(xCoord, yCoord, xCoord, yCoord + 35);
-				g.drawLine(xCoord, yCoord + 65, xCoord, yCoord + 100);
-			} else if (direction.equals("right")) {
-				g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 35);
-				g.drawLine(xCoord + 100, yCoord + 65, xCoord + 100, yCoord + 100);
-			}
+			DrawDoor(direction, xCoord, yCoord, g);
 		}
 
 		else if (wall.getType() == WallType.DOOR) {
 			UUID attachedRoom = ((RoomWall) wall).getConnectedRoom();
 
 			if (visitedRooms.contains(attachedRoom)) {
-				if (direction.equals("top")) {
-					g.drawLine(xCoord, yCoord, xCoord + 35, yCoord);
-					g.drawLine(xCoord + 65, yCoord, xCoord + 100, yCoord);
-				} else if (direction.equals("bottom")) {
-					g.drawLine(xCoord, yCoord + 100, xCoord + 35, yCoord + 100);
-					g.drawLine(xCoord + 65, yCoord + 100, xCoord + 100, yCoord + 100);
-				} else if (direction.equals("left")) {
-					g.drawLine(xCoord, yCoord, xCoord, yCoord + 35);
-					g.drawLine(xCoord, yCoord + 65, xCoord, yCoord + 100);
-				} else if (direction.equals("right")) {
-					g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 35);
-					g.drawLine(xCoord + 100, yCoord + 65, xCoord + 100, yCoord + 100);
-				}
+				DrawDoor(direction, xCoord, yCoord, g);
 			}
 
 			else {
@@ -126,6 +90,38 @@ public class HouseDrawer extends JPanel {
 					}
 				}
 			}
+		}
+	}
+	
+	public void DrawWindow(String direction, int xCoord, int yCoord, Graphics g) {
+		if (direction.equals("top")) {
+			g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
+			g.drawRect(xCoord + 35, yCoord - 2, 30, 4);
+		} else if (direction.equals("bottom")) {
+			g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
+			g.drawRect(xCoord + 35, yCoord + 98, 30, 4);
+		} else if (direction.equals("left")) {
+			g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
+			g.drawRect(xCoord - 2, yCoord + 35, 4, 30);
+		} else if (direction.equals("right")) {
+			g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
+			g.drawRect(xCoord + 98, yCoord + 35, 4, 30);
+		}
+	}
+	
+	public void DrawDoor(String direction, int xCoord, int yCoord, Graphics g) {
+		if (direction.equals("top")) {
+			g.drawLine(xCoord, yCoord, xCoord + 35, yCoord);
+			g.drawLine(xCoord + 65, yCoord, xCoord + 100, yCoord);
+		} else if (direction.equals("bottom")) {
+			g.drawLine(xCoord, yCoord + 100, xCoord + 35, yCoord + 100);
+			g.drawLine(xCoord + 65, yCoord + 100, xCoord + 100, yCoord + 100);
+		} else if (direction.equals("left")) {
+			g.drawLine(xCoord, yCoord, xCoord, yCoord + 35);
+			g.drawLine(xCoord, yCoord + 65, xCoord, yCoord + 100);
+		} else if (direction.equals("right")) {
+			g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 35);
+			g.drawLine(xCoord + 100, yCoord + 65, xCoord + 100, yCoord + 100);
 		}
 	}
 }
