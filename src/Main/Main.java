@@ -15,14 +15,14 @@ public class Main{
         House house = (House)stream.fromXML(new File("House.xml"));
 
         java.awt.EventQueue.invokeLater(() -> {
-            JScrollPane scrollPane = new JScrollPane(new HouseGraphic(house));
-            scrollPane.getViewport().setPreferredSize(new Dimension(800, 800));
-            JFrame frame = new JFrame("SOEN 343");
-            frame.getContentPane().add(scrollPane);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+//            JScrollPane scrollPane = new JScrollPane(new HouseGraphic(house));
+//            scrollPane.getViewport().setPreferredSize(new Dimension(800, 800));
+//            JFrame frame = new JFrame("SOEN 343");
+//            frame.getContentPane().add(scrollPane);
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
     	});
     }
 }
