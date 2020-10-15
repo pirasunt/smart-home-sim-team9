@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.XStream;
 
 public class CustomXStream extends XStream {
     CustomXStream(){
+        XStream.setupDefaultSecurity(this);
         super.allowTypes(new Class[]{House.class, Room.class, Wall.class, WindowWall.class,RoomWall.class, OutsideWall.class});
         super.alias("House",House.class);
         super.alias("OutsideWall",OutsideWall.class);

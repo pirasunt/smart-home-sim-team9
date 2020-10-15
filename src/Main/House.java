@@ -66,14 +66,9 @@ public class House {
     }
 
     public void getXML() {
-        XStream stream = new XStream();
-        stream.alias("OutsideWall",OutsideWall.class);
-		stream.alias("Room",Room.class);
-		stream.alias("RoomWall",RoomWall.class);
-		stream.alias("Wall",Wall.class);
-		stream.alias("WindowWall",WindowWall.class);
+        CustomXStream stream = new CustomXStream();
 		try {
-            stream.toXML(this, new FileOutputStream("House0.xml"));
+            stream.toXML(this, new FileOutputStream("House.xml"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
