@@ -8,10 +8,7 @@ import javax.swing.JScrollPane;
 public class Main{
     public static void main(String[] args) {
         CustomXStream stream = new CustomXStream();
-        House h = new House();
-        h.getXML();
-//        x.getXML();
-        House house = (House)stream.fromXML(new File("House0.xml"));
+        House house = (House)stream.fromXML(new File("House.xml"));
 
         java.awt.EventQueue.invokeLater(() -> {
             JScrollPane scrollPane = new JScrollPane(new HouseDrawer(house));
