@@ -1,13 +1,13 @@
 import java.util.UUID;
 
 public class RoomWall extends Wall{
-	UUID connectedRoom;
+	int connectedRoom;
 	
-	public RoomWall(UUID room) {
+	public RoomWall(int room) {
 		super(WallType.DOOR);
 		connectedRoom = room;
 	}
-	public UUID getConnectedRoom() {
+	public int getConnectedRoom() {
 		return connectedRoom;
 	}
 }

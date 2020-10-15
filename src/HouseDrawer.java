@@ -6,7 +6,7 @@ import javax.swing.*;
 public class HouseDrawer extends JPanel {
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
-	ArrayList<UUID> visitedRooms = new ArrayList<UUID>();
+	ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
 	House house;
 
 	public void paintComponent(Graphics g) {
@@ -58,7 +58,7 @@ public class HouseDrawer extends JPanel {
 		}
 
 		else if (wall.getType() == WallType.DOOR) {
-			UUID attachedRoom = ((RoomWall) wall).getConnectedRoom();
+			int attachedRoom = ((RoomWall) wall).getConnectedRoom();
 
 			if (visitedRooms.contains(attachedRoom)) {
 				DrawDoor(direction, xCoord, yCoord, g);

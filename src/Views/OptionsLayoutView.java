@@ -20,7 +20,6 @@ class Pain2 extends JFrame {
         this.setVisible(true);
         // add the label to the JFrame
     }
-
 }
 
 class MyPanel extends JPanel {

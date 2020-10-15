@@ -3,20 +3,11 @@ import java.util.*;
 public class Room {
 	private final Wall left, right, top, bottom;
 	private final String name;
-	private final UUID id;
+	private final int id;
 	private int temperature = 20;
-	
 
-	public Room() {
-		this.name="asdasd";
-		this.left = new Wall();
-		this.bottom = new Wall();
-		this.right = new Wall();
-		this.top = new Wall();
-		this.id = UUID.randomUUID();
-	}
 	
-	public Room(String name, Wall left, Wall bottom, Wall right, Wall top, UUID id) {
+	public Room(String name, Wall left, Wall bottom, Wall right, Wall top, int id) {
 		this.name = name;
 		this.left = left;
 		this.right = right;
@@ -45,7 +36,7 @@ public class Room {
 		return name;
 	}
 
-	public UUID getId() {
+	public int getId() {
 		return id;
 	}
 	
