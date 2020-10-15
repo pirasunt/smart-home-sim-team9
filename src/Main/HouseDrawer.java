@@ -1,6 +1,7 @@
+package Main;
+
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.UUID;
 import javax.swing.*;
 
 public class HouseDrawer extends JPanel {
