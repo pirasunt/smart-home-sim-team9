@@ -1,6 +1,10 @@
-package Main;
+package Models;
 
-import com.thoughtworks.xstream.XStream;
+import Custom.CustomXStream;
+import Walls.OutsideWall;
+import Walls.RoomWall;
+import Walls.Wall;
+import Walls.WindowWall;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

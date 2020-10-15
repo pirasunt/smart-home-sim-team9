@@ -1,5 +1,9 @@
 package Main;
 
+import Custom.CustomXStream;
+import Models.House;
+import Views.HouseGraphic;
+
 import java.awt.*;
 import java.io.*;
 import javax.swing.JFrame;
@@ -11,7 +15,7 @@ public class Main{
         House house = (House)stream.fromXML(new File("House.xml"));
 
         java.awt.EventQueue.invokeLater(() -> {
-            JScrollPane scrollPane = new JScrollPane(new HouseDrawer(house));
+            JScrollPane scrollPane = new JScrollPane(new HouseGraphic(house));
             scrollPane.getViewport().setPreferredSize(new Dimension(800, 800));
             JFrame frame = new JFrame("SOEN 343");
             frame.getContentPane().add(scrollPane);

@@ -1,10 +1,16 @@
-package Main;
+package Views;
+
+import Enums.WallType;
+import Models.House;
+import Models.Room;
+import Walls.RoomWall;
+import Walls.Wall;
 
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class HouseDrawer extends JPanel {
+public class HouseGraphic extends JPanel {
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 1000;
 	ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
@@ -21,7 +27,7 @@ public class HouseDrawer extends JPanel {
 		return new Dimension(WIDTH, HEIGHT);
 	}
 
-	public HouseDrawer(House home) {
+	public HouseGraphic(House home) {
 		this.house = home;
 	}
 

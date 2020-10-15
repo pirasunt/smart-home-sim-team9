@@ -57,7 +57,7 @@
                 </constraints>
                 <properties>
                   <model>
-                    <item value="Living Main.Room"/>
+                    <item value="Living Models.Room"/>
                     <item value="Bedroom"/>
                     <item value="Bathroom"/>
                     <item value="Kitchen"/>

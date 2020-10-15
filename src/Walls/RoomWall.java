@@ -1,4 +1,6 @@
-package Main;
+package Walls;
+
+import Enums.WallType;
 
 public class RoomWall extends Wall{
 	int connectedRoom;

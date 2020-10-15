@@ -1,4 +1,6 @@
-package Main;
+package Models;
+
+import Walls.Wall;
 
 public class Room {
 	private final Wall left, right, top, bottom;
@@ -50,7 +52,7 @@ public class Room {
 	
 	@Override
 	public String toString() {
-		return "Main.Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
+		return "Models.Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
 				+ ", id=" + id + "]";
 	}
 }
