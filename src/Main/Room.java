@@ -1,4 +1,4 @@
-import java.util.*;
+package Main;
 
 public class Room {
 	private final Wall left, right, top, bottom;
@@ -50,7 +50,7 @@ public class Room {
 	
 	@Override
 	public String toString() {
-		return "Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
+		return "Main.Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
 				+ ", id=" + id + "]";
 	}
 }

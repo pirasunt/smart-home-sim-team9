@@ -1,3 +1,4 @@
+package Main;
 
 public class Wall {
 	private WallType type;

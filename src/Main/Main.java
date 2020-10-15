@@ -1,4 +1,4 @@
-import com.thoughtworks.xstream.XStream;
+package Main;
 
 import java.awt.*;
 import java.io.*;
@@ -7,11 +7,11 @@ import javax.swing.JScrollPane;
 
 public class Main{
     public static void main(String[] args) {
-
-        XStream stream = new XStream();
-        XStream.setupDefaultSecurity(stream);
-        stream.allowTypes(new Class[]{House.class, Room.class, Wall.class, WindowWall.class,RoomWall.class, OutsideWall.class});
-        House house = (House)stream.fromXML(new File("House.xml"));
+        CustomXStream stream = new CustomXStream();
+        House h = new House();
+        h.getXML();
+//        x.getXML();
+        House house = (House)stream.fromXML(new File("House0.xml"));
 
         java.awt.EventQueue.invokeLater(() -> {
             JScrollPane scrollPane = new JScrollPane(new HouseDrawer(house));

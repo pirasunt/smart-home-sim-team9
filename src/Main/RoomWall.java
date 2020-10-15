@@ -1,4 +1,4 @@
-import java.util.UUID;
+package Main;
 
 public class RoomWall extends Wall{
 	int connectedRoom;

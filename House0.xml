@@ -1,162 +1,162 @@
-<House>
+<Main.House>
   <rooms>
     <Room>
-      <left class="Main.RoomWall">
+      <left class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>4</connectedRoom>
       </left>
-      <right class="Main.OutsideWall">
+      <right class="OutsideWall">
         <type>OUTSIDE</type>
       </right>
-      <top class="Main.WindowWall">
+      <top class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </top>
-      <bottom class="Main.RoomWall">
+      <bottom class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>2</connectedRoom>
       </bottom>
-      <name>Main.Room 1</name>
+      <name>Room 1</name>
       <id>1</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.RoomWall">
+      <left class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>3</connectedRoom>
       </left>
-      <right class="Main.RoomWall">
+      <right class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>7</connectedRoom>
       </right>
-      <top class="Main.RoomWall">
+      <top class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>1</connectedRoom>
       </top>
-      <bottom class="Main.WindowWall">
+      <bottom class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </bottom>
-      <name>Main.Room 2</name>
+      <name>Room 2</name>
       <id>2</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.WindowWall">
+      <left class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </left>
-      <right class="Main.RoomWall">
+      <right class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>2</connectedRoom>
       </right>
       <top>
         <type>WALL</type>
       </top>
-      <bottom class="Main.WindowWall">
+      <bottom class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </bottom>
-      <name>Main.Room 3</name>
+      <name>Room 3</name>
       <id>3</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.WindowWall">
+      <left class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </left>
-      <right class="Main.RoomWall">
+      <right class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>1</connectedRoom>
       </right>
-      <top class="Main.RoomWall">
+      <top class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>5</connectedRoom>
       </top>
       <bottom>
         <type>WALL</type>
       </bottom>
-      <name>Main.Room 4</name>
+      <name>Room 4</name>
       <id>4</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.RoomWall">
+      <left class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>6</connectedRoom>
       </left>
       <right>
         <type>WALL</type>
       </right>
-      <top class="Main.WindowWall">
+      <top class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </top>
-      <bottom class="Main.RoomWall">
+      <bottom class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>4</connectedRoom>
       </bottom>
-      <name>Main.Room 5</name>
+      <name>Room 5</name>
       <id>5</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.WindowWall">
+      <left class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </left>
-      <right class="Main.RoomWall">
+      <right class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>5</connectedRoom>
       </right>
-      <top class="Main.OutsideWall">
+      <top class="OutsideWall">
         <type>OUTSIDE</type>
       </top>
-      <bottom class="Main.WindowWall">
+      <bottom class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </bottom>
-      <name>Main.Room 6</name>
+      <name>Room 6</name>
       <id>6</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.RoomWall">
+      <left class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>2</connectedRoom>
       </left>
-      <right class="Main.RoomWall">
+      <right class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>8</connectedRoom>
       </right>
-      <top class="Main.WindowWall">
+      <top class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </top>
-      <bottom class="Main.RoomWall">
+      <bottom class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>9</connectedRoom>
       </bottom>
-      <name>Main.Room 7</name>
+      <name>Room 7</name>
       <id>7</id>
       <temperature>20</temperature>
     </Room>
     <Room>
-      <left class="Main.RoomWall">
+      <left class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>7</connectedRoom>
       </left>
-      <right class="Main.WindowWall">
+      <right class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
@@ -164,12 +164,12 @@
       <top>
         <type>WALL</type>
       </top>
-      <bottom class="Main.WindowWall">
+      <bottom class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </bottom>
-      <name>Main.Room 8</name>
+      <name>Room 8</name>
       <id>8</id>
       <temperature>20</temperature>
     </Room>
@@ -180,18 +180,18 @@
       <right>
         <type>WALL</type>
       </right>
-      <top class="Main.RoomWall">
+      <top class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>7</connectedRoom>
       </top>
-      <bottom class="Main.WindowWall">
+      <bottom class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
       </bottom>
-      <name>Main.Room 9</name>
+      <name>Room 9</name>
       <id>9</id>
       <temperature>20</temperature>
     </Room>
   </rooms>
-</House>
+</Main.House>

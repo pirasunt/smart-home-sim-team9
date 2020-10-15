@@ -1,3 +1,4 @@
+package Main;
 
 public class WindowWall extends Wall{
 	boolean windowOpen = false;
