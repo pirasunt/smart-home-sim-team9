@@ -1,3 +1,6 @@
+package Walls;
+
+import Enums.WallType;
 
 public class Wall {
 	private WallType type;
