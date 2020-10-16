@@ -1,6 +1,6 @@
 package Context;
 
-import common.profileType;
+import Enums.profileType;
 
 import java.util.UUID;
 

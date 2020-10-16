@@ -2,7 +2,7 @@ package Views;
 
 import Context.Environment;
 import Context.UserProfile;
-import common.profileType;
+import Enums.profileType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,16 +38,20 @@ class OptionPanel extends JPanel {
         jrb3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                JFrame frame = new JFrame("Dash");
-                Dash d = new Dash();
-                JPanel jp = d.p1;
-                frame.setContentPane(jp);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
+                if(env.isCurrentUserSet()) {
+                    JFrame frame = new JFrame("Dash");
+                    Dash d = new Dash();
+                    JPanel jp = d.p1;
+                    frame.setContentPane(jp);
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
 
-                // Little example on how to programmatically add tabs.
-                d.tabbedPane1.addTab("Example added tab", new JLabel("foo"));
+                    // Little example on how to programmatically add tabs.
+                    d.tabbedPane1.addTab("Example added tab", new JLabel("foo"));
+                } else {
+                    Console.print("ERROR: Please Select a User Profile before Entering the Simulation");
+                }
             }
         });
 

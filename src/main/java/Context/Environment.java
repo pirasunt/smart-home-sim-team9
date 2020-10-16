@@ -1,6 +1,6 @@
 package Context;
 
-import common.profileType;
+import Enums.profileType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -136,5 +136,9 @@ public class Environment {
 
     public void setCurrentUser(UserProfile currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public boolean isCurrentUserSet() {
+        return !(this.currentUser == null);
     }
 }

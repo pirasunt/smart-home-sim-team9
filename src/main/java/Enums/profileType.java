@@ -1,4 +1,4 @@
-package common;
+package Enums;
 
 public enum profileType {
     ADULT,

@@ -4,7 +4,7 @@ import Context.Environment;
 import Context.UserProfile;
 import Custom.CustomXStream;
 import Models.House;
-import common.profileType;
+import Enums.profileType;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
