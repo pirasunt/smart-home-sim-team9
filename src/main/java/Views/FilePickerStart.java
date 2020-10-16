@@ -1,12 +1,16 @@
 package Views;
 
+import Context.Environment;
+import Context.UserProfile;
 import Custom.CustomXStream;
 import Models.House;
+import common.profileType;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.UUID;
 
 import javax.swing.*;
 
@@ -27,6 +31,18 @@ public class FilePickerStart extends JFrame {
         goButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                //Sample users. The 3rd parameter is the UUID of a Room
+                UserProfile p1 = new UserProfile(profileType.ADULT, "James", UUID.randomUUID());
+                UserProfile p2 = new UserProfile(profileType.STRANGER, "Janice", UUID.randomUUID());
+                UserProfile p3 = new UserProfile(profileType.CHILD, "Morty", UUID.randomUUID());
+                UserProfile p4 = new UserProfile(profileType.GUEST, "Astley", UUID.randomUUID());
+                UserProfile p5 = new UserProfile(profileType.GUEST, "Penny", UUID.randomUUID());
+                UserProfile p6 = new UserProfile(profileType.STRANGER, "Cool Guy", UUID.randomUUID());
+                UserProfile p7 = new UserProfile(profileType.CHILD, "Rick", UUID.randomUUID());
+
+                //Init singleton Environment object. Pass this instance to objects that need it.
+                Environment env = Environment.createSimulation(p1, p2, p3, p4, p5, p6,p7);
+
                 CustomXStream stream = new CustomXStream();
                 House house = (House) stream.fromXML(pathTo);
                 HouseGraphic hg = new HouseGraphic(house);
@@ -38,7 +54,7 @@ public class FilePickerStart extends JFrame {
 
                 Console.print("Welcome to the simulator!");
 
-                OptionFrame pp2 = new OptionFrame();
+                OptionFrame pp2 = new OptionFrame(env);
                 pp2.setSize(250, 250);
                 pp2.setVisible(true);
 

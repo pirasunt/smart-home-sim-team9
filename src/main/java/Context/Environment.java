@@ -1,5 +1,7 @@
 package Context;
 
+import common.profileType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -9,6 +11,7 @@ public class Environment {
 
     private double currentTemperature;
     private Date currentTime;
+    private UserProfile currentUser;
     private ArrayList<UserProfile> userProfileList;
 
 
@@ -32,6 +35,7 @@ public class Environment {
         this.currentTemperature = temperature;
         this.currentTime = time;
         this.userProfileList = profileList;
+        this.currentUser = null;
 
     }
 
@@ -82,6 +86,14 @@ public class Environment {
         }
     }
 
+    /**
+     * Returns a deep copy of the currently selected user on the simulation
+     * @return Deep copy of currently selected user.
+     */
+    public UserProfile getCurrentUser() {
+        return new UserProfile(this.currentUser);
+    }
+
 
     /**
      * Internal helper method that finds and updates a current UserProfile object in the ArrayList attribute
@@ -107,5 +119,22 @@ public class Environment {
     }
 
 
+    public UserProfile[] getProfilesByCategory(profileType desiredProfileType) {
+        ArrayList<UserProfile> temp = new ArrayList<UserProfile>();
 
+        for(int i =0; i < this.userProfileList.size(); i++) {
+            if(this.userProfileList.get(i).getProfileType() == desiredProfileType)
+                temp.add(new UserProfile(this.userProfileList.get(i))); //Deep copy
+        }
+        UserProfile[] temp2 = new UserProfile[temp.size()];
+        for(int i=0; i < temp.size(); i++) {
+            temp2[i] = temp.get(i);
+        }
+
+    return temp2;
+    }
+
+    public void setCurrentUser(UserProfile currentUser) {
+        this.currentUser = currentUser;
+    }
 }
