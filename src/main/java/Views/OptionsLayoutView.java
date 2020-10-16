@@ -11,9 +11,10 @@ import java.awt.event.ActionListener;
 
 class OptionFrame extends JFrame {
     OptionPanel panel;
-
+    private static Environment env;
     // constructor
-    OptionFrame(Environment env) {
+    OptionFrame(Environment environment) {
+        env = environment;
         panel = new OptionPanel(env);
         this.add(panel);
         //TODO: Close window don't exit app lol
@@ -27,7 +28,9 @@ class OptionFrame extends JFrame {
 
 class OptionPanel extends JPanel {
 
-    public OptionPanel(Environment env) {
+    private static Environment env;
+    public OptionPanel(Environment environment) {
+        env = environment;
         JButton jrb1 = new JButton("Select User Profile");
         JButton jrb2 = new JButton("Select Location");
         JButton jrb3 = new JButton("Enter Simulation");
@@ -40,7 +43,7 @@ class OptionPanel extends JPanel {
 
                 if(env.isCurrentUserSet()) {
                     JFrame frame = new JFrame("Dash");
-                    Dash d = new Dash();
+                    Dash d = new Dash(env);
                     JPanel jp = d.p1;
                     frame.setContentPane(jp);
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

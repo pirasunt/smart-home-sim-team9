@@ -1,6 +1,8 @@
 package Views;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+
+import Context.Environment;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
@@ -30,17 +34,26 @@ public class Dash extends JFrame{
     private JButton changeButton2;
     private JFormattedTextField formattedTextField1;
     private JFormattedTextField formattedTextField2;
-    private JSpinner spinner1;
+    private JSpinner spinner1; //temperature spinner
     private JDatePickerImpl datePicker;
     private JSpinner time_spinner;
     private Boolean action1 = false;
     private Boolean action2= false;
+    private static Environment env;
 
-    public Dash() {
+    public Dash(Environment environment) {
+        env = environment;
+        spinner1.setValue(env.getOutsideTemp());
         stopSimulationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        spinner1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                env.setTemperature((int)spinner1.getValue()); //Any change on Temp Spinner will update Environment attribute
             }
         });
         editActionButton.addActionListener(new ActionListener() {

@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Environment {
     private static Environment instance = null;
 
-    private double currentTemperature;
+    private int outsideTemperature;
     private Date currentTime;
     private UserProfile currentUser;
     private ArrayList<UserProfile> userProfileList;
@@ -31,8 +31,8 @@ public class Environment {
         return instance;
     }
 
-    private Environment(double temperature, Date time, ArrayList<UserProfile> profileList) {
-        this.currentTemperature = temperature;
+    private Environment(int temperature, Date time, ArrayList<UserProfile> profileList) {
+        this.outsideTemperature = temperature;
         this.currentTime = time;
         this.userProfileList = profileList;
         this.currentUser = null;
@@ -44,7 +44,7 @@ public class Environment {
     }
 
     public void setTemperature(int newTemp){
-        this.currentTemperature = newTemp;
+        this.outsideTemperature = newTemp;
     }
 
     public void setTime(Date newTime) {
@@ -140,5 +140,9 @@ public class Environment {
 
     public boolean isCurrentUserSet() {
         return !(this.currentUser == null);
+    }
+
+    public int getOutsideTemp() {
+        return this.outsideTemperature;
     }
 }
