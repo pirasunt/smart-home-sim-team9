@@ -38,7 +38,6 @@ public class FilePickerStart extends JFrame {
 
                 Console.print("Welcome to the simulator!");
 
-                //TODO: Rename class
                 OptionFrame pp2 = new OptionFrame();
                 pp2.setSize(250, 250);
                 pp2.setVisible(true);
