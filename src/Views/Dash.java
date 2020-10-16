@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
-
 public class Dash {
     JButton stopSimulationButton;
     JButton editActionButton;
@@ -79,7 +78,6 @@ public class Dash {
                 if(action1 == false) {
                     action2 = true;
                     ChangeTime();}
-
             }
         });
     }
