@@ -1,13 +1,12 @@
-package Main;
+package PlaceHolderMain;
 
 import Custom.CustomXStream;
 import Models.House;
 import Views.HouseGraphic;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 
 public class Main{
     public static void main(String[] args) {

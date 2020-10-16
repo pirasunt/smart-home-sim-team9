@@ -1,40 +1,47 @@
 package Views;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridLayout;
+import Custom.CustomXStream;
+import Models.House;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class FilePickerStart extends JFrame {
     private final JTextField filename = new JTextField();
     private final JTextField dir = new JTextField();
-
     private final JButton choseFile = new JButton("Select");
     private final JButton goButton = new JButton("Go");
+    private File pathTo;
 
 
     public FilePickerStart() {
         JPanel p = new JPanel();
         choseFile.addActionListener(new OpenL());
 
+        // Is required as we need a reference to destroy the Window
         FilePickerStart o = this;
         goButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HouseLayoutView pp = new HouseLayoutView();
+
+                CustomXStream stream = new CustomXStream();
+                House house = (House) stream.fromXML(pathTo);
+                HouseGraphic hg = new HouseGraphic(house);
+                hg.init();
+
+                //Init console, can now call static method Console.print()
                 Console c = new Console();
-                c.init();
-                c.print("Welcome to the sim!");
-                Pain2 pp2 = new Pain2();
-                pp2.setSize(250,250);
-                pp.setVisible(true);
+                Console.init();
+
+                Console.print("Welcome to the simulator!");
+
+                OptionFrame pp2 = new OptionFrame();
+                pp2.setSize(250, 250);
                 pp2.setVisible(true);
+
                 o.dispose();
             }
         });
@@ -67,6 +74,7 @@ public class FilePickerStart extends JFrame {
             // Demonstrate "Open" dialog:
             int rVal = c.showOpenDialog(FilePickerStart.this);
             if (rVal == JFileChooser.APPROVE_OPTION) {
+                pathTo = c.getSelectedFile();
                 filename.setText(c.getSelectedFile().getName());
                 dir.setText(c.getCurrentDirectory().toString());
             }

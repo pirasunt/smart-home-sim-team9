@@ -11,11 +11,11 @@ import javax.swing.JTextArea;
 
 
 class Console {
-    final JFrame frame = new JFrame();
-    PrintStream ps;
+    static final JFrame frame = new JFrame();
+    static PrintStream ps;
 
     public Console() {
-        JTextArea textArea = new JTextArea(24, 80);
+        JTextArea textArea = new JTextArea(10, 80);
         textArea.setBackground(Color.BLACK);
         textArea.setForeground(Color.LIGHT_GRAY);
         textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
@@ -28,17 +28,13 @@ class Console {
         frame.add(textArea);
     }
 
-    public void print(String s) {
+    static public void print(String s) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ps.println(timestamp + " : " + s);
     }
 
-    public void init() {
+    static public void init() {
         frame.pack();
         frame.setVisible(true);
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 }
