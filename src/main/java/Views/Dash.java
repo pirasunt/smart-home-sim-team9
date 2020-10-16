@@ -155,5 +155,4 @@ public class Dash extends JFrame{
         this.pack();
         this.setVisible(true);
     }
-
 }
