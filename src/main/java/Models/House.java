@@ -95,12 +95,12 @@ public class House {
         return this;
     }
 
-    public void getXML() {
-        CustomXStream stream = new CustomXStream();
-        try {
-            stream.toXML(this, new FileOutputStream("House.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void getXML() {
+//        CustomXStream stream = new CustomXStream();
+//        try {
+//            stream.toXML(this, new FileOutputStream("House.xml"));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
