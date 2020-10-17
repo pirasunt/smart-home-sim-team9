@@ -3,8 +3,7 @@ package Views;
 import Enums.WallType;
 import Models.House;
 import Models.Room;
-import Walls.RoomWall;
-import Walls.Wall;
+import Models.Walls.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,6 +15,10 @@ public class HouseGraphic extends JPanel {
     ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
     House house;
 
+    /**
+     *
+     * @param home
+     */
     public HouseGraphic(House home) {
         this.house = home;
     }

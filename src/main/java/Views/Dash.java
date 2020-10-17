@@ -19,7 +19,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-public class Dash extends JFrame{
+public class Dash extends JFrame {
     JButton stopSimulationButton;
     JButton editActionButton;
     JTabbedPane tabbedPane1;
@@ -85,21 +85,24 @@ public class Dash extends JFrame{
         changeButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(action2 == false) {
+                if (action2 == false) {
                     action1 = true;
-                    ChangeDate();}
+                    ChangeDate();
+                }
             }
         });
         changeButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(action1 == false) {
+                if (action1 == false) {
                     action2 = true;
-                    ChangeTime();}
+                    ChangeTime();
+                }
             }
         });
     }
-    public void ChangeDate(){
+
+    public void ChangeDate() {
         SqlDateModel model = new SqlDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
@@ -135,13 +138,14 @@ public class Dash extends JFrame{
         this.pack();
         this.setVisible(true);
     }
-    public void ChangeTime(){
+
+    public void ChangeTime() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         SpinnerDateModel sm = new SpinnerDateModel(env.getDateObject(), null, null, Calendar.HOUR_OF_DAY);
 
-        time_spinner = new javax.swing.JSpinner(sm);
+        time_spinner = new JSpinner(sm);
 
         JSpinner.DateEditor te = new JSpinner.DateEditor(time_spinner, "hh:mm a");
         time_spinner.setEditor(te);
@@ -172,4 +176,5 @@ public class Dash extends JFrame{
         this.pack();
         this.setVisible(true);
     }
+
 }
