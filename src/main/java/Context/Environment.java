@@ -1,6 +1,8 @@
 package Context;
 
 import Enums.profileType;
+import Models.House;
+import Models.Room;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,15 +14,16 @@ public class Environment {
     private Calendar currentCalObj;
     private UserProfile currentUser;
     private ArrayList<UserProfile> userProfileList;
+    private House house;
 
 
-    public static Environment createSimulation(UserProfile... profiles){
+    public static Environment createSimulation(House h, UserProfile... profiles){
         if(instance == null) {
             ArrayList<UserProfile> profileList = new ArrayList<UserProfile>();
             for(UserProfile profile:profiles) {
                 profileList.add(profile);
             }
-            instance = new Environment(profileList);
+            instance = new Environment(h, profileList);
 
 
         } else {
@@ -30,16 +33,16 @@ public class Environment {
         return instance;
     }
 
-    private Environment(int temperature, Calendar cal, ArrayList<UserProfile> profileList) {
+    private Environment(House h, int temperature, Calendar cal, ArrayList<UserProfile> profileList) {
+        this.house = h;
         this.outsideTemperature = temperature;
         this.currentCalObj = cal;
         this.userProfileList = profileList;
         this.currentUser = null;
-
     }
 
-    private Environment(ArrayList<UserProfile> profileList) {
-       this(21, new GregorianCalendar(), profileList);
+    private Environment(House h, ArrayList<UserProfile> profileList) {
+       this(h, 21, new GregorianCalendar(), profileList);
     }
 
     public void setTemperature(int newTemp){
@@ -66,7 +69,7 @@ public class Environment {
             updateProfileEntry(profile.modifyLocation(roomID));
         }
         catch(NonExistantUserProfileException e) {
-            System.err.println(e.getMessage()); //TODO: Return some sort of error window?
+            System.err.println(e.getMessage()); //TODO: Return some sort of error window
         }
     }
 
@@ -91,6 +94,7 @@ public class Environment {
 
     /**
      * Internal helper method that finds and updates a current UserProfile object in the ArrayList attribute
+     * Any updated UserProfile objects in the ArrayList must pass by this method
      * @param updatedProfile UserProfile object with updated attributes
      */
     private void updateProfileEntry(UserProfile updatedProfile) throws NonExistantUserProfileException {
@@ -108,6 +112,11 @@ public class Environment {
             this.userProfileList.set(index, updatedProfile);
         } else {
             throw new NonExistantUserProfileException("UserProfile " + updatedProfile.getProfileID() + " with name " + updatedProfile.getName() + "does not exist or has been deleted");
+        }
+
+        //Update currentUser entry if needed
+        if(this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
+            this.currentUser = updatedProfile;
         }
 
     }
@@ -129,7 +138,7 @@ public class Environment {
     }
 
     public void setCurrentUser(UserProfile currentUser) {
-        this.currentUser = currentUser;
+        this.currentUser = new UserProfile(currentUser);
     }
 
     public boolean isCurrentUserSet() {
@@ -161,5 +170,16 @@ public class Environment {
     public void setTime(Date newDate) {
         this.currentCalObj.set(Calendar.HOUR_OF_DAY, newDate.getHours());
         this.currentCalObj.set(Calendar.MINUTE, newDate.getMinutes());
+    }
+
+    public Room[] getRooms() {
+        ArrayList<Room> temp = this.house.getRooms();
+        Room[] roomArray = new Room[temp.size()];
+
+        for(int i =0; i< temp.size(); i++) {
+            roomArray[i] = temp.get(i); //No need to create new Room objects since the getRooms() method returns a new ArrayList object.
+        }
+
+        return roomArray;
     }
 }

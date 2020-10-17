@@ -37,22 +37,25 @@ public class FilePickerStart extends JFrame {
         goButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                //Sample users. The 3rd parameter is the UUID of a Room
-                UserProfile p1 = new UserProfile(profileType.ADULT, "James",1);
-                UserProfile p2 = new UserProfile(profileType.STRANGER, "Janice", 1);
-                UserProfile p3 = new UserProfile(profileType.CHILD, "Morty", 3);
-                UserProfile p4 = new UserProfile(profileType.GUEST, "Astley", 3);
-                UserProfile p5 = new UserProfile(profileType.GUEST, "Penny", 4);
-                UserProfile p6 = new UserProfile(profileType.STRANGER, "Cool Guy", 5);
-                UserProfile p7 = new UserProfile(profileType.CHILD, "Rick", 6);
+                //Sample users. The 3rd parameter is roomID (-1 to indicate that no room has been set)
+                UserProfile p1 = new UserProfile(profileType.ADULT, "James",-1);
+                UserProfile p2 = new UserProfile(profileType.STRANGER, "Janice", -1);
+                UserProfile p3 = new UserProfile(profileType.CHILD, "Morty", -1);
+                UserProfile p4 = new UserProfile(profileType.GUEST, "Astley", -1);
+                UserProfile p5 = new UserProfile(profileType.GUEST, "Penny", -1);
+                UserProfile p6 = new UserProfile(profileType.STRANGER, "Cool Guy", -1);
+                UserProfile p7 = new UserProfile(profileType.CHILD, "Rick", -1);
 
-                //Init singleton Environment object. Pass this instance to objects that need it.
-                Environment env = Environment.createSimulation(p1, p2, p3, p4, p5, p6,p7);
+
 
                 CustomXStream stream = new CustomXStream();
                 House house = (House) stream.fromXML(pathTo);
                 HouseGraphic hg = new HouseGraphic(house);
                 hg.init();
+
+                //Init singleton Environment object with HOUSE and USERS. Pass this instance to objects that need it.
+                Environment env = Environment.createSimulation(house, p1, p2, p3, p4, p5, p6,p7);
+
 
                 //Init console, can now call static method Console.print()
                 Console c = new Console();

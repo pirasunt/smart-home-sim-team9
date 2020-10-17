@@ -43,6 +43,7 @@ public class House {
 //		rooms.add(room9);
 //	}
 
+    //TODO: This method is used indirectly by system through Environment. Consider changing scope.
     public ArrayList<Room> getRooms() {
         return new ArrayList<Room>(rooms);
     }

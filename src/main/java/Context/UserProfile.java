@@ -8,7 +8,7 @@ public class UserProfile{
     private UUID profileID;
     private profileType type;
     private String name;
-    private int roomID; //This value is actually a roomID and is where the profile user currently is
+    private int roomID; //Indicates UserProfile's current room location (A value of -1 indicates that a room has not been assigned to the UserProfile)
 
     public UserProfile(profileType type, String name, int id){
         this.profileID = UUID.randomUUID();

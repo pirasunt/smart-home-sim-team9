@@ -3,6 +3,7 @@ package Views;
 import Context.Environment;
 import Context.UserProfile;
 import Enums.profileType;
+import Models.Room;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,9 +41,9 @@ class OptionPanel extends JPanel {
     private static Environment env;
     public OptionPanel(Environment environment) {
         env = environment;
-        JButton jrb1 = new JButton("Select User Profile");
-        JButton jrb2 = new JButton("Select Location");
-        JButton jrb3 = new JButton("Enter Simulation");
+        JButton jrb1 = new JButton("1. Select User Profile");
+        JButton jrb2 = new JButton("2. Select Location");
+        JButton jrb3 = new JButton("3. Enter Simulation");
         Box box1 = Box.createVerticalBox();
         box1.add(jrb1);
         box1.add(jrb2);
@@ -51,16 +52,20 @@ class OptionPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 if(env.isCurrentUserSet()) {
-                    JFrame frame = new JFrame("Dash");
-                    Dash d = new Dash(env);
-                    JPanel jp = d.p1;
-                    frame.setContentPane(jp);
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.pack();
-                    frame.setVisible(true);
+                    if(env.getCurrentUser().getRoomID() != -1) {
+                        JFrame frame = new JFrame("Dash");
+                        Dash d = new Dash(env);
+                        JPanel jp = d.p1;
+                        frame.setContentPane(jp);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        frame.pack();
+                        frame.setVisible(true);
 
-                    // Little example on how to programmatically add tabs.
-                    d.tabbedPane1.addTab("Example added tab", new JLabel("foo"));
+                        // Little example on how to programmatically add tabs.
+                        d.tabbedPane1.addTab("Example added tab", new JLabel("foo"));
+                    } else {
+                        Console.print("ERROR: Please set location for selected user: '" + env.getCurrentUser().getName() + "'");
+                    }
                 } else {
                     Console.print("ERROR: Please Select a User Profile before Entering the Simulation");
                 }
@@ -169,6 +174,48 @@ class OptionPanel extends JPanel {
                 frame.setVisible(true);
             }
         });
+
+        jrb2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(env.isCurrentUserSet()) {
+
+                Console.print("Selecting location for "  + env.getCurrentUser().getName() + "...");
+                Room[] roomList = env.getRooms();
+
+
+                GridLayout userSelectionGrid = new GridLayout(0, 3, 20,20);
+                JFrame frame = new JFrame("Select Location for " + env.getCurrentUser().getName());
+                frame.setLayout(userSelectionGrid);
+
+                for(int i = 0; i< roomList.length; i++) {
+                    Room currentRoom = roomList[i];
+                    JButton btn = new JButton(currentRoom.getName());
+                    btn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            env.modifyProfileLocation(env.getCurrentUser(),currentRoom.getId());
+                            frame.dispose();
+                            Console.print("Location '" + currentRoom.getName() + "' has been set for '" + env.getCurrentUser().getName() +"'");
+                        }
+                    });
+                    frame.add(btn);
+                }
+
+
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setLocationRelativeTo(null); //Center User Selection JFrame
+                frame.setVisible(true);
+
+            } else {
+                Console.print("ERROR: Please select a User first before setting a Location");
+            }
+
+
+            }
+        });
+
         setLayout(new GridLayout(1, 1));
         add(box1);
     }
