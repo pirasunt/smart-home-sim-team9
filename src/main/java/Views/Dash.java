@@ -32,8 +32,8 @@ public class Dash extends JFrame{
     private JComboBox comboBox2;
     private JButton changeButton1;
     private JButton changeButton2;
-    private JFormattedTextField formattedTextField1;
-    private JFormattedTextField formattedTextField2;
+    private JFormattedTextField formattedTextField1; //Date field
+    private JFormattedTextField formattedTextField2;//Time Field
     private JSpinner spinner1; //temperature spinner
     private JDatePickerImpl datePicker;
     private JSpinner time_spinner;
@@ -44,6 +44,8 @@ public class Dash extends JFrame{
     public Dash(Environment environment) {
         env = environment;
         spinner1.setValue(env.getOutsideTemp());
+        formattedTextField1.setValue(env.getDateString());
+        formattedTextField2.setValue(env.getTimeString());
         stopSimulationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,7 +107,7 @@ public class Dash extends JFrame{
         p.put("text.year", "Year");
         JDatePanelImpl panel = new JDatePanelImpl(model, p);
         datePicker = new JDatePickerImpl(panel, new JFormattedTextField.AbstractFormatter(){
-            String datePattern = "yyyy-MM-dd";
+            String datePattern = "MMM dd, yyyy";
             SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
             @Override
             public Object stringToValue(String text) throws ParseException {
@@ -119,6 +121,7 @@ public class Dash extends JFrame{
                 if (value != null) {
                     Calendar cal = (Calendar) value;
                     formattedTextField1.setValue(dateFormatter.format(cal.getTime()));
+                    env.setDate(cal.getTime());//Update Environment date
                     remove(datePicker);
                     action1 = false;
                     dispose();
@@ -136,13 +139,13 @@ public class Dash extends JFrame{
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        Date date = new Date();
-        SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
+        SpinnerDateModel sm = new SpinnerDateModel(env.getDateObject(), null, null, Calendar.HOUR_OF_DAY);
 
         time_spinner = new javax.swing.JSpinner(sm);
 
-        JSpinner.DateEditor te = new JSpinner.DateEditor(time_spinner, "HH:mm a");
+        JSpinner.DateEditor te = new JSpinner.DateEditor(time_spinner, "hh:mm a");
         time_spinner.setEditor(te);
+
 
         add(time_spinner, gbc);
 
@@ -153,9 +156,10 @@ public class Dash extends JFrame{
                 Object value = time_spinner.getValue();
                 if (value instanceof Date) {
                     Date date = (Date)value;
-                    SimpleDateFormat format = new SimpleDateFormat("HH:mm a");
-                    String time = format.format(date);
+                    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+                    String time = formatter.format(date);
                     formattedTextField2.setValue(time);
+                    env.setTime(date); //Update Environment time
                     remove(time_spinner);
                     remove(btn);
                     action2 = false;

@@ -2,15 +2,14 @@ package Context;
 
 import Enums.profileType;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Environment {
     private static Environment instance = null;
 
     private int outsideTemperature;
-    private Date currentTime;
+    private Calendar currentCalObj;
     private UserProfile currentUser;
     private ArrayList<UserProfile> userProfileList;
 
@@ -31,25 +30,20 @@ public class Environment {
         return instance;
     }
 
-    private Environment(int temperature, Date time, ArrayList<UserProfile> profileList) {
+    private Environment(int temperature, Calendar cal, ArrayList<UserProfile> profileList) {
         this.outsideTemperature = temperature;
-        this.currentTime = time;
+        this.currentCalObj = cal;
         this.userProfileList = profileList;
         this.currentUser = null;
 
     }
 
     private Environment(ArrayList<UserProfile> profileList) {
-       this(21, new Date(), profileList);
+       this(21, new GregorianCalendar(), profileList);
     }
 
     public void setTemperature(int newTemp){
         this.outsideTemperature = newTemp;
-    }
-
-    public void setTime(Date newTime) {
-        this.currentTime = newTime;
-
     }
 
     /**
@@ -72,7 +66,7 @@ public class Environment {
             updateProfileEntry(profile.modifyLocation(roomID));
         }
         catch(NonExistantUserProfileException e) {
-            System.err.println(e.getMessage()); //Return some sort of error window?
+            System.err.println(e.getMessage()); //TODO: Return some sort of error window?
         }
     }
 
@@ -144,5 +138,28 @@ public class Environment {
 
     public int getOutsideTemp() {
         return this.outsideTemperature;
+    }
+
+    public String getDateString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+        return dateFormatter.format(this.currentCalObj.getTime());
+    }
+
+    public String getTimeString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
+        return dateFormatter.format(this.currentCalObj.getTime());
+    }
+
+    public Date getDateObject() {
+        return this.currentCalObj.getTime();
+    }
+
+    public void setDate(Date newDate) {
+        this.currentCalObj.set(newDate.getYear(), newDate.getMonth(), newDate.getDate());
+    }
+
+    public void setTime(Date newDate) {
+        this.currentCalObj.set(Calendar.HOUR_OF_DAY, newDate.getHours());
+        this.currentCalObj.set(Calendar.MINUTE, newDate.getMinutes());
     }
 }
