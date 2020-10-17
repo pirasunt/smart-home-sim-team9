@@ -14,6 +14,9 @@ import java.util.UUID;
 
 import javax.swing.*;
 
+/**
+ * The type File picker start.
+ */
 public class FilePickerStart extends JFrame {
     private final JTextField filename = new JTextField();
     private final JTextField dir = new JTextField();
@@ -22,6 +25,9 @@ public class FilePickerStart extends JFrame {
     private File pathTo;
 
 
+    /**
+     * Instantiates a FilePicker window.
+     */
     public FilePickerStart() {
         JPanel p = new JPanel();
         choseFile.addActionListener(new OpenL());
@@ -74,16 +80,31 @@ public class FilePickerStart extends JFrame {
         cp.add(p, BorderLayout.NORTH);
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         run(new FilePickerStart(), 250, 110);
     }
 
+    /**
+     * Run.
+     *
+     * @param frame  the frame
+     * @param width  the width
+     * @param height the height
+     */
     public static void run(JFrame frame, int width, int height) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width, height);
         frame.setVisible(true);
     }
 
+    /**
+     * The open button listener.
+     */
     class OpenL implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JFileChooser c = new JFileChooser();

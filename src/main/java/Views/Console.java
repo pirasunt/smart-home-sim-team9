@@ -10,10 +10,22 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 
+/**
+ * The type Console.
+ */
 class Console {
+    /**
+     * The Frame.
+     */
     static final JFrame frame = new JFrame();
+    /**
+     * The PrintStream.
+     */
     static PrintStream ps;
 
+    /**
+     * Instantiates a new Console.
+     */
     public Console() {
         JTextArea textArea = new JTextArea(10, 80);
         textArea.setBackground(Color.BLACK);
@@ -28,11 +40,19 @@ class Console {
         frame.add(textArea);
     }
 
+    /**
+     * Prints on the console.
+     *
+     * @param s the string to append.
+     */
     static public void print(String s) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ps.println(timestamp + " : " + s);
     }
 
+    /**
+     * Init the console.
+     */
     static public void init() {
         frame.pack();
         frame.setVisible(true);

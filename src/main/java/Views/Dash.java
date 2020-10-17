@@ -19,14 +19,41 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
+/**
+ * The type Dash.
+ */
 public class Dash extends JFrame {
+    /**
+     * The Stop simulation button.
+     */
     JButton stopSimulationButton;
+    /**
+     * The Edit action button.
+     */
     JButton editActionButton;
+    /**
+     * The Tabbed pane 1.
+     */
     JTabbedPane tabbedPane1;
+    /**
+     * The P 1.
+     */
     JPanel p1;
+    /**
+     * The Sp 1.
+     */
     JScrollPane sp1;
+    /**
+     * The Sp 2.
+     */
     JScrollPane sp2;
+    /**
+     * The Tab 2.
+     */
     JPanel Tab2;
+    /**
+     * The Tab 1.
+     */
     JPanel Tab1;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
@@ -102,6 +129,9 @@ public class Dash extends JFrame {
         });
     }
 
+    /**
+     * Change date.
+     */
     public void ChangeDate() {
         SqlDateModel model = new SqlDateModel();
         Properties p = new Properties();
@@ -139,6 +169,9 @@ public class Dash extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Change time.
+     */
     public void ChangeTime() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

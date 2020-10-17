@@ -15,10 +15,6 @@ public class HouseGraphic extends JPanel {
     ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
     House house;
 
-    /**
-     *
-     * @param home
-     */
     public HouseGraphic(House home) {
         this.house = home;
     }

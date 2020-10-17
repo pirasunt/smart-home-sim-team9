@@ -9,7 +9,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Option frame.
+ */
 class OptionFrame extends JFrame {
+    /**
+     * The Panel.
+     */
     OptionPanel panel;
     private static Environment env;
     // constructor
@@ -26,6 +32,9 @@ class OptionFrame extends JFrame {
     }
 }
 
+/**
+ * The type Option panel.
+ */
 class OptionPanel extends JPanel {
 
     private static Environment env;
