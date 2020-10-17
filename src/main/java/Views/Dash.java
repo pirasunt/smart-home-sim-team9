@@ -11,11 +11,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
-public class Dash extends JFrame{
+public class Dash extends JFrame {
     JButton stopSimulationButton;
     JButton editActionButton;
     JTabbedPane tabbedPane1;
@@ -34,7 +35,7 @@ public class Dash extends JFrame{
     private JDatePickerImpl datePicker;
     private JSpinner time_spinner;
     private Boolean action1 = false;
-    private Boolean action2= false;
+    private Boolean action2 = false;
 
     public Dash() {
         stopSimulationButton.addActionListener(new ActionListener() {
@@ -70,30 +71,34 @@ public class Dash extends JFrame{
         changeButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(action2 == false) {
+                if (action2 == false) {
                     action1 = true;
-                    ChangeDate();}
+                    ChangeDate();
+                }
             }
         });
         changeButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(action1 == false) {
+                if (action1 == false) {
                     action2 = true;
-                    ChangeTime();}
+                    ChangeTime();
+                }
             }
         });
     }
-    public void ChangeDate(){
+
+    public void ChangeDate() {
         SqlDateModel model = new SqlDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
         JDatePanelImpl panel = new JDatePanelImpl(model, p);
-        datePicker = new JDatePickerImpl(panel, new JFormattedTextField.AbstractFormatter(){
-            String datePattern = "yyyy-MM-dd";
-            SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+        datePicker = new JDatePickerImpl(panel, new JFormattedTextField.AbstractFormatter() {
+            final String datePattern = "yyyy-MM-dd";
+            final SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
             @Override
             public Object stringToValue(String text) throws ParseException {
                 Calendar cal = Calendar.getInstance();
@@ -119,14 +124,15 @@ public class Dash extends JFrame{
         this.pack();
         this.setVisible(true);
     }
-    public void ChangeTime(){
+
+    public void ChangeTime() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         Date date = new Date();
         SpinnerDateModel sm = new SpinnerDateModel(date, null, null, Calendar.HOUR_OF_DAY);
 
-        time_spinner = new javax.swing.JSpinner(sm);
+        time_spinner = new JSpinner(sm);
 
         JSpinner.DateEditor te = new JSpinner.DateEditor(time_spinner, "HH:mm a");
         time_spinner.setEditor(te);
@@ -139,7 +145,7 @@ public class Dash extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 Object value = time_spinner.getValue();
                 if (value instanceof Date) {
-                    Date date = (Date)value;
+                    Date date = (Date) value;
                     SimpleDateFormat format = new SimpleDateFormat("HH:mm a");
                     String time = format.format(date);
                     formattedTextField2.setValue(time);
@@ -155,4 +161,5 @@ public class Dash extends JFrame{
         this.pack();
         this.setVisible(true);
     }
+
 }
