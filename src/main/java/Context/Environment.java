@@ -60,7 +60,7 @@ public class Environment {
     }
 
 
-    public void modifyProfileLocation(UserProfile profile, UUID roomID) {
+    public void modifyProfileLocation(UserProfile profile, int roomID) {
 
         try {
             updateProfileEntry(profile.modifyLocation(roomID));

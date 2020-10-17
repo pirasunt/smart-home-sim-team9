@@ -8,9 +8,9 @@ public class UserProfile{
     private UUID profileID;
     private profileType type;
     private String name;
-    private UUID roomID; //This value is actually a roomID and is where the profile user currently is
+    private int roomID; //This value is actually a roomID and is where the profile user currently is
 
-    public UserProfile(profileType type, String name, UUID id){
+    public UserProfile(profileType type, String name, int id){
         this.profileID = UUID.randomUUID();
         this.roomID = id;
         this.type = type;
@@ -30,7 +30,7 @@ public class UserProfile{
      * @param id The new Room ID to move the UserProfile to
      * @return a Deep copy of the UserProfile with the roomID attribute modified
      */
-     UserProfile modifyLocation(UUID id){
+     UserProfile modifyLocation(int id){
         UserProfile temp = new UserProfile(this);
         temp.roomID = id;
         return temp;
@@ -59,7 +59,7 @@ public class UserProfile{
         return this.name;
     }
 
-    public UUID getRoomID() {
+    public int getRoomID() {
         return this.roomID;
     }
 
