@@ -10,6 +10,15 @@
     </properties>
     <modelVersion>4.0.0</modelVersion>
     <dependencies>
+        <!-- Needed for non InteliJ users AND for generating the JAR.
+             When generating the JAR we will need to select the option
+             to "generate java" instead of the binary class.
+         -->
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>forms_rt</artifactId>
+            <version>7.0.3</version>
+        </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
