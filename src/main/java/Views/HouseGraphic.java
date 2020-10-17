@@ -161,4 +161,14 @@ public class HouseGraphic extends JPanel {
         }
     }
 
+    public void init() {
+        JScrollPane scrollPane = new JScrollPane(this);
+        scrollPane.getViewport().setPreferredSize(new Dimension(700, 700));
+        JFrame frame = new JFrame("SOEN 343");
+        frame.getContentPane().add(scrollPane);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 }

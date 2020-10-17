@@ -5,10 +5,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Option frame.
+ */
 class OptionFrame extends JFrame {
+    /**
+     * The Panel.
+     */
     OptionPanel panel;
 
-    // constructor
+    /**
+     * Instantiates a new Option frame.
+     */
     OptionFrame() {
         panel = new OptionPanel();
         this.add(panel);
@@ -21,8 +29,14 @@ class OptionFrame extends JFrame {
     }
 }
 
+/**
+ * The type Option panel.
+ */
 class OptionPanel extends JPanel {
 
+    /**
+     * Instantiates a new Option panel.
+     */
     public OptionPanel() {
         JButton jrb1 = new JButton("Select User Profile");
         JButton jrb2 = new JButton("Select Location");

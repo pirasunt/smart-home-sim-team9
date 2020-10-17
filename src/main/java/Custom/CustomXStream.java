@@ -4,7 +4,13 @@ import Models.*;
 import Models.Walls.*;
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * The type Custom XStream.
+ */
 public class CustomXStream extends XStream {
+    /**
+     * Instantiates a new Custom XStream with proper .
+     */
     public CustomXStream() {
         XStream.setupDefaultSecurity(this);
         super.allowTypes(new Class[]{House.class, Room.class, Wall.class, WindowWall.class, RoomWall.class, OutsideWall.class});
