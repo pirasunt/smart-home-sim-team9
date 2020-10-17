@@ -85,7 +85,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <reportOutputDirectory>${project.reporting.outputDirectory}/myoutput</reportOutputDirectory>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <reportOutputDirectory>${project.reporting.outputDirectory}</reportOutputDirectory>
                     <destDir>javadoc</destDir>
                     <source>8</source>
                 </configuration>
