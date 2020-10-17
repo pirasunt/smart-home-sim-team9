@@ -1,6 +1,6 @@
 package Models;
 
-import Walls.Wall;
+import Models.Walls.*;
 
 public class Room {
     private final Wall left, right, top, bottom;

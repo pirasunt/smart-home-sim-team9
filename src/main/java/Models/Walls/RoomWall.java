@@ -1,4 +1,4 @@
-package Walls;
+package Models.Walls;
 
 import Enums.WallType;
 

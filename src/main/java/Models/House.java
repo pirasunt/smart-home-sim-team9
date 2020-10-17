@@ -1,10 +1,7 @@
 package Models;
 
 import Custom.CustomXStream;
-import Walls.OutsideWall;
-import Walls.RoomWall;
-import Walls.Wall;
-import Walls.WindowWall;
+import Models.Walls.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
