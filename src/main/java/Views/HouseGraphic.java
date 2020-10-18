@@ -17,11 +17,11 @@ public class HouseGraphic extends JPanel {
     private static final int HEIGHT = 1000;
 
     /**
-     * The Visited rooms.
+     * The rooms already visited by the recursive algorithm drawing the house.
      */
     ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
     /**
-     * The House.
+     * The House being drawn.
      */
     House house;
 

@@ -10,6 +10,7 @@ public class Room {
     private final String name;
     private final int id;
     private int temperature = 20;
+    private boolean lightsOn = false;
 
 
     /**
@@ -101,6 +102,24 @@ public class Room {
      */
     public void setTemperature(int temperature) {
         this.temperature = temperature;
+    }
+
+    /**
+     * Get's a boolean value representing if the lights are on or not
+     *
+     * @return lightsOn the value of the lights being on or off
+     */
+    public boolean getLightsOn(){
+        return lightsOn;
+    }
+
+    /**
+     * Sets a new value for if the lights are on or off
+     *
+     * @param value true if trying to turn lights on, false if off
+     */
+    public void setLightsOn(boolean value){
+        this.lightsOn = value;
     }
 
     @Override
