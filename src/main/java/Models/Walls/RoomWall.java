@@ -7,7 +7,7 @@ import Enums.WallType;
  */
 public class RoomWall extends Wall{
 	/**
-	 * The Connected rooms id.
+	 * The id of the room that this wall is attached to.
 	 */
 	int connectedRoom;
 
@@ -22,9 +22,9 @@ public class RoomWall extends Wall{
 	}
 
 	/**
-	 * Gets connected room.
+	 * Gets connected rooms id.
 	 *
-	 * @return the connected room
+	 * @return the connected rooms id
 	 */
 	public int getConnectedRoom() {
 		return connectedRoom;
