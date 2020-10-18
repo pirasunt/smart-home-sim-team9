@@ -6,11 +6,11 @@ import Models.Walls.*;
  * The type Room.
  */
 public class Room {
-    private final Wall left, right, top, bottom;
+    private final Wall leftWall, rightWall, topWall, bottomWall;
     private final String name;
     private final int id;
     private int temperature = 20;
-
+    private boolean lightsOn = false;
 
     /**
      * Instantiates a new Room.
@@ -24,10 +24,10 @@ public class Room {
      */
     public Room(String name, Wall left, Wall bottom, Wall right, Wall top, int id) {
         this.name = name;
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
+        this.leftWall = left;
+        this.rightWall = right;
+        this.topWall = top;
+        this.bottomWall = bottom;
         this.id = id;
     }
 
@@ -36,8 +36,8 @@ public class Room {
      *
      * @return the left wall
      */
-    public Wall getLeft() {
-        return left;
+    public Wall getLeftWall() {
+        return leftWall;
     }
 
     /**
@@ -45,8 +45,8 @@ public class Room {
      *
      * @return the right wall
      */
-    public Wall getRight() {
-        return right;
+    public Wall getRightWall() {
+        return rightWall;
     }
 
     /**
@@ -54,8 +54,8 @@ public class Room {
      *
      * @return the top wall
      */
-    public Wall getTop() {
-        return top;
+    public Wall getTopWall() {
+        return topWall;
     }
 
     /**
@@ -63,8 +63,8 @@ public class Room {
      *
      * @return the bottom wall
      */
-    public Wall getBottom() {
-        return bottom;
+    public Wall getBottomWall() {
+        return bottomWall;
     }
 
     /**
@@ -103,9 +103,27 @@ public class Room {
         this.temperature = temperature;
     }
 
+    /**
+     * Get's a boolean value representing if the lights are on or not
+     *
+     * @return lightsOn the value of the lights being on or off
+     */
+    public boolean getLightsOn(){
+        return lightsOn;
+    }
+
+    /**
+     * Sets a new value for if the lights are on or off
+     *
+     * @param value true if trying to turn lights on, false if off
+     */
+    public void setLightsOn(boolean value){
+        this.lightsOn = value;
+    }
+
     @Override
     public String toString() {
-        return "Models.Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
+        return "Models.Room [left=" + leftWall + ", right=" + rightWall + ", top=" + topWall + ", bottom=" + bottomWall + ", name=" + name
                 + ", id=" + id + "]";
     }
 }

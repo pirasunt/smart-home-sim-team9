@@ -17,11 +17,11 @@ public class HouseGraphic extends JPanel {
     private static final int HEIGHT = 1000;
 
     /**
-     * The Visited rooms.
+     * The rooms already visited by the recursive algorithm drawing the house.
      */
     ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
     /**
-     * The House.
+     * The House being drawn.
      */
     House house;
 
@@ -64,7 +64,7 @@ public class HouseGraphic extends JPanel {
      *
      * @param g the g
      */
-    public void DrawHouse(Graphics g) {
+    private void DrawHouse(Graphics g) {
         if (house.getRooms().size() > 0) {
             DrawRoom(house.getRooms().get(0), 300, 300, g);
         }
@@ -78,10 +78,10 @@ public class HouseGraphic extends JPanel {
         g.drawString(room.getName(), xCoord + 2, yCoord + 15);
         g.drawString(((Integer) room.getTemperature()).toString() + "\u00B0", xCoord + 2, yCoord + 30);
 
-        DrawWallType(room.getLeft(), "left", xCoord, yCoord, g);
-        DrawWallType(room.getBottom(), "bottom", xCoord, yCoord, g);
-        DrawWallType(room.getRight(), "right", xCoord, yCoord, g);
-        DrawWallType(room.getTop(), "top", xCoord, yCoord, g);
+        DrawWallType(room.getLeftWall(), "left", xCoord, yCoord, g);
+        DrawWallType(room.getBottomWall(), "bottom", xCoord, yCoord, g);
+        DrawWallType(room.getRightWall(), "right", xCoord, yCoord, g);
+        DrawWallType(room.getTopWall(), "top", xCoord, yCoord, g);
     }
 
     private void DrawWallType(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
