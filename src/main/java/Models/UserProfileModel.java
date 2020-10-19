@@ -1,16 +1,16 @@
-package Context;
+package Models;
 
 import Enums.profileType;
 
 import java.util.UUID;
 
-public class UserProfile{
+public class UserProfileModel {
     private UUID profileID;
     private profileType type;
     private String name;
     private int roomID; //Indicates UserProfile's current room location (A value of -1 indicates that a room has not been assigned to the UserProfile)
 
-    public UserProfile(profileType type, String name, int id){
+    public UserProfileModel(profileType type, String name, int id){
         this.profileID = UUID.randomUUID();
         this.roomID = id;
         this.type = type;
@@ -18,7 +18,7 @@ public class UserProfile{
     }
 
     //Copy Constructor
-    public UserProfile(UserProfile original){
+    public UserProfileModel(UserProfileModel original){
         this.profileID = original.profileID; //UUID immutable obj
         this.roomID = original.roomID;
         this.type = original.type;
@@ -30,8 +30,8 @@ public class UserProfile{
      * @param id The new Room ID to move the UserProfile to
      * @return a Deep copy of the UserProfile with the roomID attribute modified
      */
-     UserProfile modifyLocation(int id){
-        UserProfile temp = new UserProfile(this);
+     UserProfileModel modifyLocation(int id){
+        UserProfileModel temp = new UserProfileModel(this);
         temp.roomID = id;
         return temp;
     }
@@ -41,8 +41,8 @@ public class UserProfile{
      * @param newName The new name of the UserProfile
      * @return  a Deep copy of the UserProfile with the profile Name attribute modified
      */
-    UserProfile modifyName(String newName) {
-         UserProfile temp = new UserProfile(this);
+    UserProfileModel modifyName(String newName) {
+         UserProfileModel temp = new UserProfileModel(this);
          temp.name = newName;
          return temp;
     }

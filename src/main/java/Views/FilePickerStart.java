@@ -1,7 +1,8 @@
 package Views;
 
-import Context.Environment;
-import Context.UserProfile;
+import Controllers.EnvironmentController;
+import Models.EnvironmentModel;
+import Models.UserProfileModel;
 import Custom.CustomXStream;
 import Models.House;
 import Enums.profileType;
@@ -10,7 +11,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.UUID;
 
 import javax.swing.*;
 
@@ -38,13 +38,13 @@ public class FilePickerStart extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 //Sample users. The 3rd parameter is roomID (-1 to indicate that no room has been set)
-                UserProfile p1 = new UserProfile(profileType.ADULT, "James",-1);
-                UserProfile p2 = new UserProfile(profileType.STRANGER, "Janice", -1);
-                UserProfile p3 = new UserProfile(profileType.CHILD, "Morty", -1);
-                UserProfile p4 = new UserProfile(profileType.GUEST, "Astley", -1);
-                UserProfile p5 = new UserProfile(profileType.GUEST, "Penny", -1);
-                UserProfile p6 = new UserProfile(profileType.STRANGER, "Cool Guy", -1);
-                UserProfile p7 = new UserProfile(profileType.CHILD, "Rick", -1);
+                UserProfileModel p1 = new UserProfileModel(profileType.ADULT, "James",-1);
+                UserProfileModel p2 = new UserProfileModel(profileType.STRANGER, "Janice", -1);
+                UserProfileModel p3 = new UserProfileModel(profileType.CHILD, "Morty", -1);
+                UserProfileModel p4 = new UserProfileModel(profileType.GUEST, "Astley", -1);
+                UserProfileModel p5 = new UserProfileModel(profileType.GUEST, "Penny", -1);
+                UserProfileModel p6 = new UserProfileModel(profileType.STRANGER, "Cool Guy", -1);
+                UserProfileModel p7 = new UserProfileModel(profileType.CHILD, "Rick", -1);
 
 
 
@@ -54,7 +54,7 @@ public class FilePickerStart extends JFrame {
                 hg.init();
 
                 //Init singleton Environment object with HOUSE and USERS. Pass this instance to objects that need it.
-                Environment env = Environment.createSimulation(house, p1, p2, p3, p4, p5, p6,p7);
+                EnvironmentModel theModel = EnvironmentModel.createSimulation(house, p1, p2, p3, p4, p5, p6,p7);
 
 
                 //Init console, can now call static method Console.print()
@@ -63,9 +63,9 @@ public class FilePickerStart extends JFrame {
 
                 Console.print("Welcome to the simulator!");
 
-                OptionFrame pp2 = new OptionFrame(env);
-                pp2.setSize(250, 250);
-                pp2.setVisible(true);
+                EnvironmentView theView = new EnvironmentView();
+                EnvironmentController theController = new EnvironmentController(theView, theModel);
+
 
                 o.dispose();
             }

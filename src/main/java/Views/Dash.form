@@ -39,7 +39,7 @@
                   <text value="Edit Action"/>
                 </properties>
               </component>
-              <component id="525f6" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+              <component id="525f6" class="javax.swing.JComboBox" binding="userProfileDropDown">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -47,7 +47,7 @@
                   <model/>
                 </properties>
               </component>
-              <component id="2bf42" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
+              <component id="2bf42" class="javax.swing.JComboBox" binding="userRoomDropDown">
                 <constraints>
                   <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -55,7 +55,7 @@
                   <model/>
                 </properties>
               </component>
-              <component id="9a57e" class="javax.swing.JButton" binding="changeButton1" default-binding="true">
+              <component id="9a57e" class="javax.swing.JButton" binding="changeDate">
                 <constraints>
                   <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -63,7 +63,7 @@
                   <text value="Change"/>
                 </properties>
               </component>
-              <component id="2359e" class="javax.swing.JFormattedTextField" binding="formattedTextField1" default-binding="true">
+              <component id="2359e" class="javax.swing.JFormattedTextField" binding="dateField">
                 <constraints>
                   <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -73,7 +73,7 @@
                   <text value=""/>
                 </properties>
               </component>
-              <component id="427e0" class="javax.swing.JFormattedTextField" binding="formattedTextField2" default-binding="true">
+              <component id="427e0" class="javax.swing.JFormattedTextField" binding="timeField">
                 <constraints>
                   <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -83,13 +83,13 @@
                   <text value=""/>
                 </properties>
               </component>
-              <component id="85e31" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+              <component id="85e31" class="javax.swing.JSpinner" binding="tempSpinner">
                 <constraints>
                   <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="d96ff" class="javax.swing.JButton" binding="changeButton2">
+              <component id="d96ff" class="javax.swing.JButton" binding="changeTime">
                 <constraints>
                   <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>

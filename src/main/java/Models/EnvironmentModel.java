@@ -1,30 +1,29 @@
-package Context;
+package Models;
 
+import Custom.NonExistantUserProfileException;
 import Enums.profileType;
-import Models.House;
-import Models.Room;
 import Views.Console;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Environment {
-    private static Environment instance = null;
+public class EnvironmentModel {
+    private static EnvironmentModel instance = null;
 
     private int outsideTemperature;
     private Calendar currentCalObj;
-    private UserProfile currentUser;
-    private ArrayList<UserProfile> userProfileList;
+    private UserProfileModel currentUser;
+    private ArrayList<UserProfileModel> userProfileModelList;
     private House house;
 
 
-    public static Environment createSimulation(House h, UserProfile... profiles){
+    public static EnvironmentModel createSimulation(House h, UserProfileModel... profiles){
         if(instance == null) {
-            ArrayList<UserProfile> profileList = new ArrayList<UserProfile>();
-            for(UserProfile profile:profiles) {
+            ArrayList<UserProfileModel> profileList = new ArrayList<UserProfileModel>();
+            for(UserProfileModel profile:profiles) {
                 profileList.add(profile);
             }
-            instance = new Environment(h, profileList);
+            instance = new EnvironmentModel(h, profileList);
 
 
         } else {
@@ -34,15 +33,15 @@ public class Environment {
         return instance;
     }
 
-    private Environment(House h, int temperature, Calendar cal, ArrayList<UserProfile> profileList) {
+    private EnvironmentModel(House h, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
         this.house = h;
         this.outsideTemperature = temperature;
         this.currentCalObj = cal;
-        this.userProfileList = profileList;
+        this.userProfileModelList = profileList;
         this.currentUser = null;
     }
 
-    private Environment(House h, ArrayList<UserProfile> profileList) {
+    private EnvironmentModel(House h, ArrayList<UserProfileModel> profileList) {
        this(h, 21, new GregorianCalendar(), profileList);
     }
 
@@ -54,17 +53,17 @@ public class Environment {
      * Returns a deep copy of all the registered user profiles
      * @return UserProfile Array of all registered user profile in the environment
      */
-    public UserProfile[] getAllUserProfiles(){
-        UserProfile[] up = new UserProfile[this.userProfileList.size()];
+    public UserProfileModel[] getAllUserProfiles(){
+        UserProfileModel[] up = new UserProfileModel[this.userProfileModelList.size()];
 
         for(int i =0; i< up.length ; i++){
-            up[i] = new UserProfile(this.userProfileList.get(i));
+            up[i] = new UserProfileModel(this.userProfileModelList.get(i));
         }
         return up;
     }
 
 
-    public void modifyProfileLocation(UserProfile profile, Room room) {
+    public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
         try {
             updateProfileEntry(profile.modifyLocation(room.getId()));
@@ -75,7 +74,7 @@ public class Environment {
         }
     }
 
-    public void editProfileName(UserProfile profile, String newName) {
+    public void editProfileName(UserProfileModel profile, String newName) {
 
         try {
             updateProfileEntry(profile.modifyName(newName));
@@ -89,15 +88,15 @@ public class Environment {
      * Returns a deep copy of the currently selected user on the simulation
      * @return Deep copy of currently selected user.
      */
-    public UserProfile getCurrentUser() {
-        return new UserProfile(this.currentUser);
+    public UserProfileModel getCurrentUser() {
+        return new UserProfileModel(this.currentUser);
     }
 
-    public UserProfile getUserByID(UUID id) throws NonExistantUserProfileException {
-        UserProfile temp = null;
-        for(int i =0; i< this.userProfileList.size(); i++) {
-            if(id == this.userProfileList.get(i).getProfileID()) {
-                temp = new UserProfile(this.userProfileList.get(i));
+    public UserProfileModel getUserByID(UUID id) throws NonExistantUserProfileException {
+        UserProfileModel temp = null;
+        for(int i = 0; i< this.userProfileModelList.size(); i++) {
+            if(id == this.userProfileModelList.get(i).getProfileID()) {
+                temp = new UserProfileModel(this.userProfileModelList.get(i));
                 break;
             }
         }
@@ -114,19 +113,19 @@ public class Environment {
      * Any updated UserProfile objects in the ArrayList must pass by this method
      * @param updatedProfile UserProfile object with updated attributes
      */
-    private void updateProfileEntry(UserProfile updatedProfile) throws NonExistantUserProfileException {
+    private void updateProfileEntry(UserProfileModel updatedProfile) throws NonExistantUserProfileException {
 
         boolean existingProfile = false;
         int index = -1;
-        for(int i = 0; i < this.userProfileList.size(); i++) {
-            if(this.userProfileList.get(i).getProfileID() == updatedProfile.getProfileID()) {
+        for(int i = 0; i < this.userProfileModelList.size(); i++) {
+            if(this.userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
                 existingProfile = true;
                 index = i;
             }
         }
 
         if(existingProfile && index >= 0) {
-            this.userProfileList.set(index, updatedProfile);
+            this.userProfileModelList.set(index, updatedProfile);
         } else {
             throw new NonExistantUserProfileException("UserProfile " + updatedProfile.getProfileID() + " with name " + updatedProfile.getName() + "does not exist or has been deleted");
         }
@@ -139,14 +138,14 @@ public class Environment {
     }
 
 
-    public UserProfile[] getProfilesByCategory(profileType desiredProfileType) {
-        ArrayList<UserProfile> temp = new ArrayList<UserProfile>();
+    public UserProfileModel[] getProfilesByCategory(profileType desiredProfileType) {
+        ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
-        for(int i =0; i < this.userProfileList.size(); i++) {
-            if(this.userProfileList.get(i).getProfileType() == desiredProfileType)
-                temp.add(new UserProfile(this.userProfileList.get(i))); //Deep copy
+        for(int i = 0; i < this.userProfileModelList.size(); i++) {
+            if(this.userProfileModelList.get(i).getProfileType() == desiredProfileType)
+                temp.add(new UserProfileModel(this.userProfileModelList.get(i))); //Deep copy
         }
-        UserProfile[] temp2 = new UserProfile[temp.size()];
+        UserProfileModel[] temp2 = new UserProfileModel[temp.size()];
         for(int i=0; i < temp.size(); i++) {
             temp2[i] = temp.get(i);
         }
@@ -154,8 +153,8 @@ public class Environment {
     return temp2;
     }
 
-    public void setCurrentUser(UserProfile currentUser) {
-        this.currentUser = new UserProfile(currentUser);
+    public void setCurrentUser(UserProfileModel currentUser) {
+        this.currentUser = new UserProfileModel(currentUser);
         Console.print("Current user has been set to " + this.currentUser.getName()+"/" + this.currentUser.getProfileType());
     }
 
