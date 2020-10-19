@@ -302,7 +302,7 @@ public class EnvironmentController {
          */
         @Override
         public void stateChanged(ChangeEvent e) {
-            theModel.setTemperature((int)e.getSource()); //Any change on Temp Spinner will update Environment attribute
+            theModel.setTemperature(theView.getTemperatureFromSpinner()); //Any change on Temp Spinner will update Environment attribute
         }
     }
 
@@ -373,8 +373,8 @@ public class EnvironmentController {
         public void actionPerformed(ActionEvent e) {
             if (action1 == false) {
                 action2 = true;
-                theView.ChangeTime(theModel.getDateObject());
                 theView.addConfirmTimeListener(new ConfirmTimeListener());
+                theView.ChangeTime(theModel.getDateObject());
             }
         }
 

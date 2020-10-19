@@ -121,12 +121,10 @@ public class EnvironmentView extends JFrame {
         dashboard.time_spinner.setEditor(te);
 
 
-        add(dashboard.time_spinner, gbc);
-
-        dashboard.timeConfirm = new JButton("OK");
+        this.dashboard.add(dashboard.time_spinner, gbc);
 
 
-        this.dashboard.add(dashboard.changeTime, gbc);
+        this.dashboard.add(dashboard.timeConfirm, gbc);
         this.dashboard.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
         this.dashboard.pack();
         this.dashboard.setVisible(true);
@@ -173,6 +171,10 @@ public class EnvironmentView extends JFrame {
 
     public void setDateField(String date){
         this.dashboard.dateField.setValue(date);
+    }
+
+    public int getTemperatureFromSpinner(){
+        return (int)dashboard.tempSpinner.getValue();
     }
 
 
