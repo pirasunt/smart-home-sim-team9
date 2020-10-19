@@ -74,6 +74,7 @@ public class Dash extends JFrame {
         tempSpinner.setValue(temp);
         dateField.setValue(date);
         timeField.setValue(time);
+        timeConfirm = new JButton("OK");
 
 
 
