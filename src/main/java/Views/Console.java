@@ -26,7 +26,7 @@ public class Console {
     /**
      * Instantiates a new Console.
      */
-    Console() {
+    public Console() {
         JTextArea textArea = new JTextArea(10, 80);
         textArea.setBackground(Color.BLACK);
         textArea.setForeground(Color.LIGHT_GRAY);
