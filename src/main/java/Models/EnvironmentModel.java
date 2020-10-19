@@ -203,4 +203,16 @@ public class EnvironmentModel {
 
         return roomArray;
     }
+
+    public void addUserProfile(UserProfileModel newUser) throws Exception {
+
+        if(newUser.getName() .equals("") || newUser.getName() == null || newUser.getProfileType() == null){
+            throw new Exception("Can Not Create User: Invalid User Attributes");
+        } else {
+            this.userProfileModelList.add(new UserProfileModel(newUser));
+            Console.print("New user '" + newUser.getName() + "'/" + newUser.getProfileType() +" has been created");
+        }
+
+
+    }
 }

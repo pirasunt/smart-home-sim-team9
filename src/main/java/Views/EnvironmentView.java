@@ -1,6 +1,6 @@
 package Views;
 
-import Models.EnvironmentModel;
+import Enums.profileType;
 import Models.Room;
 import Models.UserProfileModel;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -10,10 +10,7 @@ import org.jdatepicker.impl.SqlDateModel;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -23,6 +20,13 @@ public class EnvironmentView extends JFrame {
     private JButton userButton;
     private JButton locationButton;
     private JButton enterSimButton;
+    private JButton createUserButton;
+    private JButton confirmUserCreateBtn;
+
+    private JFrame createUser;
+    private JTextField profileName;
+    private JComboBox<profileType> profileType;
+
     private Dash dashboard;
 
     public EnvironmentView() {
@@ -33,6 +37,11 @@ public class EnvironmentView extends JFrame {
         box1.add(userButton);
         box1.add(locationButton);
         box1.add(enterSimButton);
+        box1.add(new JSeparator());
+        box1.add(new JLabel("Configuration"));
+
+        this.createUserButton = new JButton("Create User");
+        box1.add(this.createUserButton);
 
         this.add(box1);
         setLayout(new GridLayout(1, 1));
@@ -41,6 +50,14 @@ public class EnvironmentView extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public void addConfirmUserCreateListener(ActionListener listenForConfirmUserCreate){
+        this.confirmUserCreateBtn.addActionListener(listenForConfirmUserCreate);
+    }
+
+    public void addCreateUserListener(ActionListener listenForCreateUser){
+        this.createUserButton.addActionListener(listenForCreateUser);
     }
 
     public void addUserListener(ActionListener listenForUser) {
@@ -176,6 +193,40 @@ public class EnvironmentView extends JFrame {
         return (int)dashboard.tempSpinner.getValue();
     }
 
+    public void userCreationWindow(){
+        this.createUser = new JFrame("Create a new User");
+        GridLayout grid = new GridLayout(4,2, 2,2);
+        createUser.setLayout(grid);
+
+        this.profileName = new JTextField();
+        this.profileType = new JComboBox<profileType>(Enums.profileType.values());
+        this.confirmUserCreateBtn= new JButton("Create");
+
+        createUser.add(new JLabel("Profile Name: "));
+        createUser.add(profileName);
+        createUser.add(new JLabel("Profile Type"));
+        createUser.add(profileType);
+        createUser.add(new JLabel());//Empty cell
+        createUser.add(new JLabel());//Empty cell
+        createUser.add(new JLabel());//Empty cell
+        createUser.add(this.confirmUserCreateBtn);
+
+
+        createUser.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        createUser.pack();
+        createUser.setLocationRelativeTo(null); //Center User Selection JFrame
+        createUser.setVisible(true);
+
+
+    }
+
+    public void disposeCreateUser(){
+        this.createUser.dispose();
+    }
+
+    public UserProfileModel getNewlyCreatedUser() {
+        return new UserProfileModel((profileType) this.profileType.getSelectedItem(), this.profileName.getText(), -1);
+    }
 
 
 }

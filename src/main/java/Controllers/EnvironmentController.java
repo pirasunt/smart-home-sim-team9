@@ -40,9 +40,10 @@ public class EnvironmentController {
         this.theView.addUserListener(new StartListener());
         this.theView.addLocationListener(new LocationListener());
         this.theView.addSimulatorListener(new SimulatorListener());
+        this.theView.addCreateUserListener(new CreateUserListener());
     }
 
-    class StartListener implements ActionListener {
+    private class StartListener implements ActionListener {
 
         /**
          * Invoked when the 'Select User Profile' Button is pressed
@@ -148,7 +149,7 @@ public class EnvironmentController {
         }
     }
 
-    class LocationListener implements ActionListener {
+    private class LocationListener implements ActionListener {
         /**
          * Invoked when the 'Select Location' Button is pressed
          *
@@ -192,7 +193,7 @@ public class EnvironmentController {
         }
     }
 
-     class SimulatorListener implements ActionListener {
+     private class SimulatorListener implements ActionListener {
 
          /**
           * Invoked when the 'Enter Simulation' Button is pressed
@@ -273,7 +274,7 @@ public class EnvironmentController {
      }
 
 
-     class UserRoomDropDownListener implements ActionListener {
+     private class UserRoomDropDownListener implements ActionListener {
          /**
           * Invoked when the Room dropdown is selected and modified.
           *
@@ -398,6 +399,42 @@ public class EnvironmentController {
                     action2 = false;
                     theView.disposeDash();
                 }
+            }
+        }
+    }
+
+    private class CreateUserListener implements ActionListener {
+
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            theView.userCreationWindow();
+            theView.addConfirmUserCreateListener(new ConfirmUserCreateListener());
+        }
+
+        private class ConfirmUserCreateListener implements ActionListener {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    theModel.addUserProfile(theView.getNewlyCreatedUser());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    theView.disposeCreateUser();
+                }
+
+                theView.disposeCreateUser();
+
             }
         }
     }
