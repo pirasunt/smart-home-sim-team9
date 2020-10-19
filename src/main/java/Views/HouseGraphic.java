@@ -9,14 +9,43 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * The type House graphic.
+ */
 public class HouseGraphic extends JPanel {
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
+
+    /**
+     * The rooms already visited by the recursive algorithm drawing the house.
+     */
     ArrayList<Integer> visitedRooms = new ArrayList<Integer>();
+    /**
+     * The House being drawn.
+     */
     House house;
 
+    /**
+     * Instantiates a new House graphic.
+     *
+     * @param home the home
+     */
     public HouseGraphic(House home) {
         this.house = home;
+    }
+
+    /**
+     * Init.
+     */
+    public void init() {
+        JScrollPane scrollPane = new JScrollPane(this);
+        scrollPane.getViewport().setPreferredSize(new Dimension(700, 700));
+        JFrame frame = new JFrame("SOEN 343");
+        frame.getContentPane().add(scrollPane);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     public void paintComponent(Graphics g) {
@@ -30,7 +59,12 @@ public class HouseGraphic extends JPanel {
         return new Dimension(WIDTH, HEIGHT);
     }
 
-    public void DrawHouse(Graphics g) {
+    /**
+     * Draw house.
+     *
+     * @param g the g
+     */
+    private void DrawHouse(Graphics g) {
         if (house.getRooms().size() > 0) {
             DrawRoom(house.getRooms().get(0), 300, 300, g);
         }
@@ -44,13 +78,13 @@ public class HouseGraphic extends JPanel {
         g.drawString(room.getName(), xCoord + 2, yCoord + 15);
         g.drawString(((Integer) room.getTemperature()).toString() + "\u00B0", xCoord + 2, yCoord + 30);
 
-        DrawWallType(room.getLeft(), "left", xCoord, yCoord, g);
-        DrawWallType(room.getBottom(), "bottom", xCoord, yCoord, g);
-        DrawWallType(room.getRight(), "right", xCoord, yCoord, g);
-        DrawWallType(room.getTop(), "top", xCoord, yCoord, g);
+        DrawWallType(room.getLeftWall(), "left", xCoord, yCoord, g);
+        DrawWallType(room.getBottomWall(), "bottom", xCoord, yCoord, g);
+        DrawWallType(room.getRightWall(), "right", xCoord, yCoord, g);
+        DrawWallType(room.getTopWall(), "top", xCoord, yCoord, g);
     }
 
-    public void DrawWallType(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
+    private void DrawWallType(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
         if (wall.getType() == WallType.WALL) {
             DrawWall(direction, xCoord, yCoord, g);
         } else if (wall.getType() == WallType.WINDOWS) {
@@ -83,7 +117,7 @@ public class HouseGraphic extends JPanel {
         }
     }
 
-    public void DrawWall(String direction, int xCoord, int yCoord, Graphics g) {
+    private void DrawWall(String direction, int xCoord, int yCoord, Graphics g) {
         if (direction.equals("top")) {
             g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
         } else if (direction.equals("bottom")) {
@@ -95,7 +129,7 @@ public class HouseGraphic extends JPanel {
         }
     }
 
-    public void DrawWindow(String direction, int xCoord, int yCoord, Graphics g) {
+    private void DrawWindow(String direction, int xCoord, int yCoord, Graphics g) {
         if (direction.equals("top")) {
             g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
             g.drawRect(xCoord + 35, yCoord - 2, 30, 4);
@@ -111,7 +145,7 @@ public class HouseGraphic extends JPanel {
         }
     }
 
-    public void DrawDoor(String direction, int xCoord, int yCoord, Graphics g) {
+    private void DrawDoor(String direction, int xCoord, int yCoord, Graphics g) {
         if (direction.equals("top")) {
             g.drawLine(xCoord, yCoord, xCoord + 35, yCoord);
             g.drawLine(xCoord + 65, yCoord, xCoord + 100, yCoord);
@@ -125,16 +159,5 @@ public class HouseGraphic extends JPanel {
             g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 35);
             g.drawLine(xCoord + 100, yCoord + 65, xCoord + 100, yCoord + 100);
         }
-    }
-
-    public void init() {
-        JScrollPane scrollPane = new JScrollPane(this);
-        scrollPane.getViewport().setPreferredSize(new Dimension(700, 700));
-        JFrame frame = new JFrame("SOEN 343");
-        frame.getContentPane().add(scrollPane);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }

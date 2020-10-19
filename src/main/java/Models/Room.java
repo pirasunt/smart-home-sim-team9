@@ -2,52 +2,123 @@ package Models;
 
 import Models.Walls.*;
 
+/**
+ * The type Room.
+ */
 public class Room {
-    private final Wall left, right, top, bottom;
+    private final Wall leftWall, rightWall, topWall, bottomWall;
     private final String name;
     private final int id;
     private int temperature = 20;
+    private boolean lightsOn = false;
 
-
+    /**
+     * Instantiates a new Room.
+     *
+     * @param name   the name of the room
+     * @param left   the left wall
+     * @param bottom the bottom wall
+     * @param right  the right wall
+     * @param top    the top wall
+     * @param id     the id of the room
+     */
     public Room(String name, Wall left, Wall bottom, Wall right, Wall top, int id) {
         this.name = name;
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
+        this.leftWall = left;
+        this.rightWall = right;
+        this.topWall = top;
+        this.bottomWall = bottom;
         this.id = id;
     }
 
-    public Wall getLeft() {
-        return left;
+    /**
+     * Gets left wall.
+     *
+     * @return the left wall
+     */
+    public Wall getLeftWall() {
+        return leftWall;
     }
 
-    public Wall getRight() {
-        return right;
+    /**
+     * Gets right wall.
+     *
+     * @return the right wall
+     */
+    public Wall getRightWall() {
+        return rightWall;
     }
 
-    public Wall getTop() {
-        return top;
+    /**
+     * Gets top wall.
+     *
+     * @return the top wall
+     */
+    public Wall getTopWall() {
+        return topWall;
     }
 
-    public Wall getBottom() {
-        return bottom;
+    /**
+     * Gets bottom wall.
+     *
+     * @return the bottom wall
+     */
+    public Wall getBottomWall() {
+        return bottomWall;
     }
 
+    /**
+     * Gets name wall.
+     *
+     * @return the name wall
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets id of the room.
+     *
+     * @return the id of the room
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Gets temperature in the room.
+     *
+     * @return the temperature of the room
+     */
     public int getTemperature() {
         return temperature;
     }
 
+    /**
+     * Sets temperature of the room.
+     *
+     * @param temperature the temperature of the room
+     */
     public void setTemperature(int temperature) {
         this.temperature = temperature;
+    }
+
+    /**
+     * Get's a boolean value representing if the lights are on or not
+     *
+     * @return lightsOn the value of the lights being on or off
+     */
+    public boolean getLightsOn(){
+        return lightsOn;
+    }
+
+    /**
+     * Sets a new value for if the lights are on or off
+     *
+     * @param value true if trying to turn lights on, false if off
+     */
+    public void setLightsOn(boolean value){
+        this.lightsOn = value;
     }
 
     @Override
