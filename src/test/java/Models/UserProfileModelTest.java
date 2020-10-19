@@ -9,6 +9,7 @@ public class UserProfileModelTest {
     @BeforeEach
     public void initEach(){
         Console c = new Console();
+        EnvironmentModel.resetInstance();
     }
     @Test
     void modifyUserProfileName() {
@@ -16,6 +17,6 @@ public class UserProfileModelTest {
         EnvironmentModel env = EnvironmentModel.createSimulation(new House(), u);
         env.setCurrentUser(u);
         env.editProfileName(u, "New");
-        assert env.getCurrentUser().getName() == "New";
+        assert env.getCurrentUser().getName().equals("New");
     }
 }

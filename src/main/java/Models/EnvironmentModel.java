@@ -45,6 +45,11 @@ public class EnvironmentModel {
        this(h, 21, new GregorianCalendar(), profileList);
     }
 
+    // used in testing to reset instance
+    public static void resetInstance(){
+        instance = null;
+    }
+
     public void setTemperature(int newTemp){
         this.outsideTemperature = newTemp;
     }
