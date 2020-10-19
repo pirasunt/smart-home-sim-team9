@@ -5,12 +5,12 @@ import Enums.profileType;
 import java.util.UUID;
 
 public class UserProfileModel {
-    private UUID profileID;
-    private profileType type;
+    private final UUID profileID;
+    private final profileType type;
     private String name;
     private int roomID; //Indicates UserProfile's current room location (A value of -1 indicates that a room has not been assigned to the UserProfile)
 
-    public UserProfileModel(profileType type, String name, int id){
+    public UserProfileModel(profileType type, String name, int id) {
         this.profileID = UUID.randomUUID();
         this.roomID = id;
         this.type = type;
@@ -18,7 +18,7 @@ public class UserProfileModel {
     }
 
     //Copy Constructor
-    public UserProfileModel(UserProfileModel original){
+    public UserProfileModel(UserProfileModel original) {
         this.profileID = original.profileID; //UUID immutable obj
         this.roomID = original.roomID;
         this.type = original.type;
@@ -27,10 +27,11 @@ public class UserProfileModel {
 
     /**
      * Returns deep copy of a UserProfile object with the location attribute modified
+     *
      * @param id The new Room ID to move the UserProfile to
      * @return a Deep copy of the UserProfile with the roomID attribute modified
      */
-     UserProfileModel modifyLocation(int id){
+    UserProfileModel modifyLocation(int id) {
         UserProfileModel temp = new UserProfileModel(this);
         temp.roomID = id;
         return temp;
@@ -38,13 +39,14 @@ public class UserProfileModel {
 
     /**
      * Returns deep copy of the UserProfile object with its name modified
+     *
      * @param newName The new name of the UserProfile
-     * @return  a Deep copy of the UserProfile with the profile Name attribute modified
+     * @return a Deep copy of the UserProfile with the profile Name attribute modified
      */
     UserProfileModel modifyName(String newName) {
-         UserProfileModel temp = new UserProfileModel(this);
-         temp.name = newName;
-         return temp;
+        UserProfileModel temp = new UserProfileModel(this);
+        temp.name = newName;
+        return temp;
     }
 
     public UUID getProfileID() {
