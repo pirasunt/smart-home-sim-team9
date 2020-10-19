@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 /**
  * The type Console.
  */
-class Console {
+public class Console {
     /**
      * The Frame.
      */
@@ -26,7 +26,7 @@ class Console {
     /**
      * Instantiates a new Console.
      */
-    public Console() {
+    Console() {
         JTextArea textArea = new JTextArea(10, 80);
         textArea.setBackground(Color.BLACK);
         textArea.setForeground(Color.LIGHT_GRAY);

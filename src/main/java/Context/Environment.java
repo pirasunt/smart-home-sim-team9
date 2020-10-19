@@ -3,6 +3,7 @@ package Context;
 import Enums.profileType;
 import Models.House;
 import Models.Room;
+import Views.Console;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -63,10 +64,11 @@ public class Environment {
     }
 
 
-    public void modifyProfileLocation(UserProfile profile, int roomID) {
+    public void modifyProfileLocation(UserProfile profile, Room room) {
 
         try {
-            updateProfileEntry(profile.modifyLocation(roomID));
+            updateProfileEntry(profile.modifyLocation(room.getId()));
+            Console.print("Set Room to: '" + room.getName() + "' for user " + profile.getName() +"/" +profile.getProfileType() + "\n");
         }
         catch(NonExistantUserProfileException e) {
             System.err.println(e.getMessage()); //TODO: Return some sort of error window
@@ -89,6 +91,21 @@ public class Environment {
      */
     public UserProfile getCurrentUser() {
         return new UserProfile(this.currentUser);
+    }
+
+    public UserProfile getUserByID(UUID id) throws NonExistantUserProfileException {
+        UserProfile temp = null;
+        for(int i =0; i< this.userProfileList.size(); i++) {
+            if(id == this.userProfileList.get(i).getProfileID()) {
+                temp = new UserProfile(this.userProfileList.get(i));
+                break;
+            }
+        }
+        if(temp == null) {
+            throw new NonExistantUserProfileException("UserProfile " + id + "does not exist or has been deleted");
+        }
+
+        return temp;
     }
 
 
@@ -139,6 +156,7 @@ public class Environment {
 
     public void setCurrentUser(UserProfile currentUser) {
         this.currentUser = new UserProfile(currentUser);
+        Console.print("Current user has been set to " + this.currentUser.getName()+"/" + this.currentUser.getProfileType());
     }
 
     public boolean isCurrentUserSet() {

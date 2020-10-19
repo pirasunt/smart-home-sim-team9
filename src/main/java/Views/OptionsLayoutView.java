@@ -110,7 +110,6 @@ class OptionPanel extends JPanel {
                                     public void actionPerformed(ActionEvent e) {
                                         env.setCurrentUser(organisedProfiles[0][currentRow]);
                                         frame.dispose();
-                                        Console.print("Current User has been set to: " + env.getCurrentUser().getName() + " who is of type: " + env.getCurrentUser().getProfileType());
                                     }
                                 });
                                 frame.add(btn);
@@ -126,7 +125,6 @@ class OptionPanel extends JPanel {
                                     public void actionPerformed(ActionEvent e) {
                                         env.setCurrentUser(organisedProfiles[1][currentRow]);
                                         frame.dispose();
-                                        Console.print("Current User has been set to: " + env.getCurrentUser().getName() + " who is of type: " + env.getCurrentUser().getProfileType());
                                     }
                                 });
                                 frame.add(btn);
@@ -142,7 +140,6 @@ class OptionPanel extends JPanel {
                                     public void actionPerformed(ActionEvent e) {
                                         env.setCurrentUser(organisedProfiles[2][currentRow]);
                                         frame.dispose();
-                                        Console.print("Current User has been set to: " + env.getCurrentUser().getName() + " who is of type: " + env.getCurrentUser().getProfileType());
                                     }
                                 });
                                 frame.add(btn);
@@ -158,7 +155,6 @@ class OptionPanel extends JPanel {
                                     public void actionPerformed(ActionEvent e) {
                                         env.setCurrentUser(organisedProfiles[3][currentRow]);
                                         frame.dispose();
-                                        Console.print("Current User has been set to: " + env.getCurrentUser().getName() + " who is of type: " + env.getCurrentUser().getProfileType());
                                     }
                                 });
                                 frame.add(btn);
@@ -194,9 +190,8 @@ class OptionPanel extends JPanel {
                     btn.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            env.modifyProfileLocation(env.getCurrentUser(),currentRoom.getId());
+                            env.modifyProfileLocation(env.getCurrentUser(),currentRoom);
                             frame.dispose();
-                            Console.print("Location '" + currentRoom.getName() + "' has been set for '" + env.getCurrentUser().getName() +"'");
                         }
                     });
                     frame.add(btn);

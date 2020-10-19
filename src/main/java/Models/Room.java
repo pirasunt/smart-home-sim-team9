@@ -52,7 +52,6 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Models.Room [left=" + left + ", right=" + right + ", top=" + top + ", bottom=" + bottom + ", name=" + name
-                + ", id=" + id + "]";
+        return this.getName();
     }
 }
