@@ -110,9 +110,8 @@ public class EnvironmentView extends JFrame {
     }
 
     public void ChangeTime(Date currentDate) {
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.dashboard.setLayout(new GridLayout(2,1, 3,3));
+
         SpinnerDateModel sm = new SpinnerDateModel(currentDate, null, null, Calendar.HOUR_OF_DAY);
 
         dashboard.time_spinner = new JSpinner(sm);
@@ -121,10 +120,10 @@ public class EnvironmentView extends JFrame {
         dashboard.time_spinner.setEditor(te);
 
 
-        this.dashboard.add(dashboard.time_spinner, gbc);
+        this.dashboard.add(dashboard.time_spinner);
 
 
-        this.dashboard.add(dashboard.timeConfirm, gbc);
+        this.dashboard.add(dashboard.timeConfirm);
         this.dashboard.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
         this.dashboard.pack();
         this.dashboard.setVisible(true);
