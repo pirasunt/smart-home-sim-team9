@@ -268,8 +268,8 @@ public class EnvironmentView extends JFrame {
    * Provides an interface that allows the Simulator user to change the Date
    *
    * @param formatter Object that performs the conversion between the user selecting a date on the
-   *     UI via a DatePicker to a useable String format to be stored in the {@link
-   *     Models.EnvironmentModel}. The core logic of {@param formatter} is found in {@link
+   *     UI via a DatePicker to a usable String format to be stored in the {@link
+   *     Models.EnvironmentModel}. The core logic of formatter is found in {@link
    *     Controllers.EnvironmentController}
    */
   public void ChangeDate(JFormattedTextField.AbstractFormatter formatter) {

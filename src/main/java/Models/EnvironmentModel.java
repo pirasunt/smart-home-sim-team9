@@ -48,7 +48,7 @@ public class EnvironmentModel {
    * @param h An instance of {@link House} that was initialized with an XML
    * @param hg An instance of {@link HouseGraphic} that is being displayed and must be refreshed
    *     when changes occur
-   * @param profiles A list of initial {@link UserProfileModel} that will be initialized & available
+   * @param profiles A list of initial {@link UserProfileModel} that will be initialized and available
    *     with the simulation.
    * @return An Initialized Singleton of EnvironmentModel
    */
@@ -166,7 +166,7 @@ public class EnvironmentModel {
    * Get a copy of a {@link UserProfileModel} with the specified {@link UUID}
    *
    * @param id The UUID of the {@link UserProfileModel} that one is looking for
-   * @return The {@link UserProfileModel} with the specified UUID {@param id}
+   * @return The {@link UserProfileModel} with the specified UUID id
    * @throws NonExistantUserProfileException thrown when the specified {@link UUID} is of a user
    *     that does not exist
    */
@@ -216,7 +216,7 @@ public class EnvironmentModel {
   }
 
   /**
-   * Returns an array of all the userprofiles that match the specified {@param desiredProfileType}
+   * Returns an array of all the userprofiles that match the specified desiredProfileType
    *
    * @param desiredProfileType {@link ProfileType} Enum
    * @return Array of {@link UserProfileModel}
@@ -275,7 +275,7 @@ public class EnvironmentModel {
   }
 
   /**
-   * Gets the currently set date & time in the simulator in a pre-determined format
+   * Gets the currently set date and time in the simulator in a pre-determined format
    *
    * @return Date object representing currently set date and time
    */
@@ -353,7 +353,7 @@ public class EnvironmentModel {
   }
 
   /**
-   * Returns boolean if the Windows are blocked.
+   * Returns boolean if the Windows are blocked..
    *
    * @return the boolean
    */
@@ -385,7 +385,8 @@ public class EnvironmentModel {
     this.windowsObstructed = false;
   }
 
-  /** Returns the HouseGraphic displayed to the user @return the house graphic */
+  /** Returns the HouseGraphic displayed to the user
+   * @return the house graphic */
   public HouseGraphic getHouseGraphic() {
     return this.houseGraphic;
   }
