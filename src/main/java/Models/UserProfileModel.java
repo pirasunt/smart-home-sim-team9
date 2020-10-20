@@ -4,13 +4,14 @@ import Enums.ProfileType;
 
 import java.util.UUID;
 
+/** The type User profile model. */
 public class UserProfileModel {
   private final UUID profileID;
   private final ProfileType type;
   private String name;
   private int
       roomID; // Indicates UserProfile's current room location (A value of -1 indicates that a room
-              // has not been assigned to the UserProfile)
+  // has not been assigned to the UserProfile)
 
   /**
    * Creates a new UserProfileModel Object with a random UUID

@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController} manipulates the data within this class.
+ * Controllers.EnvironmentController}* manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
@@ -148,6 +148,11 @@ public class EnvironmentModel {
     return new UserProfileModel(this.currentUser);
   }
 
+  /**
+   * Sets current user.
+   *
+   * @param currentUser the current user
+   */
   public void setCurrentUser(UserProfileModel currentUser) {
     this.currentUser = new UserProfileModel(currentUser);
     Console.print(
@@ -338,10 +343,20 @@ public class EnvironmentModel {
     }
   }
 
+  /**
+   * Gets simulation object.
+   *
+   * @return the simulation running
+   */
   public boolean getSimulationRunning() {
     return this.simulationRunning;
   }
 
+  /**
+   * Returns boolean if the Windows are blocked.
+   *
+   * @return the boolean
+   */
   public boolean isWindowObstructed() {
     return this.windowsObstructed;
   }
@@ -370,7 +385,7 @@ public class EnvironmentModel {
     this.windowsObstructed = false;
   }
 
-  /** Returns the HouseGraphic displayed to the user */
+  /** Returns the HouseGraphic displayed to the user @return the house graphic */
   public HouseGraphic getHouseGraphic() {
     return this.houseGraphic;
   }
