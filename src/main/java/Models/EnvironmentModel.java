@@ -7,6 +7,9 @@ import Views.Console;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * EnvironmentModel represents the data structure of the system. The {@link Controllers.EnvironmentController} manipulates the data within this class.
+ */
 public class EnvironmentModel {
     private static EnvironmentModel instance = null;
 
@@ -29,6 +32,12 @@ public class EnvironmentModel {
         this(h, 21, new GregorianCalendar(), profileList);
     }
 
+    /**
+     * Initializes an EnvironmentModel and ensures that only 1 instance of this class exists during runtime
+     * @param h An instance of {@link House} that was initialized with an XML
+     * @param profiles A list of initial {@link UserProfileModel} that will be initialized & available with the simulation.
+     * @return An Initialized Singleton of EnvironmentModel
+     */
     public static EnvironmentModel createSimulation(House h, UserProfileModel... profiles) {
         if (instance == null) {
             ArrayList<UserProfileModel> profileList = new ArrayList<UserProfileModel>();
@@ -45,11 +54,17 @@ public class EnvironmentModel {
         return instance;
     }
 
-    // used in testing to reset instance
+    /**
+     * Used for testing
+     */
     public static void resetInstance() {
         instance = null;
     }
 
+    /**
+     * Used to set the outside temperature in the simulation
+     * @param newTemp is the new temperature
+     */
     public void setTemperature(int newTemp) {
         this.outsideTemperature = newTemp;
     }
@@ -69,16 +84,30 @@ public class EnvironmentModel {
     }
 
 
+    /**
+     * Modifies the room location of the specified user.
+     * NOTE: This method only modifies the location on the {@link UserProfileModel} that is contained within
+     * the internal {@link ArrayList} of this class and NOT the reference that is passed in.
+     * @param profile The {@link UserProfileModel} object that needs its location modified
+     * @param room The {@link Room} object that represents the new location of the user profile
+     */
     public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
         try {
             updateProfileEntry(profile.modifyLocation(room.getId()));
             Console.print("Set Room to: '" + room.getName() + "' for user " + profile.getName() + "/" + profile.getProfileType() + "\n");
         } catch (NonExistantUserProfileException e) {
-            System.err.println(e.getMessage()); //TODO: Return some sort of error window
+            System.err.println(e.getMessage()); //TODO: Return some sort of error window in the future
         }
     }
 
+    /**
+     * Modifies the profile name of the specified user.
+     * NOTE: This method only modifies the profile name on the {@link UserProfileModel} that is contained within
+     * the internal list of this class and NOT the reference that is passed in.
+     * @param profile The {@link UserProfileModel} object that needs its name modified
+     * @param newName The new name of the user profile
+     */
     public void editProfileName(UserProfileModel profile, String newName) {
 
         try {
@@ -102,6 +131,12 @@ public class EnvironmentModel {
         Console.print("Current user has been set to " + this.currentUser.getName() + "/" + this.currentUser.getProfileType());
     }
 
+    /**
+     * Get a copy of a {@link UserProfileModel} with the specified {@link UUID}
+     * @param id The UUID of the {@link UserProfileModel} that one is looking for
+     * @return The {@link UserProfileModel} with the specified UUID {@param id}
+     * @throws NonExistantUserProfileException thrown when the specified {@link UUID} is of a user that does not exist
+     */
     public UserProfileModel getUserByID(UUID id) throws NonExistantUserProfileException {
         UserProfileModel temp = null;
         for (int i = 0; i < this.userProfileModelList.size(); i++) {
@@ -117,12 +152,7 @@ public class EnvironmentModel {
         return temp;
     }
 
-    /**
-     * Internal helper method that finds and updates a current UserProfile object in the ArrayList attribute
-     * Any updated UserProfile objects in the ArrayList must pass by this method
-     *
-     * @param updatedProfile UserProfile object with updated attributes
-     */
+
     private void updateProfileEntry(UserProfileModel updatedProfile) throws NonExistantUserProfileException {
 
         boolean existingProfile = false;
@@ -147,6 +177,11 @@ public class EnvironmentModel {
 
     }
 
+    /**
+     * Returns an array of all the userprofiles that match the specified {@param desiredProfileType}
+     * @param desiredProfileType {@link profileType} Enum
+     * @return Array of {@link UserProfileModel}
+     */
     public UserProfileModel[] getProfilesByCategory(profileType desiredProfileType) {
         ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
@@ -162,37 +197,69 @@ public class EnvironmentModel {
         return temp2;
     }
 
+    /**
+     * Gets a boolean indicating whether a "Current User" has been selected in the simulator
+     * @return true if currentUser is set and false otherwise.
+     */
     public boolean isCurrentUserSet() {
         return !(this.currentUser == null);
     }
 
+    /**
+     * Gets the outside temperature that is currently set
+     * @return temperature value
+     */
     public int getOutsideTemp() {
         return this.outsideTemperature;
     }
 
+    /**
+     * Gets the currently set date in the simulator in a pre-determined format
+     * @return String representation of a {@link Date} object
+     */
     public String getDateString() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
         return dateFormatter.format(this.currentCalObj.getTime());
     }
 
+    /**
+     * Gets the currently set time in the simulator in a pre-determined format
+     * @return String representation of a {@link Date} object
+     */
     public String getTimeString() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
         return dateFormatter.format(this.currentCalObj.getTime());
     }
 
+    /**
+     * Gets the currently set date & time in the simulator in a pre-determined format
+     * @return Date object representing currently set date and time
+     */
     public Date getDateObject() {
         return this.currentCalObj.getTime();
     }
 
+    /**
+     * Sets the Date of the Simulator
+     * @param newDate {@link Date} object representing the desired date
+     */
     public void setDate(Date newDate) {
         this.currentCalObj.set(newDate.getYear(), newDate.getMonth(), newDate.getDate());
     }
 
-    public void setTime(Date newDate) {
-        this.currentCalObj.set(Calendar.HOUR_OF_DAY, newDate.getHours());
-        this.currentCalObj.set(Calendar.MINUTE, newDate.getMinutes());
+    /**
+     * Sets the Time of the Simulator
+     * @param newTime {@link Date} object representing the desired time
+     */
+    public void setTime(Date newTime) {
+        this.currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
+        this.currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
     }
 
+    /**
+     * Gets all the existing rooms that are in the {@link House}
+     * @return An array of {@link Room} objects
+     */
     public Room[] getRooms() {
         ArrayList<Room> temp = this.house.getRooms();
         Room[] roomArray = new Room[temp.size()];
@@ -204,6 +271,12 @@ public class EnvironmentModel {
         return roomArray;
     }
 
+    /**
+     * Adds a new {@link UserProfileModel} to the internal List of this class
+     * @param newUser The new {@link UserProfileModel} to be added
+     * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This includes an empty profile name
+     * or non-set {@link profileType}
+     */
     public void addUserProfile(UserProfileModel newUser) throws Exception {
 
         if(newUser.getName() .equals("") || newUser.getName() == null || newUser.getProfileType() == null){

@@ -1,5 +1,12 @@
 package Custom;
 
+/**
+ * This Exception is thrown when a modification is attempted on a UserProfile Object that
+ * does not exist in the {@link Models.EnvironmentModel} Object.
+ *
+ * This check is done by checking the UserProfile's UUID against the UUIDs of all the profiles in
+ * {@link Models.EnvironmentModel}
+ */
 public class NonExistantUserProfileException extends Exception {
     /**
      * Constructs a new exception with the specified detail message.  The
