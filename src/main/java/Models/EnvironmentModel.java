@@ -1,0 +1,291 @@
+package Models;
+
+import Custom.NonExistantUserProfileException;
+import Enums.profileType;
+import Views.Console;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * EnvironmentModel represents the data structure of the system. The {@link Controllers.EnvironmentController} manipulates the data within this class.
+ */
+public class EnvironmentModel {
+    private static EnvironmentModel instance = null;
+
+    private int outsideTemperature;
+    private final Calendar currentCalObj;
+    private UserProfileModel currentUser;
+    private final ArrayList<UserProfileModel> userProfileModelList;
+    private final House house;
+
+
+    private EnvironmentModel(House h, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
+        this.house = h;
+        this.outsideTemperature = temperature;
+        this.currentCalObj = cal;
+        this.userProfileModelList = profileList;
+        this.currentUser = null;
+    }
+
+    private EnvironmentModel(House h, ArrayList<UserProfileModel> profileList) {
+        this(h, 21, new GregorianCalendar(), profileList);
+    }
+
+    /**
+     * Initializes an EnvironmentModel and ensures that only 1 instance of this class exists during runtime
+     * @param h An instance of {@link House} that was initialized with an XML
+     * @param profiles A list of initial {@link UserProfileModel} that will be initialized & available with the simulation.
+     * @return An Initialized Singleton of EnvironmentModel
+     */
+    public static EnvironmentModel createSimulation(House h, UserProfileModel... profiles) {
+        if (instance == null) {
+            ArrayList<UserProfileModel> profileList = new ArrayList<UserProfileModel>();
+            for (UserProfileModel profile : profiles) {
+                profileList.add(profile);
+            }
+            instance = new EnvironmentModel(h, profileList);
+
+
+        } else {
+            System.err.println("There already exists an instance of environment. Returning that instance");
+        }
+
+        return instance;
+    }
+
+    /**
+     * Used for testing
+     */
+    public static void resetInstance() {
+        instance = null;
+    }
+
+    /**
+     * Used to set the outside temperature in the simulation
+     * @param newTemp is the new temperature
+     */
+    public void setTemperature(int newTemp) {
+        this.outsideTemperature = newTemp;
+    }
+
+    /**
+     * Returns a deep copy of all the registered user profiles
+     *
+     * @return UserProfile Array of all registered user profile in the environment
+     */
+    public UserProfileModel[] getAllUserProfiles() {
+        UserProfileModel[] up = new UserProfileModel[this.userProfileModelList.size()];
+
+        for (int i = 0; i < up.length; i++) {
+            up[i] = new UserProfileModel(this.userProfileModelList.get(i));
+        }
+        return up;
+    }
+
+
+    /**
+     * Modifies the room location of the specified user.
+     * NOTE: This method only modifies the location on the {@link UserProfileModel} that is contained within
+     * the internal {@link ArrayList} of this class and NOT the reference that is passed in.
+     * @param profile The {@link UserProfileModel} object that needs its location modified
+     * @param room The {@link Room} object that represents the new location of the user profile
+     */
+    public void modifyProfileLocation(UserProfileModel profile, Room room) {
+
+        try {
+            updateProfileEntry(profile.modifyLocation(room.getId()));
+            Console.print("Set Room to: '" + room.getName() + "' for user " + profile.getName() + "/" + profile.getProfileType() + "\n");
+        } catch (NonExistantUserProfileException e) {
+            System.err.println(e.getMessage()); //TODO: Return some sort of error window in the future
+        }
+    }
+
+    /**
+     * Modifies the profile name of the specified user.
+     * NOTE: This method only modifies the profile name on the {@link UserProfileModel} that is contained within
+     * the internal list of this class and NOT the reference that is passed in.
+     * @param profile The {@link UserProfileModel} object that needs its name modified
+     * @param newName The new name of the user profile
+     */
+    public void editProfileName(UserProfileModel profile, String newName) {
+
+        try {
+            updateProfileEntry(profile.modifyName(newName));
+        } catch (NonExistantUserProfileException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Returns a deep copy of the currently selected user on the simulation
+     *
+     * @return Deep copy of currently selected user.
+     */
+    public UserProfileModel getCurrentUser() {
+        return new UserProfileModel(this.currentUser);
+    }
+
+    public void setCurrentUser(UserProfileModel currentUser) {
+        this.currentUser = new UserProfileModel(currentUser);
+        Console.print("Current user has been set to " + this.currentUser.getName() + "/" + this.currentUser.getProfileType());
+    }
+
+    /**
+     * Get a copy of a {@link UserProfileModel} with the specified {@link UUID}
+     * @param id The UUID of the {@link UserProfileModel} that one is looking for
+     * @return The {@link UserProfileModel} with the specified UUID {@param id}
+     * @throws NonExistantUserProfileException thrown when the specified {@link UUID} is of a user that does not exist
+     */
+    public UserProfileModel getUserByID(UUID id) throws NonExistantUserProfileException {
+        UserProfileModel temp = null;
+        for (int i = 0; i < this.userProfileModelList.size(); i++) {
+            if (id == this.userProfileModelList.get(i).getProfileID()) {
+                temp = new UserProfileModel(this.userProfileModelList.get(i));
+                break;
+            }
+        }
+        if (temp == null) {
+            throw new NonExistantUserProfileException("UserProfile " + id + "does not exist or has been deleted");
+        }
+
+        return temp;
+    }
+
+
+    private void updateProfileEntry(UserProfileModel updatedProfile) throws NonExistantUserProfileException {
+
+        boolean existingProfile = false;
+        int index = -1;
+        for (int i = 0; i < this.userProfileModelList.size(); i++) {
+            if (this.userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
+                existingProfile = true;
+                index = i;
+            }
+        }
+
+        if (existingProfile && index >= 0) {
+            this.userProfileModelList.set(index, updatedProfile);
+        } else {
+            throw new NonExistantUserProfileException("UserProfile " + updatedProfile.getProfileID() + " with name " + updatedProfile.getName() + "does not exist or has been deleted");
+        }
+
+        //Update currentUser entry if needed
+        if (this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
+            this.currentUser = updatedProfile;
+        }
+
+    }
+
+    /**
+     * Returns an array of all the userprofiles that match the specified {@param desiredProfileType}
+     * @param desiredProfileType {@link profileType} Enum
+     * @return Array of {@link UserProfileModel}
+     */
+    public UserProfileModel[] getProfilesByCategory(profileType desiredProfileType) {
+        ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
+
+        for (int i = 0; i < this.userProfileModelList.size(); i++) {
+            if (this.userProfileModelList.get(i).getProfileType() == desiredProfileType)
+                temp.add(new UserProfileModel(this.userProfileModelList.get(i))); //Deep copy
+        }
+        UserProfileModel[] temp2 = new UserProfileModel[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            temp2[i] = temp.get(i);
+        }
+
+        return temp2;
+    }
+
+    /**
+     * Gets a boolean indicating whether a "Current User" has been selected in the simulator
+     * @return true if currentUser is set and false otherwise.
+     */
+    public boolean isCurrentUserSet() {
+        return !(this.currentUser == null);
+    }
+
+    /**
+     * Gets the outside temperature that is currently set
+     * @return temperature value
+     */
+    public int getOutsideTemp() {
+        return this.outsideTemperature;
+    }
+
+    /**
+     * Gets the currently set date in the simulator in a pre-determined format
+     * @return String representation of a {@link Date} object
+     */
+    public String getDateString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+        return dateFormatter.format(this.currentCalObj.getTime());
+    }
+
+    /**
+     * Gets the currently set time in the simulator in a pre-determined format
+     * @return String representation of a {@link Date} object
+     */
+    public String getTimeString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
+        return dateFormatter.format(this.currentCalObj.getTime());
+    }
+
+    /**
+     * Gets the currently set date & time in the simulator in a pre-determined format
+     * @return Date object representing currently set date and time
+     */
+    public Date getDateObject() {
+        return this.currentCalObj.getTime();
+    }
+
+    /**
+     * Sets the Date of the Simulator
+     * @param newDate {@link Date} object representing the desired date
+     */
+    public void setDate(Date newDate) {
+        this.currentCalObj.set(newDate.getYear(), newDate.getMonth(), newDate.getDate());
+    }
+
+    /**
+     * Sets the Time of the Simulator
+     * @param newTime {@link Date} object representing the desired time
+     */
+    public void setTime(Date newTime) {
+        this.currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
+        this.currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
+    }
+
+    /**
+     * Gets all the existing rooms that are in the {@link House}
+     * @return An array of {@link Room} objects
+     */
+    public Room[] getRooms() {
+        ArrayList<Room> temp = this.house.getRooms();
+        Room[] roomArray = new Room[temp.size()];
+
+        for (int i = 0; i < temp.size(); i++) {
+            roomArray[i] = temp.get(i); //No need to create new Room objects since the getRooms() method returns a new ArrayList object.
+        }
+
+        return roomArray;
+    }
+
+    /**
+     * Adds a new {@link UserProfileModel} to the internal List of this class
+     * @param newUser The new {@link UserProfileModel} to be added
+     * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This includes an empty profile name
+     * or non-set {@link profileType}
+     */
+    public void addUserProfile(UserProfileModel newUser) throws Exception {
+
+        if(newUser.getName() .equals("") || newUser.getName() == null || newUser.getProfileType() == null){
+            throw new Exception("Can Not Create User: Invalid User Attributes");
+        } else {
+            this.userProfileModelList.add(new UserProfileModel(newUser));
+            Console.print("New user '" + newUser.getName() + "'/" + newUser.getProfileType() +" has been created");
+        }
+
+
+    }
+}

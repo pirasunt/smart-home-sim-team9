@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 /**
  * The type Console.
  */
-class Console {
+public class Console {
     /**
      * The Frame.
      */

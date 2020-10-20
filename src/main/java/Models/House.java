@@ -16,7 +16,7 @@ public class House {
      */
     ArrayList<Room> rooms = new ArrayList<Room>();
 
-//    TO REMOVE
+////    TO REMOVE
 //	public House() {
 //		int room1ID = 1;
 //		int room2ID = 2;

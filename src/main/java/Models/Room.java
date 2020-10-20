@@ -108,7 +108,7 @@ public class Room {
      *
      * @return lightsOn the value of the lights being on or off
      */
-    public boolean getLightsOn(){
+    public boolean getLightsOn() {
         return lightsOn;
     }
 
@@ -117,13 +117,12 @@ public class Room {
      *
      * @param value true if trying to turn lights on, false if off
      */
-    public void setLightsOn(boolean value){
+    public void setLightsOn(boolean value) {
         this.lightsOn = value;
     }
 
     @Override
     public String toString() {
-        return "Models.Room [left=" + leftWall + ", right=" + rightWall + ", top=" + topWall + ", bottom=" + bottomWall + ", name=" + name
-                + ", id=" + id + "]";
+        return this.getName();
     }
 }

@@ -1,7 +1,11 @@
 package Views;
 
+import Controllers.EnvironmentController;
+import Models.EnvironmentModel;
+import Models.UserProfileModel;
 import Custom.CustomXStream;
 import Models.House;
+import Enums.profileType;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,10 +37,25 @@ public class FilePickerStart extends JFrame {
         goButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                //Sample users. The 3rd parameter is roomID (-1 to indicate that no room has been set)
+                UserProfileModel p1 = new UserProfileModel(profileType.ADULT, "James",-1);
+                UserProfileModel p2 = new UserProfileModel(profileType.STRANGER, "Janice", -1);
+                UserProfileModel p3 = new UserProfileModel(profileType.CHILD, "Morty", -1);
+                UserProfileModel p4 = new UserProfileModel(profileType.GUEST, "Astley", -1);
+                UserProfileModel p5 = new UserProfileModel(profileType.GUEST, "Penny", -1);
+                UserProfileModel p6 = new UserProfileModel(profileType.STRANGER, "Cool Guy", -1);
+                UserProfileModel p7 = new UserProfileModel(profileType.CHILD, "Rick", -1);
+
+
+
                 CustomXStream stream = new CustomXStream();
                 House house = (House) stream.fromXML(pathTo);
                 HouseGraphic hg = new HouseGraphic(house);
                 hg.init();
+
+                //Init singleton Environment object with HOUSE and USERS. Pass this instance to objects that need it.
+                EnvironmentModel theModel = EnvironmentModel.createSimulation(house, p1, p2, p3, p4, p5, p6,p7);
+
 
                 //Init console, can now call static method Console.print()
                 Console c = new Console();
@@ -44,9 +63,9 @@ public class FilePickerStart extends JFrame {
 
                 Console.print("Welcome to the simulator!");
 
-                OptionFrame pp2 = new OptionFrame();
-                pp2.setSize(250, 250);
-                pp2.setVisible(true);
+                EnvironmentView theView = new EnvironmentView();
+                EnvironmentController theController = new EnvironmentController(theView, theModel);
+
 
                 o.dispose();
             }
