@@ -228,6 +228,8 @@ public class EnvironmentController {
                      theView.addChangeDateListener(new ChangeDateListener());
                      theView.addChangeTimeListener(new ChangeTimeListener());
                      theView.addSimulationToggleListener(new SimulationToggleListener());
+                     theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
+
 
 
 
@@ -280,6 +282,24 @@ public class EnvironmentController {
                     theModel.startSimulation();
                     theView.changeSimulationToggleText("Stop Simulation");
                 }
+             }
+         }
+
+         private class ObstructWindowsToggleListener implements ActionListener {
+
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 if (theModel.isWindowObstructed()) {
+                     //logic to unobstruct
+
+                     theModel.clearWindows();
+                     theView.changeWindowsObstructedToggleText("Obstruct Windows");
+                 }
+                 else {
+                     //logic to obstruct
+                     theModel.obstructWindows();
+                     theView.changeWindowsObstructedToggleText("Clear Windows");
+                 }
              }
          }
      }

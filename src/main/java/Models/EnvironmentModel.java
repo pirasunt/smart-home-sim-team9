@@ -16,6 +16,7 @@ public class EnvironmentModel {
     private final ArrayList<UserProfileModel> userProfileModelList;
     private final House house;
     private boolean simulationRunning = false;
+    private boolean windowsObstructed = false;
 
 
     private EnvironmentModel(House h, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
@@ -218,6 +219,11 @@ public class EnvironmentModel {
         return this.simulationRunning;
     }
 
+    public boolean isWindowObstructed(){
+        return this.windowsObstructed;
+    }
+
+
     public void startSimulation() {
         this.simulationRunning = true;
         Console.print("The simulation has been started.");
@@ -226,5 +232,16 @@ public class EnvironmentModel {
     public void stopSimulation() {
         this.simulationRunning = false;
         Console.print("The simulation has been stopped.");
+    }
+
+
+    public void obstructWindows() {
+        Console.print("Obstructing all windows!");
+        this.windowsObstructed = true;
+    }
+
+    public void clearWindows() {
+        Console.print("Clearing all windows!");
+        this.windowsObstructed = false;
     }
 }

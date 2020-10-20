@@ -31,12 +31,12 @@
                   <text value="Start Simulation"/>
                 </properties>
               </component>
-              <component id="60f20" class="javax.swing.JButton" binding="editActionButton" default-binding="true">
+              <component id="60f20" class="javax.swing.JButton" binding="toggleObstructionButton" default-binding="true">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Edit Action"/>
+                  <text value="Obstruct Windows"/>
                 </properties>
               </component>
               <component id="525f6" class="javax.swing.JComboBox" binding="userProfileDropDown">
