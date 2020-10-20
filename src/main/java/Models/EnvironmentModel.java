@@ -37,14 +37,14 @@ public class EnvironmentModel {
         this(h, hg, 21, new GregorianCalendar(), profileList);
     }
 
-    public static EnvironmentModel createSimulation(House h, HouseGraphic hg, UserProfileModel... profiles) {
     /**
      * Initializes an EnvironmentModel and ensures that only 1 instance of this class exists during runtime
      * @param h An instance of {@link House} that was initialized with an XML
+     * @param hg An instance of {@link HouseGraphic} that is being displayed and must be refreshed when changes occur
      * @param profiles A list of initial {@link UserProfileModel} that will be initialized & available with the simulation.
      * @return An Initialized Singleton of EnvironmentModel
      */
-    public static EnvironmentModel createSimulation(House h, UserProfileModel... profiles) {
+    public static EnvironmentModel createSimulation(House h, HouseGraphic hg, UserProfileModel... profiles) {
         if (instance == null) {
             ArrayList<UserProfileModel> profileList = new ArrayList<UserProfileModel>();
             for (UserProfileModel profile : profiles) {
@@ -184,10 +184,9 @@ public class EnvironmentModel {
 
     /**
      * Returns an array of all the userprofiles that match the specified {@param desiredProfileType}
-     * @param desiredProfileType {@link profileType} Enum
+     * @param desiredProfileType {@link ProfileType} Enum
      * @return Array of {@link UserProfileModel}
      */
-    public UserProfileModel[] getProfilesByCategory(profileType desiredProfileType) {
     public UserProfileModel[] getProfilesByCategory(ProfileType desiredProfileType) {
         ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
@@ -283,7 +282,7 @@ public class EnvironmentModel {
      * Adds a new {@link UserProfileModel} to the internal List of this class
      * @param newUser The new {@link UserProfileModel} to be added
      * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This includes an empty profile name
-     * or non-set {@link profileType}
+     * or non-set {@link ProfileType}
      */
     public void addUserProfile(UserProfileModel newUser) throws Exception {
 

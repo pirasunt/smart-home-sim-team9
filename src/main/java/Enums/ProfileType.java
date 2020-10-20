@@ -1,11 +1,10 @@
 package Enums;
 
-public enum ProfileType {
 /**
  * Enum type representing the different 'privilege' levels that a {@link Models.UserProfileModel} can have.
  * User with a higher level privilege can perform more actions within the simulator
  */
-public enum profileType {
+public enum ProfileType {
     /**
      * Adult represents a household member that can perform any action (Family Member)
      */
