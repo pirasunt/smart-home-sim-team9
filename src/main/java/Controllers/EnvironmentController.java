@@ -22,14 +22,23 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * The EnvironmentController handles all operations requested in {@link EnvironmentView} and makes the necessary changes to the data within
+ * {@link EnvironmentModel}.
+ */
 public class EnvironmentController {
+
 
     private EnvironmentView theView;
     private EnvironmentModel theModel;
-
     private Boolean action1 = false;
     private Boolean action2= false;
 
+    /**
+     * Initializes the Environment controller using a reference to the View and Model
+     * @param v A reference to an instance of an {@link EnvironmentView}
+     * @param m A reference to an instance of an {@link EnvironmentModel}
+     */
     public EnvironmentController(EnvironmentView v, EnvironmentModel m){
         this.theView = v;
         this.theModel = m;
@@ -408,7 +417,7 @@ public class EnvironmentController {
                     Date date = (Date)value;
                     SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
                     String time = formatter.format(date);
-                    theView.getTimeField().setValue(time);
+                    theView.setTimeField(time);
                     theModel.setTime(date); //Update Environment time
                     theView.removeTimeComponentPicker();
                     action2 = false;
