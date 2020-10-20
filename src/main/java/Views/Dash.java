@@ -18,7 +18,7 @@ public class Dash extends JFrame {
     /**
      * The Edit action button.
      */
-    JButton editActionButton;
+    JButton toggleObstructionButton;
     /**
      * The Tabbed pane 1.
      */
@@ -69,12 +69,12 @@ public class Dash extends JFrame {
             }
         });
 
-        editActionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+//        toggleObstructionButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
         tabbedPane1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
