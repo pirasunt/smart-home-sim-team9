@@ -1,6 +1,6 @@
 package Views;
 
-import Enums.profileType;
+import Enums.ProfileType;
 import Models.Room;
 import Models.UserProfileModel;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -29,7 +29,7 @@ public class EnvironmentView extends JFrame {
 
     private JFrame createUser;
     private JTextField profileName;
-    private JComboBox<profileType> profileType;
+    private JComboBox<ProfileType> profileType;
 
     private Dash dashboard;
 
@@ -147,6 +147,14 @@ public class EnvironmentView extends JFrame {
         this.dashboard.timeConfirm.addActionListener(listenForTimeConfirm);
     }
 
+    public void addSimulationToggleListener(ActionListener listenForSimulationStart){
+        this.dashboard.toggleSimulationButton.addActionListener(listenForSimulationStart);
+    }
+
+    public void addObstructionToggleListener(ActionListener listenForWindowObstruction){
+        this.dashboard.toggleObstructionButton.addActionListener(listenForWindowObstruction);
+    }
+
 
     /**
      * Creates Simulation Dashboard and uses the passed in values to set initial values
@@ -211,7 +219,7 @@ public class EnvironmentView extends JFrame {
 
         dashboard.time_spinner = new JSpinner(sm);
 
-        JSpinner.DateEditor te = new JSpinner.DateEditor(dashboard.time_spinner, "hh:mm a");
+        JSpinner.DateEditor te = new JSpinner.DateEditor(dashboard.time_spinner, "hh:mm:ss a");
         dashboard.time_spinner.setEditor(te);
 
 
@@ -289,7 +297,7 @@ public class EnvironmentView extends JFrame {
         createUser.setLayout(grid);
 
         this.profileName = new JTextField();
-        this.profileType = new JComboBox<profileType>(Enums.profileType.values());
+        this.profileType = new JComboBox<ProfileType>(ProfileType.values());
         this.confirmUserCreateBtn= new JButton("Create");
 
         createUser.add(new JLabel("Profile Name: "));
@@ -306,8 +314,6 @@ public class EnvironmentView extends JFrame {
         createUser.pack();
         createUser.setLocationRelativeTo(null); //Center User Selection JFrame
         createUser.setVisible(true);
-
-
     }
 
     /**
@@ -316,9 +322,16 @@ public class EnvironmentView extends JFrame {
      * @return A {@link UserProfileModel} containing the attributes specified in {@link #userCreationWindow()}
      */
     public UserProfileModel getNewlyCreatedUser() {
-        return new UserProfileModel((profileType) this.profileType.getSelectedItem(), this.profileName.getText(), -1);
+        return new UserProfileModel((ProfileType) this.profileType.getSelectedItem(), this.profileName.getText(), -1);
     }
 
+    public void changeSimulationToggleText(String test){
+        dashboard.toggleSimulationButton.setText(test);
+    }
+
+    public void changeWindowsObstructedToggleText(String text){
+        dashboard.toggleObstructionButton.setText(text);
+    }
     /**
      * Used to clean up UI after the user is done creating a {@link UserProfileModel}
      */

@@ -1,26 +1,11 @@
 package Views;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
-import java.util.UUID;
-
-import Custom.NonExistantUserProfileException;
-import Models.UserProfileModel;
-import Models.Room;
-import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
 
 /**
  * The type Dash.
@@ -29,11 +14,11 @@ public class Dash extends JFrame {
     /**
      * The Stop simulation button.
      */
-    JButton stopSimulationButton;
+    JButton toggleSimulationButton;
     /**
      * The Edit action button.
      */
-    JButton editActionButton;
+    JButton toggleObstructionButton;
     /**
      * The Tabbed pane 1.
      */
@@ -77,20 +62,19 @@ public class Dash extends JFrame {
         timeConfirm = new JButton("OK");
 
 
-
-        stopSimulationButton.addActionListener(new ActionListener() {
+        toggleSimulationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
         });
 
-        editActionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+//        toggleObstructionButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
         tabbedPane1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -99,6 +83,5 @@ public class Dash extends JFrame {
         });
 
     }
-
 
 }

@@ -88,6 +88,10 @@ public class HouseGraphic extends JPanel {
         if (wall.getType() == WallType.WALL) {
             DrawWall(direction, xCoord, yCoord, g);
         } else if (wall.getType() == WallType.WINDOWS) {
+            if (((WindowWall)wall).isWindowObstructed() == true) {
+                DrawObstructedWindow(direction, xCoord, yCoord, g);
+                return;
+            }
             DrawWindow(direction, xCoord, yCoord, g);
         } else if (wall.getType() == WallType.OUTSIDE) {
             DrawDoor(direction, xCoord, yCoord, g);
@@ -160,4 +164,26 @@ public class HouseGraphic extends JPanel {
             g.drawLine(xCoord + 100, yCoord + 65, xCoord + 100, yCoord + 100);
         }
     }
+
+    private void DrawObstructedWindow(String direction, int xCoord, int yCoord, Graphics g) {
+        if (direction.equals("top")) {
+            g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
+            g.setColor(Color.red);
+            g.fillRect(xCoord + 35, yCoord - 2, 30, 4);
+        } else if (direction.equals("bottom")) {
+            g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
+            g.setColor(Color.red);
+            g.fillRect(xCoord + 35, yCoord + 98, 30, 4);
+        } else if (direction.equals("left")) {
+            g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
+            g.setColor(Color.red);
+            g.fillRect(xCoord - 2, yCoord + 35, 4, 30);
+        } else if (direction.equals("right")) {
+            g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
+            g.setColor(Color.red);
+            g.fillRect(xCoord + 98, yCoord + 35, 4, 30);
+        }
+        g.setColor(Color.BLACK);
+    }
+
 }

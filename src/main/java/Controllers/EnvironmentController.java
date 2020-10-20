@@ -1,10 +1,12 @@
 package Controllers;
 
 import Custom.NonExistantUserProfileException;
-import Enums.profileType;
+import Enums.ProfileType;
+import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
+import Models.Walls.WindowWall;
 import Views.Console;
 import Views.EnvironmentView;
 
@@ -75,7 +77,7 @@ public class EnvironmentController {
             frame.add(guestLabel);
             frame.add(strangerLabel);
 
-            UserProfileModel[][] organisedProfiles = {theModel.getProfilesByCategory(profileType.ADULT), theModel.getProfilesByCategory(profileType.CHILD), theModel.getProfilesByCategory(profileType.GUEST), theModel.getProfilesByCategory(profileType.STRANGER)};
+            UserProfileModel[][] organisedProfiles = {theModel.getProfilesByCategory(ProfileType.ADULT), theModel.getProfilesByCategory(ProfileType.CHILD), theModel.getProfilesByCategory(ProfileType.GUEST), theModel.getProfilesByCategory(ProfileType.STRANGER)};
             for(int i = 0; i< allProfiles.length*4; i++) {
                 int currentCol = i%4;
                 int currentRow = i/4;
@@ -236,6 +238,9 @@ public class EnvironmentController {
                      theView.addTempSpinnerListener(new TempSpinnerListener());
                      theView.addChangeDateListener(new ChangeDateListener());
                      theView.addChangeTimeListener(new ChangeTimeListener());
+                     theView.addSimulationToggleListener(new SimulationToggleListener());
+                     theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
+
 
 
 
@@ -273,6 +278,21 @@ public class EnvironmentController {
                          }
                      }
                  }
+             }
+         }
+
+         private class SimulationToggleListener implements ActionListener {
+
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                if (theModel.getSimulationRunning() == true) {
+                    theModel.stopSimulation();
+                    theView.changeSimulationToggleText("Start Simulation");
+                }
+                else if (theModel.getSimulationRunning() == false) {
+                    theModel.startSimulation();
+                    theView.changeSimulationToggleText("Stop Simulation");
+                }
              }
          }
      }
@@ -439,6 +459,66 @@ public class EnvironmentController {
 
                 theView.disposeCreateUser();
 
+            }
+        }
+    }
+
+    private class ObstructWindowsToggleListener implements ActionListener {
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (theModel.isWindowObstructed()) {
+                Room[] rooms = theModel.getRooms();
+
+                for (Room r : rooms) {
+                    if (r.getId() == 0) continue;
+
+                    if (r.getLeftWall().getType() == WallType.WINDOWS ) {
+                        ((WindowWall)r.getLeftWall()).setWindowObstructed(false);
+                    }
+                    if (r.getRightWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getRightWall()).setWindowObstructed(false);
+                    }
+                    if (r.getTopWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getTopWall()).setWindowObstructed(false);
+                    }
+                    if (r.getBottomWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getBottomWall()).setWindowObstructed(false);
+                    }
+                }
+
+                theModel.getHouseGraphic().repaint();
+                theModel.clearWindows();
+                theView.changeWindowsObstructedToggleText("Obstruct Windows");
+            }
+            else if (!theModel.isWindowObstructed()){
+                Room[] rooms = theModel.getRooms();
+
+                for (Room r : rooms) {
+                    if (r.getId() == 0) continue;
+
+                    if (r.getLeftWall().getType() == WallType.WINDOWS ) {
+                        ((WindowWall)r.getLeftWall()).setWindowObstructed(true);
+                    }
+                    if (r.getRightWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getRightWall()).setWindowObstructed(true);
+                    }
+                    if (r.getTopWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getTopWall()).setWindowObstructed(true);
+                    }
+                    if (r.getBottomWall().getType() == WallType.WINDOWS) {
+                        ((WindowWall)r.getBottomWall()).setWindowObstructed(true);
+                    }
+                }
+
+                theModel.getHouseGraphic().repaint();
+                theModel.obstructWindows();
+                theView.changeWindowsObstructedToggleText("Clear Windows");
             }
         }
     }
