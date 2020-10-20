@@ -332,7 +332,7 @@ public class EnvironmentController {
       theModel.setTemperature(
           theView
               .getTemperatureFromSpinner()); // Any change on Temp Spinner will update Environment
-                                             // attribute
+      // attribute
     }
   }
 

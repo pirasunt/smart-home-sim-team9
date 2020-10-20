@@ -58,6 +58,7 @@ public class House {
     return this;
   }
 
+  /** Retrieves XML of the current house and saves to file. */
   public void getXML() {
     CustomXStream stream = new CustomXStream();
     try {

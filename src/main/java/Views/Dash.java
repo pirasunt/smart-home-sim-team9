@@ -26,17 +26,43 @@ public class Dash extends JFrame {
   /** The Tab 1. */
   JPanel Tab1;
 
+  /** The User profile drop down. */
   JComboBox userProfileDropDown; // Current User Profile
+
+  /** The User room drop down. */
   JComboBox userRoomDropDown; // Current User Profile's Room
+
+  /** The Change date. */
   JButton changeDate;
+
+  /** The Change time. */
   JButton changeTime;
+
+  /** The Date field. */
   JFormattedTextField dateField; // Date field
+
+  /** The Time field. */
   JFormattedTextField timeField; // Time Field
+
+  /** The Temp spinner. */
   JSpinner tempSpinner; // temperature spinner
+
+  /** The Date picker. */
   JDatePickerImpl datePicker;
+
+  /** The Time spinner. */
   JSpinner time_spinner;
+
+  /** The Time confirm. */
   JButton timeConfirm;
 
+  /**
+   * Instantiates a new Dashboard frame.
+   *
+   * @param temp the temp
+   * @param date the date
+   * @param time the time
+   */
   public Dash(int temp, String date, String time) {
     tempSpinner.setValue(temp);
     dateField.setValue(date);

@@ -161,10 +161,20 @@ public class EnvironmentView extends JFrame {
     this.dashboard.timeConfirm.addActionListener(listenForTimeConfirm);
   }
 
+  /**
+   * Method used to pass on the {@link JButton} listener responsibility to its caller.
+   *
+   * @param listenForSimulationStart the listen for simulation start
+   */
   public void addSimulationToggleListener(ActionListener listenForSimulationStart) {
     this.dashboard.toggleSimulationButton.addActionListener(listenForSimulationStart);
   }
 
+  /**
+   * Method used to pass on the {@link JButton} listener responsibility to its caller.
+   *
+   * @param listenForWindowObstruction the listen for window obstruction
+   */
   public void addObstructionToggleListener(ActionListener listenForWindowObstruction) {
     this.dashboard.toggleObstructionButton.addActionListener(listenForWindowObstruction);
   }
@@ -231,6 +241,11 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.setSelectedItem(room);
   }
 
+  /**
+   * Changes the time passed.
+   *
+   * @param currentDate the current date
+   */
   public void ChangeTime(Date currentDate) {
     this.dashboard.setLayout(new GridLayout(2, 1, 3, 3));
 
@@ -253,8 +268,8 @@ public class EnvironmentView extends JFrame {
    * Provides an interface that allows the Simulator user to change the Date
    *
    * @param formatter Object that performs the conversion between the user selecting a date on the
-   *     UI via a DatePicker to a useable String format to be stored in the {@link
-   *     Models.EnvironmentModel}. The core logic of {@param formatter} is found in {@link
+   *     UI via a DatePicker to a usable String format to be stored in the {@link
+   *     Models.EnvironmentModel}. The core logic of formatter is found in {@link
    *     Controllers.EnvironmentController}
    */
   public void ChangeDate(JFormattedTextField.AbstractFormatter formatter) {
@@ -338,7 +353,7 @@ public class EnvironmentView extends JFrame {
 
   /**
    * Called after a user confirms the create of a user. This method creates a new {@link
-   * UserProfileModel} with the completed fields
+   * UserProfileModel}* with the completed fields
    *
    * @return A {@link UserProfileModel} containing the attributes specified in {@link
    *     #userCreationWindow()}
@@ -348,10 +363,20 @@ public class EnvironmentView extends JFrame {
         (ProfileType) this.profileType.getSelectedItem(), this.profileName.getText(), -1);
   }
 
-  public void changeSimulationToggleText(String test) {
-    dashboard.toggleSimulationButton.setText(test);
+  /**
+   * Toggles the simulation text.
+   *
+   * @param text the text
+   */
+  public void changeSimulationToggleText(String text) {
+    dashboard.toggleSimulationButton.setText(text);
   }
 
+  /**
+   * Toggles the obstruction text.
+   *
+   * @param text the text
+   */
   public void changeWindowsObstructedToggleText(String text) {
     dashboard.toggleObstructionButton.setText(text);
   }
