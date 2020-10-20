@@ -1,11 +1,10 @@
 package Models;
 
 import Custom.CustomXStream;
-import Enums.profileType;
+import Enums.ProfileType;
 import Views.Console;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Models.EnvironmentModel;
 
 import java.io.File;
 import java.util.Date;
@@ -20,7 +19,7 @@ public class EnvironmentModelTest {
 
     @Test
     void testOutsideTemperature() {
-        UserProfileModel u = new UserProfileModel(profileType.ADULT, "James", -1);
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", -1);
         EnvironmentModel env = EnvironmentModel.createSimulation(new House(), u);
         env.setTemperature(23);
         assert env.getOutsideTemp() == 23;
@@ -31,7 +30,7 @@ public class EnvironmentModelTest {
         CustomXStream cxs = new CustomXStream();
         House testHouse;
         testHouse = (House) cxs.fromXML(new File("House.xml"));
-        UserProfileModel u = new UserProfileModel(profileType.ADULT, "James", 2);
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
         EnvironmentModel env = EnvironmentModel.createSimulation(testHouse,u);
         env.setCurrentUser(u);
         assert env.getCurrentUser().getRoomID() ==  2;
@@ -42,7 +41,7 @@ public class EnvironmentModelTest {
         CustomXStream cxs = new CustomXStream();
         House testHouse;
         testHouse = (House) cxs.fromXML(new File("House.xml"));
-        UserProfileModel u = new UserProfileModel(profileType.ADULT, "James", 2);
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
         EnvironmentModel env = EnvironmentModel.createSimulation(testHouse,u);
         env.setCurrentUser(u);
         UserProfileModel tmp = env.getCurrentUser().modifyLocation(3);
@@ -54,7 +53,7 @@ public class EnvironmentModelTest {
         CustomXStream cxs = new CustomXStream();
         House testHouse;
         testHouse = (House) cxs.fromXML(new File("House.xml"));
-        UserProfileModel u = new UserProfileModel(profileType.ADULT, "James", 2);
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
         EnvironmentModel env = EnvironmentModel.createSimulation(testHouse,u);
         Date d = new Date();
         env.setTime(d);

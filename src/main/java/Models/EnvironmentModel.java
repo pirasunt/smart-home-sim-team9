@@ -1,7 +1,7 @@
 package Models;
 
 import Custom.NonExistantUserProfileException;
-import Enums.profileType;
+import Enums.ProfileType;
 import Views.Console;
 
 import java.text.SimpleDateFormat;
@@ -15,6 +15,7 @@ public class EnvironmentModel {
     private UserProfileModel currentUser;
     private final ArrayList<UserProfileModel> userProfileModelList;
     private final House house;
+    private boolean simulationRunning = false;
 
 
     private EnvironmentModel(House h, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
@@ -36,7 +37,6 @@ public class EnvironmentModel {
                 profileList.add(profile);
             }
             instance = new EnvironmentModel(h, profileList);
-
 
         } else {
             System.err.println("There already exists an instance of environment. Returning that instance");
@@ -147,7 +147,7 @@ public class EnvironmentModel {
 
     }
 
-    public UserProfileModel[] getProfilesByCategory(profileType desiredProfileType) {
+    public UserProfileModel[] getProfilesByCategory(ProfileType desiredProfileType) {
         ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
         for (int i = 0; i < this.userProfileModelList.size(); i++) {
@@ -176,7 +176,7 @@ public class EnvironmentModel {
     }
 
     public String getTimeString() {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
         return dateFormatter.format(this.currentCalObj.getTime());
     }
 
@@ -212,7 +212,19 @@ public class EnvironmentModel {
             this.userProfileModelList.add(new UserProfileModel(newUser));
             Console.print("New user '" + newUser.getName() + "'/" + newUser.getProfileType() +" has been created");
         }
+    }
 
+    public boolean getSimulationRunning(){
+        return this.simulationRunning;
+    }
 
+    public void startSimulation() {
+        this.simulationRunning = true;
+        Console.print("The simulation has been started.");
+    }
+
+    public void stopSimulation() {
+        this.simulationRunning = false;
+        Console.print("The simulation has been stopped.");
     }
 }

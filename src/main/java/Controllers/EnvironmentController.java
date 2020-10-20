@@ -1,16 +1,12 @@
 package Controllers;
 
 import Custom.NonExistantUserProfileException;
-import Enums.profileType;
+import Enums.ProfileType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Views.Console;
-import Views.Dash;
 import Views.EnvironmentView;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -22,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Properties;
 import java.util.UUID;
 
 public class EnvironmentController {
@@ -71,7 +66,7 @@ public class EnvironmentController {
             frame.add(guestLabel);
             frame.add(strangerLabel);
 
-            UserProfileModel[][] organisedProfiles = {theModel.getProfilesByCategory(profileType.ADULT), theModel.getProfilesByCategory(profileType.CHILD), theModel.getProfilesByCategory(profileType.GUEST), theModel.getProfilesByCategory(profileType.STRANGER)};
+            UserProfileModel[][] organisedProfiles = {theModel.getProfilesByCategory(ProfileType.ADULT), theModel.getProfilesByCategory(ProfileType.CHILD), theModel.getProfilesByCategory(ProfileType.GUEST), theModel.getProfilesByCategory(ProfileType.STRANGER)};
             for(int i = 0; i< allProfiles.length*4; i++) {
                 int currentCol = i%4;
                 int currentRow = i/4;
@@ -232,6 +227,7 @@ public class EnvironmentController {
                      theView.addTempSpinnerListener(new TempSpinnerListener());
                      theView.addChangeDateListener(new ChangeDateListener());
                      theView.addChangeTimeListener(new ChangeTimeListener());
+                     theView.addSimulationToggleListener(new SimulationToggleListener());
 
 
 
@@ -269,6 +265,21 @@ public class EnvironmentController {
                          }
                      }
                  }
+             }
+         }
+
+         private class SimulationToggleListener implements ActionListener {
+
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                if (theModel.getSimulationRunning() == true) {
+                    theModel.stopSimulation();
+                    theView.changeSimulationToggleText("Start Simulation");
+                }
+                else if (theModel.getSimulationRunning() == false) {
+                    theModel.startSimulation();
+                    theView.changeSimulationToggleText("Stop Simulation");
+                }
              }
          }
      }

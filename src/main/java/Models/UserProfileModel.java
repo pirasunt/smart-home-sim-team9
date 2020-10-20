@@ -1,16 +1,16 @@
 package Models;
 
-import Enums.profileType;
+import Enums.ProfileType;
 
 import java.util.UUID;
 
 public class UserProfileModel {
     private final UUID profileID;
-    private final profileType type;
+    private final ProfileType type;
     private String name;
     private int roomID; //Indicates UserProfile's current room location (A value of -1 indicates that a room has not been assigned to the UserProfile)
 
-    public UserProfileModel(profileType type, String name, int id) {
+    public UserProfileModel(ProfileType type, String name, int id) {
         this.profileID = UUID.randomUUID();
         this.roomID = id;
         this.type = type;
@@ -53,7 +53,7 @@ public class UserProfileModel {
         return this.profileID;
     }
 
-    public profileType getProfileType() {
+    public ProfileType getProfileType() {
         return this.type;
     }
 

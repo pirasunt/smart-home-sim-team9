@@ -1,6 +1,6 @@
 package Enums;
 
-public enum profileType {
+public enum ProfileType {
     ADULT,
     CHILD,
     GUEST,
