@@ -55,7 +55,7 @@ public class House {
      * @return the rooms in the house
      */
     public ArrayList<Room> getRooms() {
-        return new ArrayList<Room>(rooms);
+        return this.rooms;
     }
 
     /**

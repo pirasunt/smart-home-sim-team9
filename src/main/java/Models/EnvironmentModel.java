@@ -3,6 +3,7 @@ package Models;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
 import Views.Console;
+import Views.HouseGraphic;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,29 +16,31 @@ public class EnvironmentModel {
     private UserProfileModel currentUser;
     private final ArrayList<UserProfileModel> userProfileModelList;
     private final House house;
+    private final HouseGraphic houseGraphic;
     private boolean simulationRunning = false;
     private boolean windowsObstructed = false;
 
 
-    private EnvironmentModel(House h, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
+    private EnvironmentModel(House h, HouseGraphic hg, int temperature, Calendar cal, ArrayList<UserProfileModel> profileList) {
         this.house = h;
+        this.houseGraphic = hg;
         this.outsideTemperature = temperature;
         this.currentCalObj = cal;
         this.userProfileModelList = profileList;
         this.currentUser = null;
     }
 
-    private EnvironmentModel(House h, ArrayList<UserProfileModel> profileList) {
-        this(h, 21, new GregorianCalendar(), profileList);
+    private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
+        this(h, hg, 21, new GregorianCalendar(), profileList);
     }
 
-    public static EnvironmentModel createSimulation(House h, UserProfileModel... profiles) {
+    public static EnvironmentModel createSimulation(House h, HouseGraphic hg, UserProfileModel... profiles) {
         if (instance == null) {
             ArrayList<UserProfileModel> profileList = new ArrayList<UserProfileModel>();
             for (UserProfileModel profile : profiles) {
                 profileList.add(profile);
             }
-            instance = new EnvironmentModel(h, profileList);
+            instance = new EnvironmentModel(h, hg, profileList);
 
         } else {
             System.err.println("There already exists an instance of environment. Returning that instance");
@@ -196,12 +199,14 @@ public class EnvironmentModel {
 
     public Room[] getRooms() {
         ArrayList<Room> temp = this.house.getRooms();
-        Room[] roomArray = new Room[temp.size()];
+        Room[] roomArray = new Room[temp.size()+1];
+        Room r = new Room("Outside", null,null,null,null, 0);
 
         for (int i = 0; i < temp.size(); i++) {
             roomArray[i] = temp.get(i); //No need to create new Room objects since the getRooms() method returns a new ArrayList object.
         }
 
+        roomArray[roomArray.length-1] = r;
         return roomArray;
     }
 
@@ -223,25 +228,42 @@ public class EnvironmentModel {
         return this.windowsObstructed;
     }
 
-
+    /**
+     * Turns on the simulation
+     */
     public void startSimulation() {
         this.simulationRunning = true;
         Console.print("The simulation has been started.");
     }
 
+    /**
+     * Turns off the simulation
+     */
     public void stopSimulation() {
         this.simulationRunning = false;
         Console.print("The simulation has been stopped.");
     }
 
-
+    /**
+     * Obstructs all windows
+     */
     public void obstructWindows() {
         Console.print("Obstructing all windows!");
         this.windowsObstructed = true;
     }
 
+    /**
+     * Removes obstruction from all windows
+     */
     public void clearWindows() {
         Console.print("Clearing all windows!");
         this.windowsObstructed = false;
+    }
+
+    /**
+     * Returns the HouseGraphic displayed to the user
+     */
+    public HouseGraphic getHouseGraphic() {
+        return this.houseGraphic;
     }
 }

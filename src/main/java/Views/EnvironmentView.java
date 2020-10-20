@@ -100,8 +100,8 @@ public class EnvironmentView extends JFrame {
         this.dashboard.toggleSimulationButton.addActionListener(listenForSimulationStart);
     }
 
-    public void addObstructionToggleListener(ActionListener listener){
-        this.dashboard.toggleObstructionButton.addActionListener(listener);
+    public void addObstructionToggleListener(ActionListener listenForWindowObstruction){
+        this.dashboard.toggleObstructionButton.addActionListener(listenForWindowObstruction);
     }
 
     public void createDash(int temp, String date, String time){
