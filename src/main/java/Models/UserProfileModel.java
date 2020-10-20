@@ -10,6 +10,12 @@ public class UserProfileModel {
     private String name;
     private int roomID; //Indicates UserProfile's current room location (A value of -1 indicates that a room has not been assigned to the UserProfile)
 
+    /**
+     * Creates a new UserProfileModel Object with a random UUID
+     * @param type One of 4 profile types and represents the privilege level of the profile
+     * @param name Name of the profile.
+     * @param id Represents the room ID of the user's current location
+     */
     public UserProfileModel(profileType type, String name, int id) {
         this.profileID = UUID.randomUUID();
         this.roomID = id;
@@ -17,9 +23,12 @@ public class UserProfileModel {
         this.name = name;
     }
 
-    //Copy Constructor
+    /**
+     * Copy constructor used to generate deep copies
+     * @param original The original object that needs to be copied
+     */
     public UserProfileModel(UserProfileModel original) {
-        this.profileID = original.profileID; //UUID immutable obj
+        this.profileID = original.profileID; //UUID immutable obj already
         this.roomID = original.roomID;
         this.type = original.type;
         this.name = original.name;
@@ -27,8 +36,7 @@ public class UserProfileModel {
 
     /**
      * Returns deep copy of a UserProfile object with the location attribute modified
-     *
-     * @param id The new Room ID to move the UserProfile to
+     * @param id The new Room ID of the UserProfile
      * @return a Deep copy of the UserProfile with the roomID attribute modified
      */
     UserProfileModel modifyLocation(int id) {
@@ -39,7 +47,6 @@ public class UserProfileModel {
 
     /**
      * Returns deep copy of the UserProfile object with its name modified
-     *
      * @param newName The new name of the UserProfile
      * @return a Deep copy of the UserProfile with the profile Name attribute modified
      */
@@ -49,42 +56,41 @@ public class UserProfileModel {
         return temp;
     }
 
+    /**
+     * Getter that fetches the profile ID. Used to uniquely identify an object of this class
+     * @return UUID of the UserProfile
+     */
     public UUID getProfileID() {
         return this.profileID;
     }
 
+    /**
+     * Getter that fetches {@link profileType} Enum and represents the privilege level of the user
+     * @return UserProfile privilege level
+     */
     public profileType getProfileType() {
         return this.type;
     }
 
+    /**
+     * Getter that fetches the Profile Name
+     * @return Name of the profile as a String
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Getter that fetches the Profile's location
+     * @return Integer that represents the {@link Room} ID of the UserProfile
+     */
     public int getRoomID() {
         return this.roomID;
     }
 
 
     /**
-     * Returns a string representation of the object. In general, the
-     * {@code toString} method returns a string that
-     * "textually represents" this object. The result should
-     * be a concise but informative representation that is easy for a
-     * person to read.
-     * It is recommended that all subclasses override this method.
-     * <p>
-     * The {@code toString} method for class {@code Object}
-     * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `{@code @}', and
-     * the unsigned hexadecimal representation of the hash code of the
-     * object. In other words, this method returns a string equal to the
-     * value of:
-     * <blockquote>
-     * <pre>
-     * getClass().getName() + '@' + Integer.toHexString(hashCode())
-     * </pre></blockquote>
-     *
+     * Returns a string representation of the object.
      * @return a string representation of the object.
      */
     @Override
