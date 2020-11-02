@@ -13,12 +13,13 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>1</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>2</connectedRoom>
       </bottomWall>
-      <name>Entrance</name>
+      <name>Room 1</name>
       <id>1</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -40,8 +41,9 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>2</windowId>
       </bottomWall>
-      <name>Living Room</name>
+      <name>Room 2</name>
       <id>2</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -51,6 +53,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>3</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -63,8 +66,9 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>4</windowId>
       </bottomWall>
-      <name>Bathroom</name>
+      <name>Room 3</name>
       <id>3</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -74,6 +78,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>5</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -86,7 +91,7 @@
       <bottomWall>
         <type>WALL</type>
       </bottomWall>
-      <name>Dining Room</name>
+      <name>Room 4</name>
       <id>4</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -103,12 +108,13 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>6</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>4</connectedRoom>
       </bottomWall>
-      <name>Kitchen</name>
+      <name>Room 5</name>
       <id>5</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -118,6 +124,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>7</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -131,8 +138,9 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>0</windowId>
       </bottomWall>
-      <name>Garage</name>
+      <name>Room 6</name>
       <id>6</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -150,12 +158,13 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>0</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
         <connectedRoom>9</connectedRoom>
       </bottomWall>
-      <name>Hall</name>
+      <name>Room 7</name>
       <id>7</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -169,6 +178,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>9</windowId>
       </rightWall>
       <topWall>
         <type>WALL</type>
@@ -177,8 +187,9 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>8</windowId>
       </bottomWall>
-      <name>Bedroom</name>
+      <name>Room 8</name>
       <id>8</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>
@@ -198,8 +209,9 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>10</windowId>
       </bottomWall>
-      <name>Bedroom</name>
+      <name>Room 9</name>
       <id>9</id>
       <temperature>20</temperature>
       <lightsOn>false</lightsOn>

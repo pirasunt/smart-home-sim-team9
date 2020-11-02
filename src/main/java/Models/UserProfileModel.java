@@ -9,8 +9,7 @@ public class UserProfileModel {
   private final UUID profileID;
   private final ProfileType type;
   private String name;
-  private int
-      roomID; /* Indicates UserProfile's current room location (A value of -1 indicates that a room
+  private int roomID; /* Indicates UserProfile's current room location (A value of -1 indicates that a room
    has not been assigned to the UserProfile)*/
 
   /**
