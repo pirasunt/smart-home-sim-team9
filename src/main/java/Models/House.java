@@ -23,12 +23,12 @@ public class House {
     int room8ID = 8;
     int room9ID = 9;
 
-    Room room1 = new Room("Room 1", new RoomWall(room4ID), new RoomWall(room2ID), new OutsideWall(), new WindowWall(1), room1ID);
+    Room room1 = new Room("Room 1", new RoomWall(room4ID), new RoomWall(room2ID), new OutsideWall(1), new WindowWall(1), room1ID);
     Room room2 = new Room("Room 2", new RoomWall(room3ID), new WindowWall(2), new RoomWall(room7ID), new RoomWall(room1ID), room2ID);
     Room room3 = new Room("Room 3", new WindowWall(3), new WindowWall(4), new RoomWall(room2ID), new Wall(), room3ID);
     Room room4 = new Room("Room 4", new WindowWall(5), new Wall(), new RoomWall(room1ID), new RoomWall(room5ID), room4ID);
     Room room5 = new Room("Room 5", new RoomWall(room6ID), new RoomWall(room4ID), new Wall(), new WindowWall(6), room5ID);
-    Room room6 = new Room("Room 6", new WindowWall(7), new WindowWall(), new RoomWall(room5ID), new OutsideWall(), room6ID);
+    Room room6 = new Room("Room 6", new WindowWall(7), new WindowWall(), new RoomWall(room5ID), new OutsideWall(2), room6ID);
     Room room7 = new Room("Room 7", new RoomWall(room2ID), new RoomWall(room9ID), new RoomWall(room8ID), new WindowWall(), room7ID);
     Room room8 = new Room("Room 8", new RoomWall(room7ID), new WindowWall(8), new WindowWall(9), new Wall(), room8ID);
     Room room9 = new Room("Room 9", new Wall(), new WindowWall(10), new Wall(), new RoomWall(room7ID), room9ID);

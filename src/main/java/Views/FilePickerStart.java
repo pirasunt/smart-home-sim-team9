@@ -84,6 +84,8 @@ public class FilePickerStart extends JFrame {
    */
   public static void main(String[] args) {
     run(new FilePickerStart(), 250, 110);
+//  House house = new House();
+//  house.getXML();
   }
 
   /**
