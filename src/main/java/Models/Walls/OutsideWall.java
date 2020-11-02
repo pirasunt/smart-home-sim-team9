@@ -7,6 +7,7 @@ import Views.Console;
 public class OutsideWall extends Wall {
   private boolean doorLocked = false;
   private int doorId;
+  private boolean lightsOn = false;
 
   /** Instantiates a new Outside wall. */
   public OutsideWall() {
@@ -46,5 +47,33 @@ public class OutsideWall extends Wall {
 
     this.doorLocked = false;
     console.print("Door with outside access " + doorId + " has been unlocked.");
+  }
+
+  /**
+   * Method to set if the lights at this door are on or off.
+   * @param lightsOn the value you wish the attribute lightsOn to take
+   */
+  public void setLightsOn(boolean lightsOn) {
+    this.lightsOn = lightsOn;
+  }
+
+  /**
+   * Method to be used when a door is being locked automatically be the system.
+   */
+  public void turnLightsOn(){
+    Console console = new Console();
+
+    this.lightsOn = true;
+    console.print("Door with outside access " + doorId + " lights have been turned on.");
+  }
+
+  /**
+   * Method to be used when a door is being locked automatically be the system.
+   */
+  public void turnsLightsOff(){
+    Console console = new Console();
+
+    this.lightsOn = false;
+    console.print("Door with outside access " + doorId + " lights have been turned off.");
   }
 }
