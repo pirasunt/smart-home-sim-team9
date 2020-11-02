@@ -1,6 +1,7 @@
 package Models;
 
 import Models.Walls.*;
+import Views.Console;
 
 /** The type Room. */
 public class Room {
@@ -118,6 +119,19 @@ public class Room {
   public void setLightsOn(boolean value) {
     this.lightsOn = value;
   }
+
+  public void turnOffLights(){
+    lightsOn = false;
+    Console console = new Console();
+    console.print("Lights in room: " + name + " have been turned off.");
+  }
+
+  public void turnOnLights(){
+    lightsOn = true;
+    Console console = new Console();
+    console.print("Lights in room: " + name + " have been turned on.");
+  }
+
 
   @Override
   public String toString() {
