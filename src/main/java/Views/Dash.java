@@ -37,10 +37,10 @@ public class Dash extends JFrame {
   JButton changeTime;
 
   /** The Date field. */
-  JFormattedTextField dateField; // Date field
+  JLabel dateField; // Date field
 
   /** The Time field. */
-  JFormattedTextField timeField; // Time Field
+  JLabel timeField; // Time Field
 
   /** The Temp spinner. */
   JSpinner tempSpinner; // temperature spinner
@@ -63,8 +63,8 @@ public class Dash extends JFrame {
    */
   public Dash(int temp, String date, String time) {
     tempSpinner.setValue(temp);
-    dateField.setValue(date);
-    timeField.setValue(time);
+    dateField.setText(date);
+    timeField.setText(time);
     timeConfirm = new JButton("OK");
     tabbedPane1.addMouseListener(
         new MouseAdapter() {
