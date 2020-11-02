@@ -1,6 +1,8 @@
 package Views;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -54,6 +56,10 @@ public class Dash extends JFrame {
   /** The Time confirm. */
   JButton timeConfirm;
 
+  private int hour;
+  private int minute;
+  private int second;
+
   /**
    * Instantiates a new Dashboard frame.
    *
@@ -73,5 +79,26 @@ public class Dash extends JFrame {
             super.mouseClicked(e);
           }
         });
+    Timer timer = new Timer(1000, new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        second++;
+        if(second > 59) {
+          minute++;
+          second = 0;
+        }
+        if(minute > 59) {
+          hour++;
+          minute = 0;
+        }
+        if(hour > 23){
+          hour = 0;
+        }
+        String time = hour + "h " + minute + "m " + second + "s";
+        timeField.setText(time);
+      }
+    });
+
+    timer.start();
   }
 }
