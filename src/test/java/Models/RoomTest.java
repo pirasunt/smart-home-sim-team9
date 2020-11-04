@@ -53,7 +53,6 @@ public class RoomTest {
 
     assertEquals(testRoom.getAllUsersInRoom(env).size(), expected.size());
     assertEquals(testRoom.getAllUsersInRoom(env).get(0).getName(), expected.get(0).getName());
-    assertEquals(testRoom.getAllUsersInRoom(env).get(0).getProfileID(), expected.get(0).getProfileID());
     assertEquals(testRoom.getAllUsersInRoom(env).get(0).getRoomID(), expected.get(0).getRoomID());
     assertEquals(testRoom.getAllUsersInRoom(env).get(0).getProfileType(), expected.get(0).getProfileType());
   }
