@@ -409,7 +409,7 @@ public class EnvironmentController {
         Object value = theView.getTimeSpinnerVal();
         if (value instanceof Date) {
           Date date = (Date) value;
-          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
           String time = formatter.format(date);
           theView.setTimeField(time);
           theModel.setTime(date); // Update Environment time
