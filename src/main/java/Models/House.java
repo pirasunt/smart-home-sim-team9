@@ -63,10 +63,10 @@ public class House {
      * @param room the room to be returned
      * @return the room requested
      */
-    public Room getRoom(Room room) {
+    public Room getRoomById(int id) {
         for (Room r : rooms) {
-            if (r.getId() == room.getId() && r.getName().equals(room.getName())) {
-                return room;
+            if (r.getId() == id) {
+                return r;
             }
         }
         return null;
