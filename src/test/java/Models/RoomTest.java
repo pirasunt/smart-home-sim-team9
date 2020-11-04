@@ -2,7 +2,6 @@ package Models;
 
 import Custom.CustomXStream;
 import Enums.ProfileType;
-import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
 import Views.HouseGraphic;
 import org.junit.jupiter.api.Test;
@@ -56,5 +55,4 @@ public class RoomTest {
     assertEquals(testRoom.getAllUsersInRoom(env).get(0).getRoomID(), expected.get(0).getRoomID());
     assertEquals(testRoom.getAllUsersInRoom(env).get(0).getProfileType(), expected.get(0).getProfileType());
   }
-
 }
