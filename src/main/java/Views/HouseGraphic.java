@@ -1,5 +1,6 @@
 package Views;
 
+import DrawingHelpers.WindowDrawingHelper;
 import Enums.WallType;
 import Models.House;
 import Models.Room;
@@ -77,17 +78,45 @@ public class HouseGraphic extends JPanel {
   }
 
   private void DrawWallType(Wall wall, String direction, int xCoord, int yCoord, Graphics g) {
+    //The wall is just a normal wall
     if (wall.getType() == WallType.WALL) {
       DrawWall(direction, xCoord, yCoord, g);
-    } else if (wall.getType() == WallType.WINDOWS) {
-      if (((WindowWall) wall).isWindowObstructed() == true) {
-        DrawObstructedWindow(direction, xCoord, yCoord, g);
-        return;
+    }
+    //The wall is a wall that contains a window
+    else if (wall.getType() == WallType.WINDOWS) {
+      //Window is obstructed
+      if (((WindowWall) wall).isWindowObstructed() == true){
+        //Window is opened
+        if (((WindowWall) wall).isWindowOpen() == true) {
+          WindowDrawingHelper.DrawOpenObstructedWindow(direction, xCoord, yCoord, g);
+          return;
+        }
+        //Window is closed
+        else if (((WindowWall) wall).isWindowOpen() == false){
+          WindowDrawingHelper.DrawClosedObstructedWindow(direction, xCoord, yCoord, g);
+          return;
+        }
       }
-      DrawWindow(direction, xCoord, yCoord, g);
-    } else if (wall.getType() == WallType.OUTSIDE) {
+      //Window is not obstructed
+      else if (((WindowWall) wall).isWindowObstructed() == false){
+        //Window is opened
+        if (((WindowWall) wall).isWindowOpen() == true) {
+          WindowDrawingHelper.DrawOpenWindow(direction, xCoord, yCoord, g);
+          return;
+        }
+        //Window is closed
+        else if (((WindowWall) wall).isWindowOpen() == false){
+          WindowDrawingHelper.DrawClosedWindow(direction, xCoord, yCoord, g);
+          return;
+        }
+      }
+    }
+    //The wall is a door that leads to the outside
+    else if (wall.getType() == WallType.OUTSIDE) {
       DrawDoor(direction, xCoord, yCoord, g);
-    } else if (wall.getType() == WallType.DOOR) {
+    }
+    //The wall is a door that leads to another room
+    else if (wall.getType() == WallType.DOOR) {
       int attachedRoom = ((RoomWall) wall).getConnectedRoom();
 
       if (visitedRooms.contains(attachedRoom)) {
@@ -113,6 +142,8 @@ public class HouseGraphic extends JPanel {
     }
   }
 
+
+
   private void DrawWall(String direction, int xCoord, int yCoord, Graphics g) {
     if (direction.equals("top")) {
       g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
@@ -125,21 +156,7 @@ public class HouseGraphic extends JPanel {
     }
   }
 
-  private void DrawWindow(String direction, int xCoord, int yCoord, Graphics g) {
-    if (direction.equals("top")) {
-      g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
-      g.drawRect(xCoord + 35, yCoord - 2, 30, 4);
-    } else if (direction.equals("bottom")) {
-      g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
-      g.drawRect(xCoord + 35, yCoord + 98, 30, 4);
-    } else if (direction.equals("left")) {
-      g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
-      g.drawRect(xCoord - 2, yCoord + 35, 4, 30);
-    } else if (direction.equals("right")) {
-      g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
-      g.drawRect(xCoord + 98, yCoord + 35, 4, 30);
-    }
-  }
+
 
   private void DrawDoor(String direction, int xCoord, int yCoord, Graphics g) {
     if (direction.equals("top")) {
@@ -157,24 +174,24 @@ public class HouseGraphic extends JPanel {
     }
   }
 
-  private void DrawObstructedWindow(String direction, int xCoord, int yCoord, Graphics g) {
-    if (direction.equals("top")) {
-      g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
-      g.setColor(Color.red);
-      g.fillRect(xCoord + 35, yCoord - 2, 30, 4);
-    } else if (direction.equals("bottom")) {
-      g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
-      g.setColor(Color.red);
-      g.fillRect(xCoord + 35, yCoord + 98, 30, 4);
-    } else if (direction.equals("left")) {
-      g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
-      g.setColor(Color.red);
-      g.fillRect(xCoord - 2, yCoord + 35, 4, 30);
-    } else if (direction.equals("right")) {
-      g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
-      g.setColor(Color.red);
-      g.fillRect(xCoord + 98, yCoord + 35, 4, 30);
-    }
-    g.setColor(Color.BLACK);
+
+
+
+
+  private void DrawLockedDoor(String direction, int xCoord, int yCoord, Graphics g){
+
   }
+
+  private void DrawDoorLight(String direction, int xCoord, int yCoord, Graphics g){
+
+  }
+
+  private void DrawRoomLight(String direction, int xCoord, int yCoord, Graphics g){
+
+  }
+
+  private void DrawPeopleInRoom(String direction, int xCoord, int yCoord, Graphics g){
+
+  }
+
 }
