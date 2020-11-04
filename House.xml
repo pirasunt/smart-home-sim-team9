@@ -9,6 +9,7 @@
         <type>OUTSIDE</type>
         <doorLocked>false</doorLocked>
         <doorId>1</doorId>
+        <lightsOn>false</lightsOn>
       </rightWall>
       <topWall class="WindowWall">
         <type>WINDOWS</type>
@@ -135,6 +136,7 @@
         <type>OUTSIDE</type>
         <doorLocked>false</doorLocked>
         <doorId>2</doorId>
+        <lightsOn>false</lightsOn>
       </topWall>
       <bottomWall class="WindowWall">
         <type>WINDOWS</type>

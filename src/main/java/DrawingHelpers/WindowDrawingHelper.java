@@ -62,7 +62,7 @@ public class WindowDrawingHelper {
         g.setColor(Color.BLACK);
     }
 
-    public static void DrawClosedWindow(String direction, int xCoord, int yCoord, Graphics g){
+    public static void DrawClosedWindow(String direction, int xCoord, int yCoord, Graphics g) {
         if (direction.equals("top")) {
             g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
             g.fillRect(xCoord + 35, yCoord - 2, 30, 4);

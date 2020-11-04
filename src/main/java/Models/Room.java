@@ -3,6 +3,8 @@ package Models;
 import Models.Walls.*;
 import Views.Console;
 
+import java.util.ArrayList;
+
 /** The type Room. */
 public class Room {
   private final Wall leftWall, rightWall, topWall, bottomWall;
@@ -120,18 +122,40 @@ public class Room {
     this.lightsOn = value;
   }
 
+  /**
+   * Method to be used when lights are turned off while the simulator is running
+   */
   public void turnOffLights(){
     lightsOn = false;
     Console console = new Console();
     console.print("Lights in room: " + name + " have been turned off.");
   }
 
+  /**
+   * Method to be used when lights are turned on while the simulator is running
+   */
   public void turnOnLights(){
     lightsOn = true;
     Console console = new Console();
     console.print("Lights in room: " + name + " have been turned on.");
   }
 
+  /**
+   * Returns which users are located in the room represented by this instance of Room.
+   * @param environment The EnvironmentModel singleton which stores all user profiles that exist in the simulation.
+   * @return an array containing all the UserProfileModel objects with a room id equal to the one of this Room instance.
+   */
+  public UserProfileModel[] getAllUsersInRoom(EnvironmentModel environment) {
+    ArrayList<UserProfileModel> users = new ArrayList<UserProfileModel>();
+
+    for (UserProfileModel user : environment.getAllUserProfiles()) {
+      if (user.getRoomID() == this.id) {
+        users.add(user);
+      }
+    }
+
+    return (UserProfileModel[])users.toArray();
+  }
 
   @Override
   public String toString() {

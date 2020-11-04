@@ -45,12 +45,14 @@ public class FilePickerStart extends JFrame {
             CustomXStream stream = new CustomXStream();
             House house = (House) stream.fromXML(pathTo);
             HouseGraphic hg = new HouseGraphic(house);
-            hg.init();
 
             // Init singleton Environment object with HOUSE and USERS. Pass this instance to objects
             // that need it.
             EnvironmentModel theModel =
                 EnvironmentModel.createSimulation(house, hg, p1, p2, p3, p4, p5, p6, p7);
+
+            //Initialize the house graphic
+            hg.init(theModel);
 
             // Init console, can now call static method Console.print()
             Console c = new Console();
@@ -84,8 +86,8 @@ public class FilePickerStart extends JFrame {
    */
   public static void main(String[] args) {
     run(new FilePickerStart(), 250, 110);
-//  House house = new House();
-//  house.getXML();
+//    House house = new House();
+//    house.getXML();
   }
 
   /**

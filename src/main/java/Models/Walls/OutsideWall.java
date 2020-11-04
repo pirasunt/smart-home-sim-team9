@@ -22,7 +22,23 @@ public class OutsideWall extends Wall {
   }
 
   /**
-   * Set the value of the doorLocked attribute describing if this outside door is locked or not
+   * Returns the value of the attribute doorLocked which is true if the door is locked, false otherwise.
+   * @return if the door is locked or not.
+   */
+  public boolean getDoorLocked(){
+    return this.doorLocked;
+  }
+
+  /**
+   * Returns the value of the attribute lightsOn which is true if the light is on, false otherwise.
+   * @return if the light is on or not.
+   */
+  public boolean getLightsOn(){
+    return this.lightsOn;
+  }
+
+  /**
+   * Set the value of the doorLocked attribute describing if this outside door is locked or not.
    * @param doorLocked the value you wish the attribute to have after this method call.
    */
   public void setDoorLocked(boolean doorLocked) {
