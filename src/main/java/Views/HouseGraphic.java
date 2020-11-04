@@ -6,6 +6,7 @@ import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.House;
 import Models.Room;
+import Models.UserProfileModel;
 import Models.Walls.*;
 
 import java.awt.*;
@@ -86,6 +87,7 @@ public class HouseGraphic extends JPanel {
 
         g.drawString(room.getName(), xCoord + 2, yCoord + 15);
         g.drawString(((Integer) room.getTemperature()).toString() + "\u00B0", xCoord + 2, yCoord + 30);
+        DrawPeopleInRoom(room, xCoord, yCoord, g);
 
         DrawWallType(room.getLeftWall(), "left", xCoord, yCoord, g);
         DrawWallType(room.getBottomWall(), "bottom", xCoord, yCoord, g);
@@ -201,8 +203,12 @@ public class HouseGraphic extends JPanel {
         g.setColor(Color.black);
     }
 
-    private void DrawPeopleInRoom(String direction, int xCoord, int yCoord, Graphics g) {
-
+    private void DrawPeopleInRoom(Room room, int xCoord, int yCoord, Graphics g) {
+        int newX = xCoord + 2;
+        int newY = yCoord + 45;
+        for (UserProfileModel user : room.getAllUsersInRoom(environment)) {
+            g.drawString("\u263A " + user.getName(), newX, newY);
+            newY += 15;
+        }
     }
-
 }

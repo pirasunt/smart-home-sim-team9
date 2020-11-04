@@ -145,7 +145,7 @@ public class Room {
    * @param environment The EnvironmentModel singleton which stores all user profiles that exist in the simulation.
    * @return an array containing all the UserProfileModel objects with a room id equal to the one of this Room instance.
    */
-  public UserProfileModel[] getAllUsersInRoom(EnvironmentModel environment) {
+  public ArrayList<UserProfileModel> getAllUsersInRoom(EnvironmentModel environment) {
     ArrayList<UserProfileModel> users = new ArrayList<UserProfileModel>();
 
     for (UserProfileModel user : environment.getAllUserProfiles()) {
@@ -154,7 +154,7 @@ public class Room {
       }
     }
 
-    return (UserProfileModel[])users.toArray();
+    return users;
   }
 
   @Override
