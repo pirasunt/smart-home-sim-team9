@@ -86,7 +86,7 @@ public class OutsideWall extends Wall {
   /**
    * Method to be used when a door is being locked automatically be the system.
    */
-  public void turnsLightsOff(){
+  public void turnLightsOff(){
     Console console = new Console();
 
     this.lightsOn = false;
