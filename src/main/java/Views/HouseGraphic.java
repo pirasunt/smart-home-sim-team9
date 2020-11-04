@@ -1,7 +1,7 @@
 package Views;
 
-import DrawingHelpers.OutsideDoorDrawingHelper;
-import DrawingHelpers.WindowDrawingHelper;
+import Helpers.DrawingHelpers.OutsideDoorDrawingHelper;
+import Helpers.DrawingHelpers.WindowDrawingHelper;
 import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.House;

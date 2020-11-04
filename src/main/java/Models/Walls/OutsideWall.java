@@ -5,7 +5,7 @@ import Views.Console;
 
 /** The type Outside wall. */
 public class OutsideWall extends Wall {
-  private boolean doorLocked = false;
+  private boolean doorLocked = true;
   private int doorId;
   private boolean lightsOn = false;
 

@@ -7,7 +7,7 @@
       </leftWall>
       <rightWall class="OutsideWall">
         <type>OUTSIDE</type>
-        <doorLocked>false</doorLocked>
+        <doorLocked>true</doorLocked>
         <doorId>1</doorId>
         <lightsOn>false</lightsOn>
       </rightWall>
@@ -134,7 +134,7 @@
       </rightWall>
       <topWall class="OutsideWall">
         <type>OUTSIDE</type>
-        <doorLocked>false</doorLocked>
+        <doorLocked>true</doorLocked>
         <doorId>2</doorId>
         <lightsOn>false</lightsOn>
       </topWall>

@@ -1,4 +1,4 @@
-package DrawingHelpers;
+package Helpers.DrawingHelpers;
 
 import java.awt.*;
 
