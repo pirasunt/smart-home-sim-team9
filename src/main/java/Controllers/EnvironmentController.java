@@ -30,8 +30,6 @@ public class EnvironmentController {
 
   private final EnvironmentView theView;
   private final EnvironmentModel theModel;
-  private Boolean action1 = false;
-  private Boolean action2 = false;
 
   /**
    * Initializes the Environment controller using a reference to the View and Model
@@ -344,10 +342,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (action2 == false) {
-        action1 = true;
         theView.ChangeDate(new CustomDateFormatter());
-      }
     }
 
     private class CustomDateFormatter extends JFormattedTextField.AbstractFormatter {
@@ -383,7 +378,6 @@ public class EnvironmentController {
           theView.setDateField(dateFormatter.format(cal.getTime()));
           theModel.setDate(cal.getTime()); // Update Environment date
           theView.removeDateComponentPicker();
-          action1 = false;
           theView.disposeDash();
           return dateFormatter.format(cal.getTime());
         }
@@ -400,11 +394,8 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (action1 == false) {
-        action2 = true;
         theView.addConfirmTimeListener(new ConfirmTimeListener());
         theView.ChangeTime(theModel.getDateObject());
-      }
     }
 
     private class ConfirmTimeListener implements ActionListener {
@@ -418,12 +409,11 @@ public class EnvironmentController {
         Object value = theView.getTimeSpinnerVal();
         if (value instanceof Date) {
           Date date = (Date) value;
-          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
           String time = formatter.format(date);
           theView.setTimeField(time);
           theModel.setTime(date); // Update Environment time
           theView.removeTimeComponentPicker();
-          action2 = false;
           theView.disposeDash();
         }
       }

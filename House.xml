@@ -7,12 +7,15 @@
       </leftWall>
       <rightWall class="OutsideWall">
         <type>OUTSIDE</type>
-        <isGarage>false</isGarage>
+        <doorLocked>true</doorLocked>
+        <doorId>1</doorId>
+        <lightsOn>false</lightsOn>
       </rightWall>
       <topWall class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>1</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
@@ -40,6 +43,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>2</windowId>
       </bottomWall>
       <name>Living Room</name>
       <id>2</id>
@@ -51,6 +55,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>3</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -63,6 +68,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>4</windowId>
       </bottomWall>
       <name>Bathroom</name>
       <id>3</id>
@@ -74,6 +80,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>5</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -103,6 +110,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>6</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
@@ -118,6 +126,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>7</windowId>
       </leftWall>
       <rightWall class="RoomWall">
         <type>DOOR</type>
@@ -125,12 +134,15 @@
       </rightWall>
       <topWall class="OutsideWall">
         <type>OUTSIDE</type>
-        <isGarage>false</isGarage>
+        <doorLocked>true</doorLocked>
+        <doorId>2</doorId>
+        <lightsOn>false</lightsOn>
       </topWall>
       <bottomWall class="WindowWall">
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>0</windowId>
       </bottomWall>
       <name>Garage</name>
       <id>6</id>
@@ -150,6 +162,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>0</windowId>
       </topWall>
       <bottomWall class="RoomWall">
         <type>DOOR</type>
@@ -169,6 +182,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>9</windowId>
       </rightWall>
       <topWall>
         <type>WALL</type>
@@ -177,6 +191,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>8</windowId>
       </bottomWall>
       <name>Bedroom</name>
       <id>8</id>
@@ -198,6 +213,7 @@
         <type>WINDOWS</type>
         <windowOpen>false</windowOpen>
         <windowObstructed>false</windowObstructed>
+        <windowId>10</windowId>
       </bottomWall>
       <name>Bedroom</name>
       <id>9</id>
