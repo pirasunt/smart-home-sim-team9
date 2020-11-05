@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}* manipulates the data within this class.
+ * Controllers.EnvironmentController}** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
@@ -48,8 +48,8 @@ public class EnvironmentModel {
    * @param h An instance of {@link House} that was initialized with an XML
    * @param hg An instance of {@link HouseGraphic} that is being displayed and must be refreshed
    *     when changes occur
-   * @param profiles A list of initial {@link UserProfileModel} that will be initialized and available
-   *     with the simulation.
+   * @param profiles A list of initial {@link UserProfileModel} that will be initialized and
+   *     available with the simulation.
    * @return An Initialized Singleton of EnvironmentModel
    */
   public static EnvironmentModel createSimulation(
@@ -352,6 +352,20 @@ public class EnvironmentModel {
   }
 
   /**
+   * Remove the inputted user profile from the list.
+   *
+   * @param u the user to be removed.
+   */
+  public void removeUserProfile(UserProfileModel u)  {
+    for (int i = 0; i < this.userProfileModelList.size(); i++) {
+      if(this.userProfileModelList.get(i).getProfileID() == u.getProfileID()){
+        this.userProfileModelList.remove(i);
+        break;
+      }
+    }
+  }
+
+  /**
    * Gets simulation object.
    *
    * @return the simulation running
@@ -393,8 +407,11 @@ public class EnvironmentModel {
     this.windowsObstructed = false;
   }
 
-  /** Returns the HouseGraphic displayed to the user
-   * @return the house graphic */
+  /**
+   * Returns the HouseGraphic displayed to the user
+   *
+   * @return the house graphic
+   */
   public HouseGraphic getHouseGraphic() {
     return this.houseGraphic;
   }
