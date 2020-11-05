@@ -30,6 +30,10 @@ public class EnvironmentController {
 
   private final EnvironmentView theView;
   private final EnvironmentModel theModel;
+  private int hour;
+  private int minute;
+  private int second;
+  private String amPM;
 
   /**
    * Initializes the Environment controller using a reference to the View and Model
@@ -46,6 +50,52 @@ public class EnvironmentController {
     this.theView.addSimulatorListener(new SimulatorListener());
     this.theView.addCreateUserListener(new CreateUserListener());
   }
+  /**
+   * Initializes the timer
+   */
+  Timer timer = new Timer(1000, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      String hourString;
+      String minuteString;
+      String secondString;
+
+      second++;
+      if(second > 59) {
+        minute++;
+        second = 0;
+      }
+      if(minute > 59) {
+        hour++;
+        minute = 0;
+      }
+      if(hour > 12){
+        hour = 1;
+        if(amPM == "AM")
+          amPM = "PM";
+        else
+          amPM = "AM";
+      }
+
+      if(hour < 10)
+        hourString = "0" + hour;
+      else
+        hourString = String.valueOf(hour);
+
+      if(minute < 10)
+        minuteString = "0" + minute;
+      else
+        minuteString = String.valueOf(minute);
+
+      if(second < 10)
+        secondString = "0" + second;
+      else
+        secondString = String.valueOf(second);
+
+      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
+      theView.setTimeField(time);
+    }
+  });
 
   private class StartListener implements ActionListener {
 
@@ -243,6 +293,7 @@ public class EnvironmentController {
           theView.addChangeTimeListener(new ChangeTimeListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
+          theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
 
         } else {
           Console.print(
@@ -291,9 +342,15 @@ public class EnvironmentController {
         if (theModel.getSimulationRunning() == true) {
           theModel.stopSimulation();
           theView.changeSimulationToggleText("Start Simulation");
+          timer.stop();
         } else if (theModel.getSimulationRunning() == false) {
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
+          hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
+          minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
+          second = Integer.parseInt(theModel.getTimeString().substring(6,8));
+          amPM = theModel.getTimeString().substring(8);
+          timer.restart();
         }
       }
     }
@@ -510,6 +567,23 @@ public class EnvironmentController {
         theModel.obstructWindows();
         theView.changeWindowsObstructedToggleText("Clear Windows");
       }
+    }
+  }
+
+  private class confirmTimeSpeedListener implements ActionListener {
+    /**
+     * Invoked when the 'OK' Button is pressed for the time speed
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      if (theView.getTimeSpeed() == "10x")
+        timer.setDelay(100);
+      else if (theView.getTimeSpeed() == "100x")
+        timer.setDelay(10);
+      else
+        timer.setDelay(1000);
     }
   }
 }
