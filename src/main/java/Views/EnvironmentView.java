@@ -401,4 +401,12 @@ public class EnvironmentView extends JFrame {
   public void disposeDash() {
     this.dashboard.dispose();
   }
+
+  public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
+    this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
+  }
+
+  public String getTimeSpeed(){
+    return dashboard.timeSpeed.getSelectedItem().toString();
+  }
 }
