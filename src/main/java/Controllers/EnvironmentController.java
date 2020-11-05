@@ -8,6 +8,7 @@ import Models.Room;
 import Models.UserProfileModel;
 import Models.Walls.WindowWall;
 import Views.Console;
+import Views.EditSimulationView;
 import Views.EnvironmentView;
 
 import javax.swing.*;
@@ -463,6 +464,12 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
+      //Pass on responsibility of editing the simulation to its own controller and view.
+      //The Environment Model contains all the environment data that will be needed.
+      EditSimulationController editSimController = new EditSimulationController(new EditSimulationView(), theModel);
+
+
       if (theModel.isWindowObstructed()) {
         Room[] rooms = theModel.getRooms();
 
