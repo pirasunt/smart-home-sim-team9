@@ -17,6 +17,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -240,8 +242,6 @@ public class EnvironmentController {
           theView.addUserDropDownListener(new UserDropDownListener());
           theView.addUserRoomDropDownListener(new UserRoomDropDownListener());
           theView.addTempSpinnerListener(new TempSpinnerListener());
-          theView.addChangeDateListener(new ChangeDateListener());
-          theView.addChangeTimeListener(new ChangeTimeListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addEditSimulationListener(new EditSimulationListener());
 
@@ -335,92 +335,6 @@ public class EnvironmentController {
     }
   }
 
-  private class ChangeDateListener implements ActionListener {
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        theView.ChangeDate(new CustomDateFormatter());
-    }
-
-    private class CustomDateFormatter extends JFormattedTextField.AbstractFormatter {
-      /**
-       * Parses <code>text</code> returning an arbitrary Object. Some formatters may return null.
-       *
-       * @param text String to convert
-       * @return Object representation of text
-       * @throws ParseException if there is an error in the conversion
-       */
-      private final String datePattern = "MMM dd, yyyy";
-
-      private final SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-      @Override
-      public Object stringToValue(String text) throws ParseException {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime((Date) dateFormatter.parseObject(text));
-        return cal;
-      }
-
-      /**
-       * Returns the string value to display for <code>value</code>.
-       *
-       * @param value Value to convert
-       * @return String representation of value
-       * @throws ParseException if there is an error in the conversion
-       */
-      @Override
-      public String valueToString(Object value) throws ParseException {
-        if (value != null) {
-          Calendar cal = (Calendar) value;
-          theView.setDateField(dateFormatter.format(cal.getTime()));
-          theModel.setDate(cal.getTime()); // Update Environment date
-          theView.removeDateComponentPicker();
-          theView.disposeDash();
-          return dateFormatter.format(cal.getTime());
-        }
-        return "";
-      }
-    }
-  }
-
-  private class ChangeTimeListener implements ActionListener {
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        theView.addConfirmTimeListener(new ConfirmTimeListener());
-        theView.ChangeTime(theModel.getDateObject());
-    }
-
-    private class ConfirmTimeListener implements ActionListener {
-      /**
-       * Invoked when an action occurs.
-       *
-       * @param e the event to be processed
-       */
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Object value = theView.getTimeSpinnerVal();
-        if (value instanceof Date) {
-          Date date = (Date) value;
-          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
-          String time = formatter.format(date);
-          theView.setTimeField(time);
-          theModel.setTime(date); // Update Environment time
-          theView.removeTimeComponentPicker();
-          theView.disposeDash();
-        }
-      }
-    }
-  }
-
   private class CreateUserListener implements ActionListener {
 
     /**
@@ -467,9 +381,12 @@ public class EnvironmentController {
 
       //Pass on responsibility of editing the simulation to its own controller and view.
       //The Environment Model contains all the environment data that will be needed.
-      EditSimulationController editSimController = new EditSimulationController(new EditSimulationView(), theModel);
+      EditSimulationView editSimView = new EditSimulationView();
+      new EditSimulationController(editSimView, theModel);
 
+      editSimView.addWindowListener(new EditSimulationWindowListener());
 
+/*
       if (theModel.isWindowObstructed()) {
         Room[] rooms = theModel.getRooms();
 
@@ -516,6 +433,96 @@ public class EnvironmentController {
         theModel.getHouseGraphic().repaint();
         theModel.obstructWindows();
         theView.changeWindowsObstructedToggleText("Clear Windows");
+      }
+      */
+    }
+
+    private class EditSimulationWindowListener implements WindowListener {
+      /**
+       * Invoked the first time a window is made visible.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowOpened(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when the user attempts to close the window
+       * from the window's system menu.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowClosing(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a window has been closed as the result
+       * of calling dispose on the window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowClosed(WindowEvent e) {
+        theView.refreshDash(theModel.getDateString(), theModel.getTimeString());
+      }
+
+      /**
+       * Invoked when a window is changed from a normal to a
+       * minimized state. For many platforms, a minimized window
+       * is displayed as the icon specified in the window's
+       * iconImage property.
+       *
+       * @param e the event to be processed
+       * @see Frame#setIconImage
+       */
+      @Override
+      public void windowIconified(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a window is changed from a minimized
+       * to a normal state.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowDeiconified(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when the Window is set to be the active Window. Only a Frame or
+       * a Dialog can be the active Window. The native windowing system may
+       * denote the active Window or its children with special decorations, such
+       * as a highlighted title bar. The active Window is always either the
+       * focused Window, or the first Frame or Dialog that is an owner of the
+       * focused Window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowActivated(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a Window is no longer the active Window. Only a Frame or a
+       * Dialog can be the active Window. The native windowing system may denote
+       * the active Window or its children with special decorations, such as a
+       * highlighted title bar. The active Window is always either the focused
+       * Window, or the first Frame or Dialog that is an owner of the focused
+       * Window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowDeactivated(WindowEvent e) {
+
       }
     }
   }

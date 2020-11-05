@@ -59,16 +59,6 @@ public class Dash extends JFrame {
   JComboBox userRoomDropDown; // Current User Profile's Room
 
   /**
-   * The Change date.
-   */
-  JButton changeDate;
-
-  /**
-   * The Change time.
-   */
-  JButton changeTime;
-
-  /**
    * The Date field.
    */
   JLabel dateField; // Date field
@@ -82,7 +72,6 @@ public class Dash extends JFrame {
    * The Temp spinner.
    */
   JSpinner tempSpinner; // temperature spinner
-  JButton confirmTemp;
   private JComboBox timeSpeed;
   private JButton confirmTimeSpeed;
 
@@ -238,21 +227,12 @@ public class Dash extends JFrame {
     final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
     userRoomDropDown.setModel(defaultComboBoxModel2);
     panel1.add(userRoomDropDown, new GridConstraints(3, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    changeDate = new JButton();
-    changeDate.setText("Change");
-    panel1.add(changeDate, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     dateField = new JLabel();
     dateField.setText("");
     panel1.add(dateField, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
     timeField = new JLabel();
     timeField.setText("");
     panel1.add(timeField, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-    changeTime = new JButton();
-    changeTime.setText("Change");
-    panel1.add(changeTime, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    confirmTemp = new JButton();
-    confirmTemp.setText("OK");
-    panel1.add(confirmTemp, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     final JLabel label1 = new JLabel();
     label1.setText("Date");
     panel1.add(label1, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -301,4 +281,5 @@ public class Dash extends JFrame {
   public JComponent $$$getRootComponent$$$() {
     return p1;
   }
+
 }

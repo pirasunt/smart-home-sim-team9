@@ -2,10 +2,14 @@ package Controllers;
 
 import Models.EnvironmentModel;
 import Views.EditSimulationView;
+import Views.EnvironmentView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,7 +26,8 @@ public class EditSimulationController {
 
         theView.addChangeDateListener(new ChangeDateListener());
         theView.addChangeTimeListener(new ChangeTimeListener());
-       theView.openEditScreen(theModel.getAllUserProfiles(), theModel.getDateString(), theModel.getTimeString());
+        theView.openEditScreen(theModel.getAllUserProfiles(), theModel.getDateString(), theModel.getTimeString());
+
     }
 
 
@@ -103,6 +108,4 @@ public class EditSimulationController {
             }
         }
     }
-
-
 }
