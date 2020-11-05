@@ -173,10 +173,10 @@ public class EnvironmentView extends JFrame {
   /**
    * Method used to pass on the {@link JButton} listener responsibility to its caller.
    *
-   * @param listenForWindowObstruction the listen for window obstruction
+   * @param listenForEditSimulation the listen for window obstruction
    */
-  public void addObstructionToggleListener(ActionListener listenForWindowObstruction) {
-    this.dashboard.toggleObstructionButton.addActionListener(listenForWindowObstruction);
+  public void addEditSimulationListener(ActionListener listenForEditSimulation) {
+    this.dashboard.editSimulationButton.addActionListener(listenForEditSimulation);
   }
 
   /**
@@ -378,7 +378,7 @@ public class EnvironmentView extends JFrame {
    * @param text the text
    */
   public void changeWindowsObstructedToggleText(String text) {
-    dashboard.toggleObstructionButton.setText(text);
+    dashboard.editSimulationButton.setText(text);
   }
   /** Used to clean up UI after the user is done creating a {@link UserProfileModel} */
   public void disposeCreateUser() {

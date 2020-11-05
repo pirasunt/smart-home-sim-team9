@@ -242,7 +242,7 @@ public class EnvironmentController {
           theView.addChangeDateListener(new ChangeDateListener());
           theView.addChangeTimeListener(new ChangeTimeListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
-          theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
+          theView.addEditSimulationListener(new EditSimulationListener());
 
         } else {
           Console.print(
@@ -454,7 +454,7 @@ public class EnvironmentController {
     }
   }
 
-  private class ObstructWindowsToggleListener implements ActionListener {
+  private class EditSimulationListener implements ActionListener {
 
     /**
      * Invoked when an action occurs.

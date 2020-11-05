@@ -12,7 +12,7 @@ public class Dash extends JFrame {
   /** The Stop simulation button. */
   JButton toggleSimulationButton;
   /** The Edit action button. */
-  JButton toggleObstructionButton;
+  JButton editSimulationButton;
   /** The Tabbed pane 1. */
   JTabbedPane tabbedPane1;
   /** The P 1. */
