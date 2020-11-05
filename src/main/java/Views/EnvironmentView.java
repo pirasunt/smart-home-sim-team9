@@ -286,9 +286,17 @@ public class EnvironmentView extends JFrame {
     this.dashboard.dispose();
   }
 
-  
+
   public void refreshDash(String dateString, String timeString) {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
+
+  public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
+    this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
+  }
+
+  public String getTimeSpeed(){
+    return dashboard.timeSpeed.getSelectedItem().toString();
+
   }
 }
