@@ -302,7 +302,7 @@ public class EnvironmentView extends JFrame {
    * @param time String representation of the new Time to set
    */
   public void setTimeField(String time) {
-    this.dashboard.timeField.setValue(time);
+    this.dashboard.timeField.setText(time);
   }
 
   /**
@@ -311,7 +311,7 @@ public class EnvironmentView extends JFrame {
    * @param date String representation of the new Date to set
    */
   public void setDateField(String date) {
-    this.dashboard.dateField.setValue(date);
+    this.dashboard.dateField.setText(date);
   }
 
   /**
@@ -325,7 +325,7 @@ public class EnvironmentView extends JFrame {
 
   /**
    * Creates an interface that allows the Simulator user to create new profiles The user needs to
-   * specify the new profile's name as well as the {@link profileType}. The latter is displayed
+   * specify the new profile's name as well as the {@link 'profileType'}. The latter is displayed
    */
   public void userCreationWindow() {
     this.createUser = new JFrame("Create a new User");
