@@ -120,6 +120,8 @@ public class EnvironmentModel {
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
     }
+
+    houseGraphic.repaint();
   }
 
   /**
@@ -137,6 +139,8 @@ public class EnvironmentModel {
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage());
     }
+
+    houseGraphic.repaint();
   }
 
   /**
@@ -213,6 +217,8 @@ public class EnvironmentModel {
     if (this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
       this.currentUser = updatedProfile;
     }
+
+    houseGraphic.repaint();
   }
 
   /**
@@ -341,6 +347,8 @@ public class EnvironmentModel {
       Console.print(
           "New user '" + newUser.getName() + "'/" + newUser.getProfileType() + " has been created");
     }
+
+    houseGraphic.repaint();
   }
 
   /**
