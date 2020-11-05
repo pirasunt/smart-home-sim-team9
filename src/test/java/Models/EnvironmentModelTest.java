@@ -2,7 +2,7 @@ package Models;
 
 import Custom.CustomXStream;
 import Enums.ProfileType;
-import Views.Console;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class EnvironmentModelTest {
 
   @BeforeEach
   public void initEach() {
-    Console c = new Console();
+    CustomConsole c = new CustomConsole();
     EnvironmentModel.resetInstance();
   }
 

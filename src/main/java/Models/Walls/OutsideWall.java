@@ -1,7 +1,7 @@
 package Models.Walls;
 
 import Enums.WallType;
-import Views.Console;
+import Views.CustomConsole;
 
 /** The type Outside wall. */
 public class OutsideWall extends Wall {
@@ -49,20 +49,18 @@ public class OutsideWall extends Wall {
    * Method to be used when a door is being locked automatically be the system.
    */
   public void lockDoor(){
-    Console console = new Console();
 
     this.doorLocked = true;
-    console.print("Door with outside access " + doorId + " has been locked.");
+    CustomConsole.print("Door with outside access " + doorId + " has been locked.");
   }
 
   /**
    * Method to be used when a door is being locked automatically be the system.
    */
   public void unlockDoor(){
-    Console console = new Console();
 
     this.doorLocked = false;
-    console.print("Door with outside access " + doorId + " has been unlocked.");
+    CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
   }
 
   /**
@@ -77,19 +75,17 @@ public class OutsideWall extends Wall {
    * Method to be used when a door is being locked automatically be the system.
    */
   public void turnLightsOn(){
-    Console console = new Console();
 
     this.lightsOn = true;
-    console.print("Door with outside access " + doorId + " lights have been turned on.");
+    CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
   }
 
   /**
    * Method to be used when a door is being locked automatically be the system.
    */
   public void turnLightsOff(){
-    Console console = new Console();
 
     this.lightsOn = false;
-    console.print("Door with outside access " + doorId + " lights have been turned off.");
+    CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
   }
 }

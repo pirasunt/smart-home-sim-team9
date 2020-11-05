@@ -5,7 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.security.Security;
+
+import Controllers.SecurityController;
+import Models.SecurityModel;
 import org.jdatepicker.impl.JDatePickerImpl;
+import Tools.CustomTimer;
+
 
 /** The type Dash. */
 public class Dash extends JFrame {
@@ -81,6 +87,7 @@ public class Dash extends JFrame {
           }
         });
 
+
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -124,6 +131,7 @@ public class Dash extends JFrame {
         timeField.setText(time);
       }
     });
+
 
     toggleSimulationButton.addActionListener(new ActionListener() {
       @Override

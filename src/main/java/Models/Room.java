@@ -1,7 +1,7 @@
 package Models;
 
 import Models.Walls.*;
-import Views.Console;
+import Views.CustomConsole;
 
 import java.util.ArrayList;
 
@@ -127,8 +127,8 @@ public class Room {
    */
   public void turnOffLights(){
     lightsOn = false;
-    Console console = new Console();
-    console.print("Lights in room: " + name + " have been turned off.");
+    CustomConsole customConsole = new CustomConsole();
+    customConsole.print("Lights in room: " + name + " have been turned off.");
   }
 
   /**
@@ -136,8 +136,8 @@ public class Room {
    */
   public void turnOnLights(){
     lightsOn = true;
-    Console console = new Console();
-    console.print("Lights in room: " + name + " have been turned on.");
+    CustomConsole customConsole = new CustomConsole();
+    customConsole.print("Lights in room: " + name + " have been turned on.");
   }
 
   /**
@@ -155,6 +155,10 @@ public class Room {
     }
 
     return users;
+  }
+
+  public Wall[] getAllWalls(){
+    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
   }
 
   @Override

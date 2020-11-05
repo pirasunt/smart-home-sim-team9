@@ -1,35 +1,34 @@
 package Views;
 
+import Controllers.SecurityController;
+import Models.SecurityModel;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SecurityView {
   private JPanel shpWrap;
   private JPanel Tab1;
-  private JRadioButton onRadioButton;
-  private JRadioButton offRadioButton;
   private JSpinner spinner1;
+  private JButton awayModeButton;
 
   public SecurityView() {
 
-    onRadioButton.addActionListener(
-        new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {}
-        });
   }
 
-  public void addOnRadioListener(ActionListener aE) {
-    this.onRadioButton.addActionListener(aE);
+  SecurityController sc = new SecurityController(new SecurityModel(),this);
+
+  public void addAwayListener(ActionListener l) {
+    this.awayModeButton.addActionListener(l);
+  }
+  public void addIntervalListener (ChangeListener l) {
+    this.spinner1.addChangeListener(l);
+  }
+  public void changeAwayModeText(String s) {
+    awayModeButton.setText(s);
+  }
+  public String getSpinner(){
+    return (String) spinner1.getValue();
   }
 
-  public void addOffRadioListener(ActionListener aE) {
-    this.offRadioButton.addActionListener(aE);
-  }
-
-  public void addTempSpinnerListener(ChangeListener listenForTempSpinner) {
-    spinner1.addChangeListener(listenForTempSpinner);
-  }
 }

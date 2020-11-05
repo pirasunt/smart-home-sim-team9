@@ -7,7 +7,7 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Models.Walls.WindowWall;
-import Views.Console;
+import Views.CustomConsole;
 import Views.EnvironmentView;
 
 import javax.swing.*;
@@ -56,7 +56,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      Console.print("Selecting user profile...");
+      CustomConsole.print("Selecting user profile...");
       UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
       JLabel adultLabel = new JLabel("Adult", SwingConstants.CENTER);
@@ -170,7 +170,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       if (theModel.isCurrentUserSet()) {
 
-        Console.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
+        CustomConsole.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
         Room[] roomList = theModel.getRooms();
 
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
@@ -197,7 +197,7 @@ public class EnvironmentController {
         frame.setVisible(true);
 
       } else {
-        Console.print("ERROR: Please select a User first before setting a Location");
+        CustomConsole.print("ERROR: Please select a User first before setting a Location");
       }
     }
   }
@@ -245,13 +245,13 @@ public class EnvironmentController {
           theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
 
         } else {
-          Console.print(
+          CustomConsole.print(
               "ERROR: Please set location for selected user: '"
                   + theModel.getCurrentUser().getName()
                   + "'");
         }
       } else {
-        Console.print("ERROR: Please Select a User Profile before Entering the Simulation");
+        CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");
       }
     }
 
@@ -309,7 +309,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
       if (cb.getSelectedIndex() == -1) {
-        Console.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
+        CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
       } else {
         Room newRoom = (Room) cb.getSelectedItem();
         if (newRoom.getId() != theModel.getCurrentUser().getRoomID()) {
@@ -512,4 +512,9 @@ public class EnvironmentController {
       }
     }
   }
+
+//  /** Set away on. */
+//  public void setAwayOn() {
+//    theModel.getHouse().lockAndClose();
+//  }
 }
