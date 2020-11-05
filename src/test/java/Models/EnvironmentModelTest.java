@@ -14,7 +14,7 @@ public class EnvironmentModelTest {
 
   @BeforeEach
   public void initEach() {
-    CustomConsole c = new CustomConsole();
+    CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
 

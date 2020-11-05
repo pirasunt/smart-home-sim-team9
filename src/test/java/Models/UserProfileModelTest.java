@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 public class UserProfileModelTest {
   @BeforeEach
   public void initEach() {
-    CustomConsole c = new CustomConsole();
+    CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
-
   // 3.2 -> modify
   @Test
   void modifyUserProfileName() {
