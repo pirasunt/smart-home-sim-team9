@@ -1,6 +1,8 @@
 package Views;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -19,10 +21,6 @@ public class Dash extends JFrame {
   JScrollPane sp1;
   /** The Sp 2. */
   JScrollPane sp2;
-  /** The Tab 2. */
-  JPanel Tab2;
-  /** The Tab 1. */
-  JPanel Tab1;
 
   /** The User profile drop down. */
   JComboBox userProfileDropDown; // Current User Profile
@@ -44,6 +42,8 @@ public class Dash extends JFrame {
 
   /** The Temp spinner. */
   JSpinner tempSpinner; // temperature spinner
+  private JRadioButton onRadioButton;
+  private JRadioButton offRadioButton;
 
   /** The Date picker. */
   JDatePickerImpl datePicker;
@@ -73,5 +73,17 @@ public class Dash extends JFrame {
             super.mouseClicked(e);
           }
         });
+    onRadioButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    });
+    offRadioButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    });
   }
 }

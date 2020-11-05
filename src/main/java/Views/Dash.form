@@ -146,7 +146,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <tabbedpane id="d516a" binding="tabbedPane1" default-binding="true">
+              <tabbedpane id="767ce" binding="tabbedPane1" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="200" height="200"/>
@@ -155,32 +155,20 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="8f304" binding="Tab1" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="90c49" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <tabbedpane title="Tab1"/>
+                      <tabbedpane title="SHP"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
-                    <children/>
-                  </grid>
-                  <grid id="e1795" binding="Tab2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <tabbedpane title="Tab2"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
-                  <grid id="b4884" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <tabbedpane title="+"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
+                    <children>
+                      <nested-form id="39888" form-file="Views/SecurityView.form">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </nested-form>
+                    </children>
                   </grid>
                 </children>
               </tabbedpane>
@@ -190,4 +178,10 @@
       </scrollpane>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="buttonGroup1">
+      <member id="d273f"/>
+      <member id="5f0ff"/>
+    </group>
+  </buttonGroups>
 </form>
