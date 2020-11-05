@@ -1,17 +1,27 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Views.Console;
 
 /** The type Window wall. */
 public class WindowWall extends Wall {
   /** This attribute is a boolean value to know if the windows on this wall are open. */
-  boolean windowOpen = false;
+  private boolean windowOpen = false;
   /** This attribute is a boolean value to know if the windows are obstructed on this wall. */
-  boolean windowObstructed = false;
+  private boolean windowObstructed = false;
+  /** This attribute is an integer to represent the id of the window so it can be referenced outside of the class. */
+  private int windowId;
 
   /** Instantiates a new Window wall. */
   public WindowWall() {
     super(WallType.WINDOWS);
+  }
+
+  /** Instantiates a new Window wall with a set id. */
+  public WindowWall(int id) {
+    super(WallType.WINDOWS);
+
+    this.windowId = id;
   }
 
   /**
@@ -48,5 +58,53 @@ public class WindowWall extends Wall {
    */
   public void setWindowOpen(boolean windowOpen) {
     this.windowOpen = windowOpen;
+  }
+
+  /**
+   * Method called when window has to be opened by the system automatically.
+   */
+  public void openWindow(){
+    if (windowObstructed){
+      Console console = new Console();
+      console.print("Window " + windowId + " is obstructed and cannot be opened.");
+    }
+    else {
+      windowOpen = true;
+      Console console = new Console();
+      console.print("Window " + windowId + " has been opened.");
+    }
+  }
+
+  /**
+   * Method called when the window has to be closed by the system automatically
+   */
+  public void closeWindow(){
+    if (windowObstructed){
+      Console console = new Console();
+      console.print("Window " + windowId + " is obstructed and cannot be closed.");
+    }
+    else {
+      windowOpen = false;
+      Console console = new Console();
+      console.print("Window " + windowId + " has been closed.");
+    }
+  }
+
+  /**
+   * Method called when the window has to be obstructed by the system automatically
+   */
+  public void obstructWindow(){
+    windowObstructed = true;
+    Console console = new Console();
+    console.print("Window " + windowId + " has been obstructed.");
+  }
+
+  /**
+   * Method called when the window has to be unobstructed by the system automatically
+   */
+  public void unobstructWindow(){
+    windowObstructed = false;
+    Console console = new Console();
+    console.print("Window " + windowId + " has been unobstructed.");
   }
 }
