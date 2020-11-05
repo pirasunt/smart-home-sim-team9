@@ -1,7 +1,6 @@
 package Models;
 
-import Custom.CustomXStream;
-import Models.Walls.*;
+import Custom.CustomXStream.CustomHouseXStream;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -98,7 +97,7 @@ public class House {
      * Retrieves XML of the current house and saves to file.
      */
     public void getXML() {
-        CustomXStream stream = new CustomXStream();
+        CustomHouseXStream stream = new CustomHouseXStream();
         try {
             stream.toXML(this, new FileOutputStream("House.xml"));
         } catch (FileNotFoundException e) {

@@ -1,10 +1,11 @@
 package Views;
 
 import Controllers.EnvironmentController;
+import Custom.CustomXStream.CustomUserXStream;
 import Helpers.HouseValidationHelper;
 import Models.EnvironmentModel;
 import Models.UserProfileModel;
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Models.House;
 import Enums.ProfileType;
 
@@ -12,6 +13,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import javax.swing.*;
 
@@ -38,24 +41,18 @@ public class FilePickerStart extends JFrame {
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
 
-                        // Sample users. The 3rd parameter is roomID (-1 to indicate that no room has been set)
-                        UserProfileModel p1 = new UserProfileModel(ProfileType.ADULT, "James", 0);
-                        UserProfileModel p2 = new UserProfileModel(ProfileType.STRANGER, "Janice", 0);
-                        UserProfileModel p3 = new UserProfileModel(ProfileType.CHILD, "Morty", 0);
-                        UserProfileModel p4 = new UserProfileModel(ProfileType.GUEST, "Astley", 0);
-                        UserProfileModel p5 = new UserProfileModel(ProfileType.GUEST, "Penny", 0);
-                        UserProfileModel p6 = new UserProfileModel(ProfileType.STRANGER, "Cool Guy", 0);
-                        UserProfileModel p7 = new UserProfileModel(ProfileType.CHILD, "Rick", 0);
+                        CustomUserXStream uStream = new CustomUserXStream();
+                        UserProfileModel[] users = (UserProfileModel[]) uStream.fromXML(new File("UserProfiles.xml"));
 
-                        CustomXStream stream = new CustomXStream();
-                        House house = (House) stream.fromXML(pathTo);
+                        CustomHouseXStream hStream = new CustomHouseXStream();
+                        House house = (House) hStream.fromXML(pathTo);
                         boolean validHouse = HouseValidationHelper.ValidateHouse(house);
                         HouseGraphic hg = new HouseGraphic(house);
 
                         // Init singleton Environment object with HOUSE and USERS. Pass this instance to objects
                         // that need it.
                         EnvironmentModel theModel =
-                                EnvironmentModel.createSimulation(house, hg, p1, p2, p3, p4, p5, p6, p7);
+                                EnvironmentModel.createSimulation(house, hg, users);
 
                         //Initialize the house graphic with the environment
                         hg.init(theModel);

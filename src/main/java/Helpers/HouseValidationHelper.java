@@ -4,7 +4,6 @@ import Enums.WallType;
 import Models.House;
 import Models.Room;
 import Models.Walls.RoomWall;
-import Models.Walls.Wall;
 
 import java.util.ArrayList;
 

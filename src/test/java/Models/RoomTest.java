@@ -1,6 +1,6 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
 import Models.Walls.Wall;
 import Views.HouseGraphic;
@@ -40,7 +40,7 @@ public class RoomTest {
 
   @Test
   void getAllUsersInRoom(){
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);

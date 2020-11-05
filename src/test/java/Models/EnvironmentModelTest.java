@@ -1,6 +1,6 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
 import Views.Console;
 import Views.HouseGraphic;
@@ -30,7 +30,7 @@ public class EnvironmentModelTest {
 
   @Test
   void setHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -42,7 +42,7 @@ public class EnvironmentModelTest {
 
   @Test
   void updateHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -55,7 +55,7 @@ public class EnvironmentModelTest {
 
   @Test
   void setDateTime() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
