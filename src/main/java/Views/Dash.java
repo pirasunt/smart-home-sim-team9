@@ -59,11 +59,6 @@ public class Dash extends JFrame {
   /** The Time confirm. */
   JButton timeConfirm;
 
-  private int hour;
-  private int minute;
-  private int second;
-  private String amPM;
-
   /**
    * Instantiates a new Dashboard frame.
    *
