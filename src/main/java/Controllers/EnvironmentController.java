@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -500,7 +501,7 @@ public class EnvironmentController {
       public void actionPerformed(ActionEvent e) {
 
         try {
-          theModel.addUserProfile(theView.getNewlyCreatedUser());
+          theModel.addUserProfile(theView.getNewlyCreatedUser(), new File("UserProfiles.xml"));
         } catch (Exception exception) {
           exception.printStackTrace();
           theView.disposeCreateUser();

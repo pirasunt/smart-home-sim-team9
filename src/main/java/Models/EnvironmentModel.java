@@ -5,6 +5,8 @@ import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
 import Views.CustomConsole;
 import Views.HouseGraphic;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -16,10 +18,10 @@ import java.util.*;
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
-  static private House house;
+  private static House house;
+  private static HouseGraphic houseGraphic;
   private final Calendar currentCalObj;
   private final ArrayList<UserProfileModel> userProfileModelList;
-  private static HouseGraphic houseGraphic;
   private int outsideTemperature;
   private UserProfileModel currentUser;
   private boolean simulationRunning = false;
@@ -32,7 +34,7 @@ public class EnvironmentModel {
       Calendar cal,
       ArrayList<UserProfileModel> profileList) {
     house = h;
-    this.houseGraphic = hg;
+    houseGraphic = hg;
     this.outsideTemperature = temperature;
     this.currentCalObj = cal;
     this.userProfileModelList = profileList;
@@ -77,6 +79,24 @@ public class EnvironmentModel {
   }
 
   /**
+   * Returns the HouseGraphic displayed to the user
+   *
+   * @return the house graphic
+   */
+  public static HouseGraphic getHouseGraphic() {
+    return houseGraphic;
+  }
+
+  /**
+   * Gets house.
+   *
+   * @return the house
+   */
+  public static House getHouse() {
+    return house;
+  }
+
+  /**
    * Used to set the outside temperature in the simulation
    *
    * @param newTemp is the new temperature
@@ -110,7 +130,7 @@ public class EnvironmentModel {
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
     try {
-      updateProfileEntry(profile.modifyLocation(room.getId()));
+      updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()
@@ -134,10 +154,10 @@ public class EnvironmentModel {
    * @param profile The {@link UserProfileModel} object that needs its name modified
    * @param newName The new name of the user profile
    */
-  public void editProfileName(UserProfileModel profile, String newName) {
+  public void editProfileName(UserProfileModel profile, String newName, File file) {
 
     try {
-      updateProfileEntry(profile.modifyName(newName));
+      updateProfileEntry(profile.modifyName(newName), file);
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage());
     }
@@ -192,7 +212,7 @@ public class EnvironmentModel {
     return temp;
   }
 
-  private void updateProfileEntry(UserProfileModel updatedProfile)
+  private void updateProfileEntry(UserProfileModel updatedProfile, File userProfilesFile)
       throws NonExistantUserProfileException {
 
     boolean existingProfile = false;
@@ -205,7 +225,20 @@ public class EnvironmentModel {
     }
 
     if (existingProfile && index >= 0) {
+
       this.userProfileModelList.set(index, updatedProfile);
+
+      try {
+        UserProfileModel[] profileListAsArray =
+            new UserProfileModel[this.userProfileModelList.size()];
+
+        CustomUserXStream uStream = new CustomUserXStream();
+        uStream.toXML(
+            this.userProfileModelList.toArray(profileListAsArray),
+            new FileOutputStream(userProfilesFile));
+      } catch (Exception e) {
+      }
+
     } else {
       throw new NonExistantUserProfileException(
           "UserProfile "
@@ -338,7 +371,7 @@ public class EnvironmentModel {
    * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This
    *     includes an empty profile name or non-set {@link ProfileType}
    */
-  public void addUserProfile(UserProfileModel newUser) throws Exception {
+  public void addUserProfile(UserProfileModel newUser, File userProfilesFile) throws Exception {
 
     if (newUser.getName().equals("")
         || newUser.getName() == null
@@ -362,7 +395,7 @@ public class EnvironmentModel {
         CustomUserXStream uStream = new CustomUserXStream();
         uStream.toXML(
             this.userProfileModelList.toArray(profileListAsArray),
-            new FileOutputStream("UserProfiles.xml"));
+            new FileOutputStream(userProfilesFile));
       } catch (FileNotFoundException e) {
         this.userProfileModelList.remove(userToAdd);
         CustomConsole.print("Error writing to UserProfiles.xml; user was not created.");
@@ -377,10 +410,22 @@ public class EnvironmentModel {
    *
    * @param u the user to be removed.
    */
-  public void removeUserProfile(UserProfileModel u) {
+  public void removeUserProfile(UserProfileModel u, File userProfilesFile) {
     for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if(this.userProfileModelList.get(i).getProfileID() == u.getProfileID()){
+      if (this.userProfileModelList.get(i).getProfileID() == u.getProfileID()) {
         this.userProfileModelList.remove(i);
+        try {
+          UserProfileModel[] profileListAsArray =
+              new UserProfileModel[this.userProfileModelList.size()];
+
+          CustomUserXStream uStream = new CustomUserXStream();
+          uStream.toXML(
+              this.userProfileModelList.toArray(profileListAsArray),
+              new FileOutputStream(userProfilesFile));
+        } catch (FileNotFoundException e) {
+          this.userProfileModelList.add(u);
+          CustomConsole.print("Error removing user from UserProfiles.xml; user was not deleted.");
+        }
         break;
       }
     }
@@ -427,23 +472,4 @@ public class EnvironmentModel {
     CustomConsole.print("Clearing all windows!");
     this.windowsObstructed = false;
   }
-
-  /**
-   * Returns the HouseGraphic displayed to the user
-   *
-   * @return the house graphic
-   */
-  public static HouseGraphic getHouseGraphic() {
-    return houseGraphic;
-  }
-
-  /**
-   * Gets house.
-   *
-   * @return the house
-   */
-  public static House getHouse() {
-    return house;
-  }
-
 }
