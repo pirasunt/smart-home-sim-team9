@@ -23,18 +23,16 @@ public class EditSimulationView extends JFrame{
     private JSpinner tempSpinner;
 
     private JFrame datePickerWindow;
-    private JDatePickerImpl datePicker;
 
     private JFrame timePickerWindow;
     private JSpinner timeSpinner;
-    private JButton timeConfirm;
+    private final JButton timeConfirm;
+    private JPanel userRoomPrivPanel; //This is dynamically generated, so can not use GUI Designer
+    private JPanel mainPanel;
 
 
     public EditSimulationView(int temp){
-        this.changeDate = new JButton("Change");
-        this.changeTime = new JButton("Change");
         this.timeConfirm = new JButton("Confirm");
-        this.tempSpinner = new JSpinner();
         this.tempSpinner.setValue(temp);
     }
 
@@ -63,70 +61,23 @@ public class EditSimulationView extends JFrame{
 
     public void openEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, String currentDate, String currentTime){
         GridLayout userSelectionGrid = new GridLayout(0, 2, 20, 20);
-        JPanel container = new JPanel();
-        JScrollPane scrPane = new JScrollPane(container);
-        scrPane.getVerticalScrollBar().setUnitIncrement(20);
 
-        container.setLayout(userSelectionGrid);
-
-
-        JLabel introMessage = new JLabel();
-        introMessage.setText("<html>NOTE: Changes will be reflected on the <br> dashboard  once this window is closed</html>");
-        introMessage.setFont(new Font("Verdana", Font.ITALIC, 11));
-        container.add(introMessage);
-        container.add(new JLabel());
-
-        JLabel changeTempLabel = new JLabel("Change Temp");
-        changeTempLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-        container.add(changeTempLabel);
-        container.add(this.tempSpinner);
-
-        container.add(new JSeparator());
-        container.add(new JSeparator());
-
-        JLabel changeDateLabel = new JLabel("Change Date");
-        changeDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-
-        container.add(changeDateLabel);
-        container.add(new JLabel()); //Blank label
-        this.dateField = new JLabel(currentDate);
-        container.add(this.dateField);
-        container.add(this.changeDate);
-
-        container.add(new JSeparator());
-        container.add(new JSeparator());
-
-
-        JLabel changeTimeLabel = new JLabel("Change Time");
-        changeTimeLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-        container.add(changeTimeLabel);
-        container.add(new JLabel());
-        this.timeField = new JLabel(currentTime);
-        container.add(this.timeField);
-        container.add(this.changeTime);
-
-
-        container.add(new JSeparator());
-        container.add(new JSeparator());
-
-        JLabel changeUserLabel = new JLabel("Edit User Location");
-        changeUserLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-        container.add(changeUserLabel);
-        container.add(new JLabel()); //Blank label
+        this.userRoomPrivPanel.setLayout(userSelectionGrid);
+        this.dateField.setText(currentDate);
+        this.timeField.setText(currentTime);
 
         //userLabels and userDropdowns arrays are the same length
         for(int i = 0; i < userLabels.length; i++) {
-            container.add(userLabels[i]);
-            container.add(userDropdowns[i]);
+            this.userRoomPrivPanel.add(userLabels[i]);
+            this.userRoomPrivPanel.add(userDropdowns[i]);
         }
 
-        this.add(scrPane);
+        this.add(this.mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null); // Center User Selection JFrame
         this.setVisible(true);
     }
-
 
     /**
      * Provides an interface that allows the Simulator user to change the Date
@@ -143,7 +94,7 @@ public class EditSimulationView extends JFrame{
         p.put("text.month", "Month");
         p.put("text.year", "Year");
         JDatePanelImpl panel = new JDatePanelImpl(model, p);
-        this.datePicker = new JDatePickerImpl(panel, formatter);
+        JDatePickerImpl datePicker = new JDatePickerImpl(panel, formatter);
         datePickerWindow = new JFrame("Pick Date");
 
 
@@ -214,4 +165,7 @@ public class EditSimulationView extends JFrame{
         this.timePickerWindow.dispose();
     }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }
