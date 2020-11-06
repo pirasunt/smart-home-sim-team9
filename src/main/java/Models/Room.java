@@ -1,7 +1,7 @@
 package Models;
 
-import Models.Walls.Wall;
-import Views.Console;
+import Models.Walls.*;
+import Views.CustomConsole;
 
 import java.util.ArrayList;
 
@@ -125,15 +125,13 @@ public class Room {
   /** Method to be used when lights are turned off while the simulator is running */
   public void turnOffLights() {
     lightsOn = false;
-    Console console = new Console();
-    Console.print("Lights in room: " + name + " have been turned off.");
+    CustomConsole.print("Lights in room: " + name + " have been turned off.");
   }
 
   /** Method to be used when lights are turned on while the simulator is running */
   public void turnOnLights() {
     lightsOn = true;
-    Console console = new Console();
-    Console.print("Lights in room: " + name + " have been turned on.");
+    CustomConsole.print("Lights in room: " + name + " have been turned on.");
   }
 
   /**
@@ -154,6 +152,10 @@ public class Room {
     }
 
     return users;
+  }
+
+  public Wall[] getAllWalls(){
+    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
   }
 
   @Override

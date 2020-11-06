@@ -1,6 +1,8 @@
 package Models;
 
 import Custom.CustomXStream.CustomHouseXStream;
+import Enums.WallType;
+import Models.Walls.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -63,8 +65,7 @@ public class House {
 
   /**
    * Gets a single room in the house.
-   *
-   * @param room the room to be returned
+   * @param id the room to be returned
    * @return the room requested
    */
   public Room getRoomById(int id) {
@@ -96,6 +97,48 @@ public class House {
   public House removeRoom(Room room) {
     rooms.remove(room);
     return this;
+  }
+
+  /**
+   * Lock and close doors and windows.
+   *
+   * @param shouldLock the shouldLock
+   */
+  public void lockAndClose(Boolean shouldLock) {
+    for (Room r : rooms) {
+
+      for (Wall w : r.getAllWalls()) {
+
+        if (w.getType() == WallType.OUTSIDE) {
+          ((OutsideWall) w).setDoorLocked(shouldLock);
+
+        } else if (w.getType() == WallType.WINDOWS) {
+          if (shouldLock) {
+            ((WindowWall) w).closeWindow();
+          } else {
+            ((WindowWall) w).openWindow();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Has obstruction boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean hasObstruction() {
+    for (Room r : rooms) {
+      for (Wall w : r.getAllWalls()) {
+        if (w.getType() == WallType.WINDOWS) {
+          if (((WindowWall) w).isWindowObstructed()) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   /** Retrieves XML of the current house and saves to file. */

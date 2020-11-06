@@ -7,7 +7,7 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Models.Walls.WindowWall;
-import Views.Console;
+import Views.CustomConsole;
 import Views.EnvironmentView;
 
 import javax.swing.*;
@@ -30,8 +30,10 @@ public class EnvironmentController {
 
   private final EnvironmentView theView;
   private final EnvironmentModel theModel;
-  private Boolean action1 = false;
-  private Boolean action2 = false;
+  private int hour;
+  private int minute;
+  private int second;
+  private String amPM;
 
   /**
    * Initializes the Environment controller using a reference to the View and Model
@@ -48,6 +50,52 @@ public class EnvironmentController {
     this.theView.addSimulatorListener(new SimulatorListener());
     this.theView.addCreateUserListener(new CreateUserListener());
   }
+  /**
+   * Initializes the timer
+   */
+  Timer timer = new Timer(1000, new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      String hourString;
+      String minuteString;
+      String secondString;
+
+      second++;
+      if(second > 59) {
+        minute++;
+        second = 0;
+      }
+      if(minute > 59) {
+        hour++;
+        minute = 0;
+      }
+      if(hour > 12){
+        hour = 1;
+        if(amPM == "AM")
+          amPM = "PM";
+        else
+          amPM = "AM";
+      }
+
+      if(hour < 10)
+        hourString = "0" + hour;
+      else
+        hourString = String.valueOf(hour);
+
+      if(minute < 10)
+        minuteString = "0" + minute;
+      else
+        minuteString = String.valueOf(minute);
+
+      if(second < 10)
+        secondString = "0" + second;
+      else
+        secondString = String.valueOf(second);
+
+      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
+      theView.setTimeField(time);
+    }
+  });
 
   private class StartListener implements ActionListener {
 
@@ -58,7 +106,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      Console.print("Selecting user profile...");
+      CustomConsole.print("Selecting user profile...");
       UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
       JLabel adultLabel = new JLabel("Adult", SwingConstants.CENTER);
@@ -172,7 +220,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       if (theModel.isCurrentUserSet()) {
 
-        Console.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
+        CustomConsole.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
         Room[] roomList = theModel.getRooms();
 
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
@@ -199,7 +247,7 @@ public class EnvironmentController {
         frame.setVisible(true);
 
       } else {
-        Console.print("ERROR: Please select a User first before setting a Location");
+        CustomConsole.print("ERROR: Please select a User first before setting a Location");
       }
     }
   }
@@ -245,15 +293,16 @@ public class EnvironmentController {
           theView.addChangeTimeListener(new ChangeTimeListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
+          theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
 
         } else {
-          Console.print(
+          CustomConsole.print(
               "ERROR: Please set location for selected user: '"
                   + theModel.getCurrentUser().getName()
                   + "'");
         }
       } else {
-        Console.print("ERROR: Please Select a User Profile before Entering the Simulation");
+        CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");
       }
     }
 
@@ -293,9 +342,15 @@ public class EnvironmentController {
         if (theModel.getSimulationRunning() == true) {
           theModel.stopSimulation();
           theView.changeSimulationToggleText("Start Simulation");
+          timer.stop();
         } else if (theModel.getSimulationRunning() == false) {
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
+          hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
+          minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
+          second = Integer.parseInt(theModel.getTimeString().substring(6,8));
+          amPM = theModel.getTimeString().substring(8);
+          timer.restart();
         }
       }
     }
@@ -311,7 +366,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
       if (cb.getSelectedIndex() == -1) {
-        Console.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
+        CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
       } else {
         Room newRoom = (Room) cb.getSelectedItem();
         if (newRoom.getId() != theModel.getCurrentUser().getRoomID()) {
@@ -344,10 +399,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (action2 == false) {
-        action1 = true;
         theView.ChangeDate(new CustomDateFormatter());
-      }
     }
 
     private class CustomDateFormatter extends JFormattedTextField.AbstractFormatter {
@@ -383,7 +435,6 @@ public class EnvironmentController {
           theView.setDateField(dateFormatter.format(cal.getTime()));
           theModel.setDate(cal.getTime()); // Update Environment date
           theView.removeDateComponentPicker();
-          action1 = false;
           theView.disposeDash();
           return dateFormatter.format(cal.getTime());
         }
@@ -400,11 +451,8 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (action1 == false) {
-        action2 = true;
         theView.addConfirmTimeListener(new ConfirmTimeListener());
         theView.ChangeTime(theModel.getDateObject());
-      }
     }
 
     private class ConfirmTimeListener implements ActionListener {
@@ -423,7 +471,6 @@ public class EnvironmentController {
           theView.setTimeField(time);
           theModel.setTime(date); // Update Environment time
           theView.removeTimeComponentPicker();
-          action2 = false;
           theView.disposeDash();
         }
       }
@@ -520,6 +567,23 @@ public class EnvironmentController {
         theModel.obstructWindows();
         theView.changeWindowsObstructedToggleText("Clear Windows");
       }
+    }
+  }
+
+  private class confirmTimeSpeedListener implements ActionListener {
+    /**
+     * Invoked when the 'OK' Button is pressed for the time speed
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      if (theView.getTimeSpeed() == "10x")
+        timer.setDelay(100);
+      else if (theView.getTimeSpeed() == "100x")
+        timer.setDelay(10);
+      else
+        timer.setDelay(1000);
     }
   }
 }

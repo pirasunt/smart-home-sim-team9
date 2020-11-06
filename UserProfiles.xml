@@ -1,8 +1,14 @@
 <UserProfileModel-array>
   <UserProfileModel>
-    <profileID>b404a8dd-dcf9-4506-8728-6b24ff6beea4</profileID>
+    <profileID>8cafa0e5-be3f-45ff-b991-fe50192850d0</profileID>
     <type>ADULT</type>
-    <name>Admin</name>
+    <name>Old</name>
+    <roomID>0</roomID>
+  </UserProfileModel>
+  <UserProfileModel>
+    <profileID>8cafa0e5-be3f-45ff-b991-fe50192850d0</profileID>
+    <type>ADULT</type>
+    <name>Old</name>
     <roomID>0</roomID>
   </UserProfileModel>
 </UserProfileModel-array>
