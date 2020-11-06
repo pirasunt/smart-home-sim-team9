@@ -1,7 +1,7 @@
 package Views;
 
+import Enums.ProfileType;
 import Models.Room;
-import Models.UserProfileModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
@@ -9,7 +9,6 @@ import org.jdatepicker.impl.SqlDateModel;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
@@ -59,18 +58,38 @@ public class EditSimulationView extends JFrame{
 
 
 
-    public void openEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, String currentDate, String currentTime){
-        GridLayout userSelectionGrid = new GridLayout(0, 2, 20, 20);
+    public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime){
+        GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
         this.userRoomPrivPanel.setLayout(userSelectionGrid);
+        this.userRoomPrivPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         this.dateField.setText(currentDate);
         this.timeField.setText(currentTime);
 
-        //userLabels and userDropdowns arrays are the same length
+        this.userRoomPrivPanel.add(new JSeparator());
+        this.userRoomPrivPanel.add(new JLabel());
+        this.userRoomPrivPanel.add(new JLabel());
+
+        JLabel userLabel = new JLabel("Users",SwingConstants.CENTER);
+        JLabel roomLabel = new JLabel("Current Room");
+        JLabel privilegeLabel = new JLabel("Privilege");
+
+        userLabel.setFont(new Font(null, Font.BOLD, 14));
+        roomLabel.setFont(new Font(null, Font.BOLD, 14));
+        privilegeLabel.setFont(new Font(null, Font.BOLD, 14));
+
+        this.userRoomPrivPanel.add(userLabel);
+        this.userRoomPrivPanel.add(roomLabel);
+        this.userRoomPrivPanel.add(privilegeLabel);
+
+
+        //userLabels, userDropdowns & profileTypes arrays are the same length
         for(int i = 0; i < userLabels.length; i++) {
             this.userRoomPrivPanel.add(userLabels[i]);
             this.userRoomPrivPanel.add(userDropdowns[i]);
+            this.userRoomPrivPanel.add(profileTypes[i]);
         }
+
 
         this.add(this.mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -165,7 +184,4 @@ public class EditSimulationView extends JFrame{
         this.timePickerWindow.dispose();
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }

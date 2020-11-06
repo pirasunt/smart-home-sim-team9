@@ -1,5 +1,6 @@
 package Controllers;
 
+import Enums.ProfileType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
@@ -39,24 +40,33 @@ public class EditSimulationController {
     private void createEditWindow(){
         UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
         Room[] allRooms = theModel.getRooms();
+        ProfileType[] allProfileTypes = Enums.ProfileType.values();
         JLabel userLabels[] = new JLabel[allProfiles.length];
         JComboBox<Room> roomDropdowns[] = new JComboBox[allProfiles.length];
+        JComboBox<ProfileType> profileTypes[] = new JComboBox[allProfiles.length];
 
 
 
         for(int i = 0; i < allProfiles.length; i++){
-           userLabels[i] = new JLabel(allProfiles[i].getName());
-            JComboBox<Room> comboBox = new JComboBox<>(allRooms);
+           userLabels[i] = new JLabel(allProfiles[i].getName(), SwingConstants.CENTER);
+            JComboBox<Room> roomComboBox = new JComboBox<>(allRooms);
+            JComboBox<ProfileType> profileComboBox = new JComboBox<>(allProfileTypes);
 
 
             //nested for loop sets the dropdown to the currentRoom of the user
             for(int j = 0; j < allRooms.length; j++){
                 if(allProfiles[i].getRoomID() == allRooms[j].getId())
-                    comboBox.setSelectedItem(allRooms[j]);
+                    roomComboBox.setSelectedItem(allRooms[j]);
+            }
+
+            for(int j = 0; j < allProfileTypes.length; j++){
+                if(allProfiles[i].getProfileType() == allProfileTypes[j]) {
+                    profileComboBox.setSelectedItem(allProfileTypes[j]);
+                }
             }
 
             int currentIndex = i;
-            comboBox.addActionListener(new ActionListener() {
+            roomComboBox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
@@ -64,9 +74,18 @@ public class EditSimulationController {
                 }
             });
 
-            roomDropdowns[i] = comboBox;
+            profileComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
+                    theModel.modifyUserPrivilege(allProfiles[currentIndex], (ProfileType)cb.getSelectedItem());
+                }
+            });
+
+            roomDropdowns[i] = roomComboBox;
+            profileTypes[i] = profileComboBox;
         }
-        theView.openEditScreen(userLabels, roomDropdowns, theModel.getDateString(), theModel.getTimeString());
+        theView.setupEditScreen(userLabels, roomDropdowns, profileTypes, theModel.getDateString(), theModel.getTimeString());
 
     }
 

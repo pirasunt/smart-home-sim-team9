@@ -37,19 +37,19 @@
   </UserProfileModel>
   <UserProfileModel>
     <profileID>71c1ce14-3370-4c3d-bcaa-de28d17be331</profileID>
-    <type>CHILD</type>
+    <type>GUEST</type>
     <name>Liam</name>
-    <roomID>0</roomID>
+    <roomID>9</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>5d2dab73-8d25-42c1-bb06-66cd64d50baa</profileID>
-    <type>GUEST</type>
+    <type>ADULT</type>
     <name>President</name>
     <roomID>0</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>613b1a80-212a-41bf-8469-d35d73ac8a25</profileID>
-    <type>GUEST</type>
+    <type>CHILD</type>
     <name>Obama</name>
     <roomID>8</roomID>
   </UserProfileModel>

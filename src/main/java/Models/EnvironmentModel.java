@@ -146,6 +146,17 @@ public class EnvironmentModel {
     houseGraphic.repaint();
   }
 
+  public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
+
+    try {
+      updateProfileEntry(profile.modifyPrivilege(newPrivilegeLevel), new File("UserProfiles.xml"));
+      CustomConsole.print("Updated privilege of user '" + profile.getName() + "' to '" + newPrivilegeLevel.toString() + "'.");
+    } catch (NonExistantUserProfileException e) {
+      System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
+    }
+
+  }
+
   /**
    * Modifies the profile name of the specified user. NOTE: This method only modifies the profile
    * name on the {@link UserProfileModel} that is contained within the internal list of this class

@@ -7,7 +7,7 @@ import java.util.UUID;
 /** The type User profile model. */
 public class UserProfileModel {
   private final UUID profileID;
-  private final ProfileType type;
+  private ProfileType type;
   private String name;
   private int
       roomID; /* Indicates UserProfile's current room location (A value of -1 indicates that a room
@@ -48,6 +48,12 @@ public class UserProfileModel {
   UserProfileModel modifyLocation(int id) {
     UserProfileModel temp = new UserProfileModel(this);
     temp.roomID = id;
+    return temp;
+  }
+
+  UserProfileModel modifyPrivilege(ProfileType newPrivilege) {
+    UserProfileModel temp = new UserProfileModel(this);
+    temp.type = newPrivilege;
     return temp;
   }
 
