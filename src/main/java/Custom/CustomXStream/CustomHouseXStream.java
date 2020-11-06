@@ -1,7 +1,11 @@
 package Custom.CustomXStream;
 
-import Models.*;
-import Models.Walls.*;
+import Models.House;
+import Models.Room;
+import Models.Walls.OutsideWall;
+import Models.Walls.RoomWall;
+import Models.Walls.Wall;
+import Models.Walls.WindowWall;
 import com.thoughtworks.xstream.XStream;
 
 /** The type Custom XStream. */
