@@ -1,7 +1,7 @@
 package Models;
 
 import Models.Walls.*;
-import Views.Console;
+import Views.CustomConsole;
 
 import java.util.ArrayList;
 
@@ -122,28 +122,25 @@ public class Room {
     this.lightsOn = value;
   }
 
-  /**
-   * Method to be used when lights are turned off while the simulator is running
-   */
-  public void turnOffLights(){
+  /** Method to be used when lights are turned off while the simulator is running */
+  public void turnOffLights() {
     lightsOn = false;
-    Console console = new Console();
-    console.print("Lights in room: " + name + " have been turned off.");
+    CustomConsole.print("Lights in room: " + name + " have been turned off.");
   }
 
-  /**
-   * Method to be used when lights are turned on while the simulator is running
-   */
-  public void turnOnLights(){
+  /** Method to be used when lights are turned on while the simulator is running */
+  public void turnOnLights() {
     lightsOn = true;
-    Console console = new Console();
-    console.print("Lights in room: " + name + " have been turned on.");
+    CustomConsole.print("Lights in room: " + name + " have been turned on.");
   }
 
   /**
    * Returns which users are located in the room represented by this instance of Room.
-   * @param environment The EnvironmentModel singleton which stores all user profiles that exist in the simulation.
-   * @return an array containing all the UserProfileModel objects with a room id equal to the one of this Room instance.
+   *
+   * @param environment The EnvironmentModel singleton which stores all user profiles that exist in
+   *     the simulation.
+   * @return an array containing all the UserProfileModel objects with a room id equal to the one of
+   *     this Room instance.
    */
   public ArrayList<UserProfileModel> getAllUsersInRoom(EnvironmentModel environment) {
     ArrayList<UserProfileModel> users = new ArrayList<UserProfileModel>();
@@ -155,6 +152,10 @@ public class Room {
     }
 
     return users;
+  }
+
+  public Wall[] getAllWalls(){
+    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
   }
 
   @Override

@@ -8,8 +8,9 @@ import Models.Room;
 import Models.UserProfileModel;
 import Views.Console;
 import Views.EditSimulationView;
+import Models.Walls.WindowWall;
+import Views.CustomConsole;
 import Views.EnvironmentView;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -18,6 +19,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -104,7 +110,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      Console.print("Selecting user profile...");
+      CustomConsole.print("Selecting user profile...");
       UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
       JLabel adultLabel = new JLabel("Adult", SwingConstants.CENTER);
@@ -218,7 +224,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       if (theModel.isCurrentUserSet()) {
 
-        Console.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
+        CustomConsole.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
         Room[] roomList = theModel.getRooms();
 
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
@@ -245,7 +251,7 @@ public class EnvironmentController {
         frame.setVisible(true);
 
       } else {
-        Console.print("ERROR: Please select a User first before setting a Location");
+        CustomConsole.print("ERROR: Please select a User first before setting a Location");
       }
     }
   }
@@ -292,13 +298,13 @@ public class EnvironmentController {
           theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
 
         } else {
-          Console.print(
+          CustomConsole.print(
               "ERROR: Please set location for selected user: '"
                   + theModel.getCurrentUser().getName()
                   + "'");
         }
       } else {
-        Console.print("ERROR: Please Select a User Profile before Entering the Simulation");
+        CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");
       }
     }
 
@@ -362,7 +368,7 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
       if (cb.getSelectedIndex() == -1) {
-        Console.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
+        CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
       } else {
         Room newRoom = (Room) cb.getSelectedItem();
         if (newRoom.getId() != theModel.getCurrentUser().getRoomID()) {
@@ -410,7 +416,7 @@ public class EnvironmentController {
       public void actionPerformed(ActionEvent e) {
 
         try {
-          theModel.addUserProfile(theView.getNewlyCreatedUser());
+          theModel.addUserProfile(theView.getNewlyCreatedUser(), new File("UserProfiles.xml"));
         } catch (Exception exception) {
           exception.printStackTrace();
           theView.disposeCreateUser();

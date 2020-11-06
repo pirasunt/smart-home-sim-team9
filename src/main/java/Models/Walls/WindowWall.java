@@ -1,7 +1,7 @@
 package Models.Walls;
 
 import Enums.WallType;
-import Views.Console;
+import Views.CustomConsole;
 
 /** The type Window wall. */
 public class WindowWall extends Wall {
@@ -65,13 +65,11 @@ public class WindowWall extends Wall {
    */
   public void openWindow(){
     if (windowObstructed){
-      Console console = new Console();
-      console.print("Window " + windowId + " is obstructed and cannot be opened.");
+      CustomConsole.print("Window " + windowId + " is obstructed and cannot be opened.");
     }
     else {
       windowOpen = true;
-      Console console = new Console();
-      console.print("Window " + windowId + " has been opened.");
+      CustomConsole.print("Window " + windowId + " has been opened.");
     }
   }
 
@@ -80,13 +78,11 @@ public class WindowWall extends Wall {
    */
   public void closeWindow(){
     if (windowObstructed){
-      Console console = new Console();
-      console.print("Window " + windowId + " is obstructed and cannot be closed.");
+      CustomConsole.print("Window " + windowId + " is obstructed and cannot be closed.");
     }
     else {
       windowOpen = false;
-      Console console = new Console();
-      console.print("Window " + windowId + " has been closed.");
+      CustomConsole.print("Window " + windowId + " has been closed.");
     }
   }
 
@@ -95,8 +91,7 @@ public class WindowWall extends Wall {
    */
   public void obstructWindow(){
     windowObstructed = true;
-    Console console = new Console();
-    console.print("Window " + windowId + " has been obstructed.");
+    CustomConsole.print("Window " + windowId + " has been obstructed.");
   }
 
   /**
@@ -104,7 +99,6 @@ public class WindowWall extends Wall {
    */
   public void unobstructWindow(){
     windowObstructed = false;
-    Console console = new Console();
-    console.print("Window " + windowId + " has been unobstructed.");
+    CustomConsole.print("Window " + windowId + " has been unobstructed.");
   }
 }

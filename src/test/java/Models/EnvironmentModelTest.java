@@ -1,8 +1,8 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
-import Views.Console;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class EnvironmentModelTest {
 
   @BeforeEach
   public void initEach() {
-    Console c = new Console();
+    CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
 
@@ -32,7 +32,7 @@ public class EnvironmentModelTest {
   //use case 3.12
   @Test
   void setHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -45,7 +45,7 @@ public class EnvironmentModelTest {
   //use case 3.12
   @Test
   void updateHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -60,7 +60,7 @@ public class EnvironmentModelTest {
   //use case 3.5
   @Test
   void setDateTime() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -74,7 +74,7 @@ public class EnvironmentModelTest {
   // unit test 3.1
   @Test
   void startStopSim() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
