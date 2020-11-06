@@ -2,19 +2,13 @@ package Views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import java.security.Security;
-import Controllers.SecurityController;
-import Models.SecurityModel;
 import org.jdatepicker.impl.JDatePickerImpl;
-import Tools.CustomTimer;
 
 
 /**
@@ -77,8 +71,7 @@ public class Dash extends JFrame {
   /**
    * The Temp spinner.
    */
-  JSpinner tempSpinner; // temperature spinner
-  JButton confirmTemp;
+  JLabel tempLabel; // temperature spinner
   JComboBox timeSpeed;
   JButton confirmTimeSpeed;
 
@@ -105,7 +98,7 @@ public class Dash extends JFrame {
    * @param time the time
    */
   public Dash(int temp, String date, String time) {
-    tempSpinner.setValue(temp);
+    tempLabel.setText(Integer.toString(temp));
     dateField.setText(date);
     timeField.setText(time);
     timeConfirm = new JButton("OK");
@@ -167,8 +160,8 @@ public class Dash extends JFrame {
     final JLabel label2 = new JLabel();
     label2.setText("Time");
     panel1.add(label2, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    tempSpinner = new JSpinner();
-    panel1.add(tempSpinner, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    tempLabel = new JLabel();
+    panel1.add(tempLabel, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     final JLabel label3 = new JLabel();
     label3.setText("Time Speed");
     panel1.add(label3, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

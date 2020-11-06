@@ -291,7 +291,6 @@ public class EnvironmentController {
 
           theView.addUserDropDownListener(new UserDropDownListener());
           theView.addUserRoomDropDownListener(new UserRoomDropDownListener());
-          theView.addTempSpinnerListener(new TempSpinnerListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addEditSimulationListener(new EditSimulationListener());
           theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
@@ -374,21 +373,6 @@ public class EnvironmentController {
           theModel.modifyProfileLocation(theModel.getCurrentUser(), newRoom);
         }
       }
-    }
-  }
-
-  private class TempSpinnerListener implements ChangeListener {
-    /**
-     * Invoked when the target of the listener has changed its state.
-     *
-     * @param e a ChangeEvent object
-     */
-    @Override
-    public void stateChanged(ChangeEvent e) {
-      theModel.setTemperature(
-          theView
-              .getTemperatureFromSpinner()); // Any change on Temp Spinner will update Environment
-      // attribute
     }
   }
 

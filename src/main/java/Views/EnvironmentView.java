@@ -5,7 +5,6 @@ import Models.Room;
 import Models.UserProfileModel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 /**
@@ -119,14 +118,7 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.addActionListener(listenForUserRoomDropDown);
   }
 
-  /**
-   * Method used to pass on the {@link JSpinner} listener responsibility to its caller.
-   *
-   * @param listenForTempSpinner Listener for the button that starts the user creation process
-   */
-  public void addTempSpinnerListener(ChangeListener listenForTempSpinner) {
-    this.dashboard.tempSpinner.addChangeListener(listenForTempSpinner);
-  }
+
 
   /**
    * Method used to pass on the {@link JButton} listener responsibility to its caller.
@@ -208,14 +200,7 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.setSelectedItem(room);
   }
 
-  /**
-   * Gets the outside temperature of the simulated environment
-   *
-   * @return The currently set temperature as an integer
-   */
-  public int getTemperatureFromSpinner() {
-    return (int) dashboard.tempSpinner.getValue();
-  }
+
 
   /**
    * Creates an interface that allows the Simulator user to create new profiles The user needs to
@@ -295,7 +280,7 @@ public class EnvironmentView extends JFrame {
   public void refreshDash(String dateString, String timeString, int temp) {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
-    this.dashboard.tempSpinner.setValue(temp);
+    this.dashboard.tempLabel.setText(Integer.toString(temp));
 
     //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
     this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());
