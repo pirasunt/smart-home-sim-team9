@@ -6,12 +6,15 @@ import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public class UserProfileModelTest {
   @BeforeEach
   public void initEach() {
     CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
+
   // 3.2 -> modify
   @Test
   void modifyUserProfileName() {
@@ -20,7 +23,7 @@ public class UserProfileModelTest {
     HouseGraphic hg = new HouseGraphic(house);
     EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
     env.setCurrentUser(u);
-    env.editProfileName(u, "New");
+    env.editProfileName(u, "New", new File("src/test/UserProfileTests.xml"));
     assert env.getCurrentUser().getName().equals("New");
   }
 
@@ -31,7 +34,7 @@ public class UserProfileModelTest {
     House house = new House();
     HouseGraphic hg = new HouseGraphic(house);
     EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
-    env.addUserProfile(u);
+    env.addUserProfile(u, new File("src/test/UserProfileTests.xml"));
     assert env.getUserByID(u.getProfileID()) != null;
   }
 
@@ -43,8 +46,8 @@ public class UserProfileModelTest {
     House house = new House();
     HouseGraphic hg = new HouseGraphic(house);
     EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
-    env.addUserProfile(u1);
-    env.removeUserProfile(u1);
+    env.addUserProfile(u1, new File("src/test/UserProfileTests.xml"));
+    env.removeUserProfile(u1, new File("src/test/UserProfileTests.xml"));
     assert env.getAllUserProfiles().length == 1;
   }
 }

@@ -1,9 +1,11 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
 import Models.Walls.Wall;
+import Views.CustomConsole;
 import Views.HouseGraphic;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,6 +14,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RoomTest {
+  @BeforeEach
+  public void initEach() {
+    CustomConsole.init();
+    EnvironmentModel.resetInstance();
+  }
 
   @Test
   void changeRoomTemp() {
@@ -40,7 +47,7 @@ public class RoomTest {
 
   @Test
   void getAllUsersInRoom(){
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);

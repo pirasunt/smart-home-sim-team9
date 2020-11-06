@@ -1,13 +1,17 @@
-package Custom;
+package Custom.CustomXStream;
 
-import Models.*;
-import Models.Walls.*;
+import Models.House;
+import Models.Room;
+import Models.Walls.OutsideWall;
+import Models.Walls.RoomWall;
+import Models.Walls.Wall;
+import Models.Walls.WindowWall;
 import com.thoughtworks.xstream.XStream;
 
 /** The type Custom XStream. */
-public class CustomXStream extends XStream {
+public class CustomHouseXStream extends XStream {
   /** Instantiates a new Custom XStream with proper . */
-  public CustomXStream() {
+  public CustomHouseXStream() {
     XStream.setupDefaultSecurity(this);
     super.allowTypes(
         new Class[] {

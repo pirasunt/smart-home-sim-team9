@@ -1,12 +1,11 @@
 package Views;
 
-import java.awt.Color;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.sql.Timestamp;
-import javax.swing.*;
 
 /** The type Console. */
 public class CustomConsole {

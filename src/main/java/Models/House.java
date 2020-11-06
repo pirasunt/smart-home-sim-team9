@@ -1,12 +1,12 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.WallType;
 import Models.Walls.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
 
 /** The type House. */
 public class House {
@@ -65,7 +65,6 @@ public class House {
 
   /**
    * Gets a single room in the house.
-   *
    * @param id the room to be returned
    * @return the room requested
    */
@@ -144,7 +143,7 @@ public class House {
 
   /** Retrieves XML of the current house and saves to file. */
   public void getXML() {
-    CustomXStream stream = new CustomXStream();
+    CustomHouseXStream stream = new CustomHouseXStream();
     try {
       stream.toXML(this, new FileOutputStream("House.xml"));
     } catch (FileNotFoundException e) {
