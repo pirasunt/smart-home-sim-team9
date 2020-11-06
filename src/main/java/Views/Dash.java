@@ -5,7 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.security.Security;
+
+import Controllers.SecurityController;
+import Models.SecurityModel;
 import org.jdatepicker.impl.JDatePickerImpl;
+import Tools.CustomTimer;
+
 
 /** The type Dash. */
 public class Dash extends JFrame {
@@ -21,10 +27,6 @@ public class Dash extends JFrame {
   JScrollPane sp1;
   /** The Sp 2. */
   JScrollPane sp2;
-  /** The Tab 2. */
-  JPanel Tab2;
-  /** The Tab 1. */
-  JPanel Tab1;
 
   /** The User profile drop down. */
   JComboBox userProfileDropDown; // Current User Profile

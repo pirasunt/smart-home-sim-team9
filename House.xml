@@ -13,7 +13,7 @@
       </rightWall>
       <topWall class="WindowWall">
         <type>WINDOWS</type>
-        <windowOpen>false</windowOpen>
+        <windowOpen>true</windowOpen>
         <windowObstructed>false</windowObstructed>
         <windowId>1</windowId>
       </topWall>

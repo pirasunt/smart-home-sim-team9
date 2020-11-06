@@ -1,7 +1,7 @@
 package Models;
 
 import Enums.ProfileType;
-import Views.Console;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 public class UserProfileModelTest {
   @BeforeEach
   public void initEach() {
-    Console c = new Console();
+    CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
-
   // 3.2 -> modify
   @Test
   void modifyUserProfileName() {

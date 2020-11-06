@@ -56,6 +56,7 @@ public class EnvironmentView extends JFrame {
     this.pack();
     this.setLocationRelativeTo(null);
     this.setVisible(true);
+
   }
 
   /**

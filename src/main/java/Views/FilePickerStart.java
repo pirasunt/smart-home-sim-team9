@@ -61,15 +61,14 @@ public class FilePickerStart extends JFrame {
                         hg.init(theModel);
 
                         // Init console, can now call static method Console.print()
-                        Console c = new Console();
-                        Console.init();
+                        CustomConsole.init();
 
-                        Console.print("Welcome to the simulator!");
+                        CustomConsole.print("Welcome to the simulator!");
                         if (!validHouse) {
-                            Console.print("The XML inputted was invalid. This means the room generated in the House Layout will not make sense.");
-                            Console.print("Make sure each room has a unique id and that connected rooms reference each other by id.");
-                            Console.print("That is: if room 1 is to the right of room 2, then room 2 must be to the left of room 1.");
-                            Console.print("Fix the XML file and restart the program with a valid input.");
+                            CustomConsole.print("The XML inputted was invalid. This means the room generated in the House Layout will not make sense.");
+                            CustomConsole.print("Make sure each room has a unique id and that connected rooms reference each other by id.");
+                            CustomConsole.print("That is: if room 1 is to the right of room 2, then room 2 must be to the left of room 1.");
+                            CustomConsole.print("Fix the XML file and restart the program with a valid input.");
                         }
 
                         EnvironmentView theView = new EnvironmentView();

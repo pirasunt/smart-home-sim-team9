@@ -2,7 +2,7 @@ package Models;
 
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
-import Views.Console;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 
 import javax.swing.Timer;
@@ -13,14 +13,14 @@ import java.util.*;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}** manipulates the data within this class.
+ * Controllers.EnvironmentController}*** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
+  static private House house;
   private final Calendar currentCalObj;
   private final ArrayList<UserProfileModel> userProfileModelList;
-  private final House house;
-  private final HouseGraphic houseGraphic;
+  private static HouseGraphic houseGraphic;
   private int outsideTemperature;
   private UserProfileModel currentUser;
   private boolean simulationRunning = false;
@@ -32,7 +32,7 @@ public class EnvironmentModel {
       int temperature,
       Calendar cal,
       ArrayList<UserProfileModel> profileList) {
-    this.house = h;
+    house = h;
     this.houseGraphic = hg;
     this.outsideTemperature = temperature;
     this.currentCalObj = cal;
@@ -112,7 +112,7 @@ public class EnvironmentModel {
 
     try {
       updateProfileEntry(profile.modifyLocation(room.getId()));
-      Console.print(
+      CustomConsole.print(
           "Set Room to: '"
               + room.getName()
               + "' for user "
@@ -162,7 +162,7 @@ public class EnvironmentModel {
    */
   public void setCurrentUser(UserProfileModel currentUser) {
     this.currentUser = new UserProfileModel(currentUser);
-    Console.print(
+    CustomConsole.print(
         "Current user has been set to "
             + this.currentUser.getName()
             + "/"
@@ -317,7 +317,7 @@ public class EnvironmentModel {
    * @return An array of {@link Room} objects
    */
   public Room[] getRooms() {
-    ArrayList<Room> temp = this.house.getRooms();
+    ArrayList<Room> temp = house.getRooms();
     Room[] roomArray = new Room[temp.size() + 1];
     Room r = new Room("Outside", null, null, null, null, 0);
 
@@ -347,7 +347,7 @@ public class EnvironmentModel {
       throw new Exception("Can Not Create User: Invalid User Attributes");
     } else {
       this.userProfileModelList.add(new UserProfileModel(newUser));
-      Console.print(
+      CustomConsole.print(
           "New user '" + newUser.getName() + "'/" + newUser.getProfileType() + " has been created");
     }
 
@@ -359,7 +359,7 @@ public class EnvironmentModel {
    *
    * @param u the user to be removed.
    */
-  public void removeUserProfile(UserProfileModel u)  {
+  public void removeUserProfile(UserProfileModel u) {
     for (int i = 0; i < this.userProfileModelList.size(); i++) {
       if(this.userProfileModelList.get(i).getProfileID() == u.getProfileID()){
         this.userProfileModelList.remove(i);
@@ -389,24 +389,24 @@ public class EnvironmentModel {
   /** Turns on the simulation */
   public void startSimulation() {
     this.simulationRunning = true;
-    Console.print("The simulation has been started.");
+    CustomConsole.print("The simulation has been started.");
   }
 
   /** Turns off the simulation */
   public void stopSimulation() {
     this.simulationRunning = false;
-    Console.print("The simulation has been stopped.");
+    CustomConsole.print("The simulation has been stopped.");
   }
 
   /** Obstructs all windows */
   public void obstructWindows() {
-    Console.print("Obstructing all windows!");
+    CustomConsole.print("Obstructing all windows!");
     this.windowsObstructed = true;
   }
 
   /** Removes obstruction from all windows */
   public void clearWindows() {
-    Console.print("Clearing all windows!");
+    CustomConsole.print("Clearing all windows!");
     this.windowsObstructed = false;
   }
 
@@ -415,7 +415,17 @@ public class EnvironmentModel {
    *
    * @return the house graphic
    */
-  public HouseGraphic getHouseGraphic() {
-    return this.houseGraphic;
+  public static HouseGraphic getHouseGraphic() {
+    return houseGraphic;
   }
+
+  /**
+   * Gets house.
+   *
+   * @return the house
+   */
+  public static House getHouse() {
+    return house;
+  }
+
 }
