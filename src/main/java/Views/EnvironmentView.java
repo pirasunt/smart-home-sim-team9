@@ -325,7 +325,7 @@ public class EnvironmentView extends JFrame {
 
   /**
    * Creates an interface that allows the Simulator user to create new profiles The user needs to
-   * specify the new profile's name as well as the {@link profileType}. The latter is displayed
+   * specify the new profile's name as well as the profileType. The latter is displayed
    */
   public void userCreationWindow() {
     this.createUser = new JFrame("Create a new User");
@@ -360,7 +360,7 @@ public class EnvironmentView extends JFrame {
    */
   public UserProfileModel getNewlyCreatedUser() {
     return new UserProfileModel(
-        (ProfileType) this.profileType.getSelectedItem(), this.profileName.getText(), -1);
+        (ProfileType) this.profileType.getSelectedItem(), this.profileName.getText(), 0);
   }
 
   /**

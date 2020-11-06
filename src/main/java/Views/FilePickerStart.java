@@ -42,7 +42,7 @@ public class FilePickerStart extends JFrame {
                     public void actionPerformed(ActionEvent e) {
 
                         CustomUserXStream uStream = new CustomUserXStream();
-                        UserProfileModel[] users = (UserProfileModel[]) uStream.fromXML(new File("UserProfiles.xml"));
+                        UserProfileModel[] users = ((UserProfileModel[]) uStream.fromXML(new File("UserProfiles.xml")));
 
                         CustomHouseXStream hStream = new CustomHouseXStream();
                         House house = (House) hStream.fromXML(pathTo);
