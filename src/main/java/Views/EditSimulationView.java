@@ -7,6 +7,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,8 @@ public class EditSimulationView extends JFrame{
     private JLabel timeField;
     private JButton changeTime;
 
+    private JSpinner tempSpinner;
+
     private JFrame datePickerWindow;
     private JDatePickerImpl datePicker;
 
@@ -27,10 +30,12 @@ public class EditSimulationView extends JFrame{
     private JButton timeConfirm;
 
 
-    public EditSimulationView(){
+    public EditSimulationView(int temp){
         this.changeDate = new JButton("Change");
         this.changeTime = new JButton("Change");
         this.timeConfirm = new JButton("Confirm");
+        this.tempSpinner = new JSpinner();
+        this.tempSpinner.setValue(temp);
     }
 
     public void addChangeDateListener(ActionListener listenForDateChange) {
@@ -43,6 +48,14 @@ public class EditSimulationView extends JFrame{
 
     public void addTimeConfirmListener(ActionListener listenForTimeConfirm) {
         this.timeConfirm.addActionListener(listenForTimeConfirm);
+    }
+
+    public void addTempSpinnerListener(ChangeListener listenForTempChange){
+        this.tempSpinner.addChangeListener(listenForTempChange);
+    }
+
+    public Integer getTempSpinnerValue(){
+        return (Integer)this.tempSpinner.getValue();
     }
 
 
@@ -58,6 +71,12 @@ public class EditSimulationView extends JFrame{
         introMessage.setFont(new Font("Verdana", Font.ITALIC, 11));
         this.add(introMessage);
         this.add(new JLabel());
+
+        JLabel changeTempLabel = new JLabel("Change Date");
+        changeTempLabel.setFont(new Font("Verdana", Font.BOLD, 13));
+        this.add(changeTempLabel);
+        this.add(this.tempSpinner);
+
 
         JLabel changeDateLabel = new JLabel("Change Date");
         changeDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));

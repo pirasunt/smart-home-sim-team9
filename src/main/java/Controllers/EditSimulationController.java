@@ -7,6 +7,8 @@ import Views.EditSimulationView;
 import Views.EnvironmentView;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +30,7 @@ public class EditSimulationController {
 
         theView.addChangeDateListener(new ChangeDateListener());
         theView.addChangeTimeListener(new ChangeTimeListener());
-
+        theView.addTempSpinnerListener(new TempChangeListener());
         createEditWindow();
 
 
@@ -144,6 +146,18 @@ public class EditSimulationController {
                     theView.removeTimeComponentPicker();
                 }
             }
+        }
+    }
+
+    private class TempChangeListener implements ChangeListener {
+        /**
+         * Invoked when the target of the listener has changed its state.
+         *
+         * @param e a ChangeEvent object
+         */
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            theModel.setTemperature(theView.getTempSpinnerValue());
         }
     }
 }

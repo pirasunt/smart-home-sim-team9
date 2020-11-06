@@ -6,7 +6,6 @@ import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
-import Views.Console;
 import Views.EditSimulationView;
 import Models.Walls.WindowWall;
 import Views.CustomConsole;
@@ -439,7 +438,7 @@ public class EnvironmentController {
 
       //Pass on responsibility of editing the simulation to its own controller and view.
       //The Environment Model contains all the environment data that will be needed.
-      EditSimulationView editSimView = new EditSimulationView();
+      EditSimulationView editSimView = new EditSimulationView(theModel.getOutsideTemp());
       new EditSimulationController(editSimView, theModel);
 
       editSimView.addWindowListener(new EditSimulationWindowListener());
@@ -525,7 +524,7 @@ public class EnvironmentController {
        */
       @Override
       public void windowClosed(WindowEvent e) {
-        theView.refreshDash(theModel.getDateString(), theModel.getTimeString());
+        theView.refreshDash(theModel.getDateString(), theModel.getTimeString(), theModel.getOutsideTemp());
       }
 
       /**
