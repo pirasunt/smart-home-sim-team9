@@ -31,10 +31,6 @@ public class EnvironmentController {
 
   private final EnvironmentView theView;
   private final EnvironmentModel theModel;
-  private int hour;
-  private int minute;
-  private int second;
-  private String amPM;
 
   /**
    * Initializes the Environment controller using a reference to the View and Model
@@ -57,11 +53,17 @@ public class EnvironmentController {
   Timer timer = new Timer(1000, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
+      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
+      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
+      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
+      String amPM = theModel.getTimeString().substring(8);
+
       String hourString;
       String minuteString;
       String secondString;
 
       second++;
+
       if(second > 59) {
         minute++;
         second = 0;
@@ -347,10 +349,6 @@ public class EnvironmentController {
         } else if (theModel.getSimulationRunning() == false) {
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
-          hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
-          minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
-          second = Integer.parseInt(theModel.getTimeString().substring(6,8));
-          amPM = theModel.getTimeString().substring(8);
           timer.restart();
         }
       }
