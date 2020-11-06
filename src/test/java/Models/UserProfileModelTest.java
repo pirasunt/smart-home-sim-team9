@@ -14,6 +14,7 @@ public class UserProfileModelTest {
     CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
+
   // 3.2 -> modify
   @Test
   void modifyUserProfileName() {
