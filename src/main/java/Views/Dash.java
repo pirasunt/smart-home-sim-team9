@@ -98,7 +98,7 @@ public class Dash extends JFrame {
    * @param time the time
    */
   public Dash(int temp, String date, String time) {
-    tempLabel.setText(Integer.toString(temp));
+    tempLabel.setText(temp + "°C");
     dateField.setText(date);
     timeField.setText(time);
     timeConfirm = new JButton("OK");

@@ -280,7 +280,7 @@ public class EnvironmentView extends JFrame {
   public void refreshDash(String dateString, String timeString, int temp) {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
-    this.dashboard.tempLabel.setText(Integer.toString(temp));
+    this.dashboard.tempLabel.setText(temp + "°C");
 
     //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
     this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());

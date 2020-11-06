@@ -63,58 +63,64 @@ public class EditSimulationView extends JFrame{
 
     public void openEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, String currentDate, String currentTime){
         GridLayout userSelectionGrid = new GridLayout(0, 2, 20, 20);
-        this.setLayout(userSelectionGrid);
+        JPanel container = new JPanel();
+        JScrollPane scrPane = new JScrollPane(container);
+        scrPane.getVerticalScrollBar().setUnitIncrement(20);
+
+        container.setLayout(userSelectionGrid);
 
 
         JLabel introMessage = new JLabel();
         introMessage.setText("<html>NOTE: Changes will be reflected on the <br> dashboard  once this window is closed</html>");
         introMessage.setFont(new Font("Verdana", Font.ITALIC, 11));
-        this.add(introMessage);
-        this.add(new JLabel());
+        container.add(introMessage);
+        container.add(new JLabel());
 
-        JLabel changeTempLabel = new JLabel("Change Date");
-        changeTempLabel.setFont(new Font("Verdana", Font.BOLD, 13));
-        this.add(changeTempLabel);
-        this.add(this.tempSpinner);
+        JLabel changeTempLabel = new JLabel("Change Temp");
+        changeTempLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        container.add(changeTempLabel);
+        container.add(this.tempSpinner);
 
+        container.add(new JSeparator());
+        container.add(new JSeparator());
 
         JLabel changeDateLabel = new JLabel("Change Date");
         changeDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
 
-        this.add(changeDateLabel);
-        this.add(new JLabel()); //Blank label
+        container.add(changeDateLabel);
+        container.add(new JLabel()); //Blank label
         this.dateField = new JLabel(currentDate);
-        this.add(this.dateField);
-        this.add(this.changeDate);
+        container.add(this.dateField);
+        container.add(this.changeDate);
 
-        this.add(new JSeparator());
-        this.add(new JSeparator());
+        container.add(new JSeparator());
+        container.add(new JSeparator());
 
 
         JLabel changeTimeLabel = new JLabel("Change Time");
         changeTimeLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-        this.add(changeTimeLabel);
-        this.add(new JLabel());
+        container.add(changeTimeLabel);
+        container.add(new JLabel());
         this.timeField = new JLabel(currentTime);
-        this.add(this.timeField);
-        this.add(this.changeTime);
+        container.add(this.timeField);
+        container.add(this.changeTime);
 
 
-        this.add(new JSeparator());
-        this.add(new JSeparator());
+        container.add(new JSeparator());
+        container.add(new JSeparator());
 
         JLabel changeUserLabel = new JLabel("Edit User Location");
         changeUserLabel.setFont(new Font("Verdana", Font.BOLD, 18));
-        this.add(changeUserLabel);
-        this.add(new JLabel()); //Blank label
+        container.add(changeUserLabel);
+        container.add(new JLabel()); //Blank label
 
         //userLabels and userDropdowns arrays are the same length
         for(int i = 0; i < userLabels.length; i++) {
-            this.add(userLabels[i]);
-            this.add(userDropdowns[i]);
+            container.add(userLabels[i]);
+            container.add(userDropdowns[i]);
         }
 
-
+        this.add(scrPane);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null); // Center User Selection JFrame
