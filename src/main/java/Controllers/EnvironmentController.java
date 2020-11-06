@@ -6,7 +6,6 @@ import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
-import Models.Walls.WindowWall;
 import Views.Console;
 import Views.EditSimulationView;
 import Views.EnvironmentView;
@@ -19,10 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -294,7 +289,6 @@ public class EnvironmentController {
           theView.addTempSpinnerListener(new TempSpinnerListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addEditSimulationListener(new EditSimulationListener());
-          theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
           theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
 
         } else {

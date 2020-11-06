@@ -1,6 +1,8 @@
 package Controllers;
 
 import Models.EnvironmentModel;
+import Models.Room;
+import Models.UserProfileModel;
 import Views.EditSimulationView;
 import Views.EnvironmentView;
 
@@ -26,7 +28,43 @@ public class EditSimulationController {
 
         theView.addChangeDateListener(new ChangeDateListener());
         theView.addChangeTimeListener(new ChangeTimeListener());
-        theView.openEditScreen(theModel.getAllUserProfiles(), theModel.getDateString(), theModel.getTimeString());
+
+        createEditWindow();
+
+
+    }
+
+    private void createEditWindow(){
+        UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
+        Room[] allRooms = theModel.getRooms();
+        JLabel userLabels[] = new JLabel[allProfiles.length];
+        JComboBox<Room> roomDropdowns[] = new JComboBox[allProfiles.length];
+
+
+
+        for(int i = 0; i < allProfiles.length; i++){
+           userLabels[i] = new JLabel(allProfiles[i].getName());
+            JComboBox<Room> comboBox = new JComboBox<>(allRooms);
+
+
+            //nested for loop sets the dropdown to the currentRoom of the user
+            for(int j = 0; j < allRooms.length; j++){
+                if(allProfiles[i].getRoomID() == allRooms[j].getId())
+                    comboBox.setSelectedItem(allRooms[j]);
+            }
+
+            int currentIndex = i;
+            comboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
+                    theModel.modifyProfileLocation(allProfiles[currentIndex], (Room)cb.getSelectedItem());
+                }
+            });
+
+            roomDropdowns[i] = comboBox;
+        }
+        theView.openEditScreen(userLabels, roomDropdowns, theModel.getDateString(), theModel.getTimeString());
 
     }
 
@@ -66,7 +104,7 @@ public class EditSimulationController {
                 if (value != null) {
                     Calendar cal = (Calendar) value;
                     theView.setDateField(dateFormatter.format(cal.getTime()));
-                    theModel.setDate(cal.getTime()); // Update Environment date
+                    theModel.setDate(cal); // Update Environment date
                     theView.removeDateComponentPicker();
                     return dateFormatter.format(cal.getTime());
                 }

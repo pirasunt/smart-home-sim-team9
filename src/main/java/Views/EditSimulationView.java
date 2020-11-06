@@ -1,6 +1,6 @@
 package Views;
 
-import Controllers.EditSimulationController;
+import Models.Room;
 import Models.UserProfileModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -8,10 +8,9 @@ import org.jdatepicker.impl.SqlDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 
 public class EditSimulationView extends JFrame{
 
@@ -47,13 +46,21 @@ public class EditSimulationView extends JFrame{
     }
 
 
-    public void openEditScreen(UserProfileModel[] userList, String currentDate, String currentTime){
+
+
+    public void openEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, String currentDate, String currentTime){
         GridLayout userSelectionGrid = new GridLayout(0, 2, 20, 20);
         this.setLayout(userSelectionGrid);
 
 
+        JLabel introMessage = new JLabel();
+        introMessage.setText("<html>NOTE: Changes will be reflected on the <br> dashboard  once this window is closed</html>");
+        introMessage.setFont(new Font("Verdana", Font.ITALIC, 11));
+        this.add(introMessage);
+        this.add(new JLabel());
+
         JLabel changeDateLabel = new JLabel("Change Date");
-        changeDateLabel.setFont(changeDateLabel.getFont().deriveFont(Font.BOLD));
+        changeDateLabel.setFont(new Font("Verdana", Font.BOLD, 18));
 
         this.add(changeDateLabel);
         this.add(new JLabel()); //Blank label
@@ -66,7 +73,7 @@ public class EditSimulationView extends JFrame{
 
 
         JLabel changeTimeLabel = new JLabel("Change Time");
-        changeTimeLabel.setFont(changeTimeLabel.getFont().deriveFont(Font.BOLD));
+        changeTimeLabel.setFont(new Font("Verdana", Font.BOLD, 18));
         this.add(changeTimeLabel);
         this.add(new JLabel());
         this.timeField = new JLabel(currentTime);
@@ -77,6 +84,16 @@ public class EditSimulationView extends JFrame{
         this.add(new JSeparator());
         this.add(new JSeparator());
 
+        JLabel changeUserLabel = new JLabel("Edit User Location");
+        changeUserLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        this.add(changeUserLabel);
+        this.add(new JLabel()); //Blank label
+
+        //userLabels and userDropdowns arrays are the same length
+        for(int i = 0; i < userLabels.length; i++) {
+            this.add(userLabels[i]);
+            this.add(userDropdowns[i]);
+        }
 
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -84,6 +101,7 @@ public class EditSimulationView extends JFrame{
         this.setLocationRelativeTo(null); // Center User Selection JFrame
         this.setVisible(true);
     }
+
 
     /**
      * Provides an interface that allows the Simulator user to change the Date
@@ -93,7 +111,6 @@ public class EditSimulationView extends JFrame{
      *     Models.EnvironmentModel}. The core logic of formatter is found in {@link
      *     Controllers.EnvironmentController}
      */
-
     public void changeDate(JFormattedTextField.AbstractFormatter formatter) {
         SqlDateModel model = new SqlDateModel();
         Properties p = new Properties();

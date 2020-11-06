@@ -297,8 +297,8 @@ public class EnvironmentModel {
    *
    * @param newDate {@link Date} object representing the desired date
    */
-  public void setDate(Date newDate) {
-    this.currentCalObj.set(newDate.getYear(), newDate.getMonth(), newDate.getDate());
+  public void setDate(Calendar newDate) {
+    this.currentCalObj.set(newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
   }
 
   /**

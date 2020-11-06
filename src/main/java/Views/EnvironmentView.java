@@ -291,6 +291,9 @@ public class EnvironmentView extends JFrame {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
 
+    //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
+    this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());
+  }
   public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
@@ -298,5 +301,9 @@ public class EnvironmentView extends JFrame {
   public String getTimeSpeed(){
     return dashboard.timeSpeed.getSelectedItem().toString();
 
+  }
+
+  public void setTimeField(String time){
+    this.dashboard.timeField.setText(time);
   }
 }
