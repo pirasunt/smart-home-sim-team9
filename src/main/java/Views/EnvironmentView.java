@@ -145,9 +145,9 @@ public class EnvironmentView extends JFrame {
    * @param date The date of the simulated environment
    * @param time The time of the simulated environment
    */
-  public void createDash(int temp, String date, String time) {
+  public void createDash(int temp, String date, String time, int delay) {
     JFrame frame = new JFrame("Dashboard");
-    this.dashboard = new Dash(temp, date, time);
+    this.dashboard = new Dash(temp, date, time, delay);
     JPanel jp = this.dashboard.p1;
     frame.setContentPane(jp);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -277,10 +277,11 @@ public class EnvironmentView extends JFrame {
   }
 
 
-  public void refreshDash(String dateString, String timeString, int temp) {
+  public void refreshDash(String dateString, String timeString, int temp, int timerDelay) {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
     this.dashboard.tempLabel.setText(temp + "°C");
+    this.dashboard.timeSpeed.setText(Integer.toString(1000/timerDelay) + " X");
 
     //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
     this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());
@@ -289,10 +290,6 @@ public class EnvironmentView extends JFrame {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
 
-  public String getTimeSpeed(){
-    return dashboard.timeSpeed.getSelectedItem().toString();
-
-  }
 
   public void setTimeField(String time){
     this.dashboard.timeField.setText(time);

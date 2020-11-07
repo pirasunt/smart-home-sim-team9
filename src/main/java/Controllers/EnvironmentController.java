@@ -2,17 +2,13 @@ package Controllers;
 
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
-import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Views.EditSimulationView;
-import Models.Walls.WindowWall;
 import Views.CustomConsole;
 import Views.EnvironmentView;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,8 +17,6 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -43,64 +37,14 @@ public class EnvironmentController {
   public EnvironmentController(EnvironmentView v, EnvironmentModel m) {
     this.theView = v;
     this.theModel = m;
-
+    theModel.initializeTimer(1000, new TimerListener());
     this.theView.addUserListener(new StartListener());
     this.theView.addLocationListener(new LocationListener());
     this.theView.addSimulatorListener(new SimulatorListener());
     this.theView.addCreateUserListener(new CreateUserListener());
+
+
   }
-  /**
-   * Initializes the timer
-   */
-  Timer timer = new Timer(1000, new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
-      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
-      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
-      String amPM = theModel.getTimeString().substring(8);
-
-      String hourString;
-      String minuteString;
-      String secondString;
-
-      second++;
-
-      if(second > 59) {
-        minute++;
-        second = 0;
-      }
-      if(minute > 59) {
-        hour++;
-        minute = 0;
-      }
-      if(hour > 12){
-        hour = 1;
-        if(amPM == "AM")
-          amPM = "PM";
-        else
-          amPM = "AM";
-      }
-
-      if(hour < 10)
-        hourString = "0" + hour;
-      else
-        hourString = String.valueOf(hour);
-
-      if(minute < 10)
-        minuteString = "0" + minute;
-      else
-        minuteString = String.valueOf(minute);
-
-      if(second < 10)
-        secondString = "0" + second;
-      else
-        secondString = String.valueOf(second);
-
-      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
-      theView.setTimeField(time);
-    }
-  });
 
   private class StartListener implements ActionListener {
 
@@ -272,7 +216,7 @@ public class EnvironmentController {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
           theView.createDash(
-              theModel.getOutsideTemp(), theModel.getDateString(), theModel.getTimeString());
+              theModel.getOutsideTemp(), theModel.getDateString(), theModel.getTimeString(), theModel.getTimer().getDelay());
           UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
           for (int i = 0; i < allProfiles.length; i++) {
@@ -295,7 +239,6 @@ public class EnvironmentController {
           theView.addUserRoomDropDownListener(new UserRoomDropDownListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
           theView.addEditSimulationListener(new EditSimulationListener());
-          theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
 
         } else {
           CustomConsole.print(
@@ -344,11 +287,11 @@ public class EnvironmentController {
         if (theModel.getSimulationRunning() == true) {
           theModel.stopSimulation();
           theView.changeSimulationToggleText("Start Simulation");
-          timer.stop();
+          theModel.getTimer().stop();
         } else if (theModel.getSimulationRunning() == false) {
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
-          timer.restart();
+          theModel.getTimer().restart();
         }
       }
     }
@@ -420,11 +363,17 @@ public class EnvironmentController {
 
       //Pass on responsibility of editing the simulation to its own controller and view.
       //The Environment Model contains all the environment data that will be needed.
-      EditSimulationView editSimView = new EditSimulationView(theModel.getOutsideTemp());
-      new EditSimulationController(editSimView, theModel);
 
-      editSimView.addWindowListener(new EditSimulationWindowListener());
+      if(!theModel.getSimulationRunning()) {
+        EditSimulationView editSimView = new EditSimulationView(theModel.getOutsideTemp(), theModel.getTimer().getDelay());
+        new EditSimulationController(editSimView, theModel);
 
+        editSimView.addWindowListener(new EditSimulationWindowListener());
+      } else {
+        CustomConsole.print("ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
+      }
+
+      //The Following code will be reused for SHC
 /*
       if (theModel.isWindowObstructed()) {
         Room[] rooms = theModel.getRooms();
@@ -506,7 +455,7 @@ public class EnvironmentController {
        */
       @Override
       public void windowClosed(WindowEvent e) {
-        theView.refreshDash(theModel.getDateString(), theModel.getTimeString(), theModel.getOutsideTemp());
+        theView.refreshDash(theModel.getDateString(), theModel.getTimeString(), theModel.getOutsideTemp(), theModel.getTimer().getDelay());
       }
 
       /**
@@ -566,20 +515,65 @@ public class EnvironmentController {
     }
   }
 
-  private class confirmTimeSpeedListener implements ActionListener {
+  private class TimerListener implements ActionListener {
     /**
-     * Invoked when the 'OK' Button is pressed for the time speed
+     * Invoked when an action occurs.
      *
      * @param e the event to be processed
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (theView.getTimeSpeed() == "10x")
-        timer.setDelay(100);
-      else if (theView.getTimeSpeed() == "100x")
-        timer.setDelay(10);
+      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
+      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
+      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
+      String amPM = theModel.getTimeString().substring(8);
+      amPM = amPM.replaceAll(" ", "");
+
+      String hourString;
+      String minuteString;
+      String secondString;
+
+      second++;
+
+      if(second > 59) {
+        minute++;
+        second = 0;
+      }
+      if(minute > 59) {
+        hour++;
+        minute = 0;
+      }
+      if(hour > 12){
+        hour = 1;
+        if(amPM.equals("AM"))
+          amPM = "PM";
+        else
+          amPM = "AM";
+      }
+
+      if(hour < 10)
+        hourString = "0" + hour;
       else
-        timer.setDelay(1000);
+        hourString = String.valueOf(hour);
+
+      if(minute < 10)
+        minuteString = "0" + minute;
+      else
+        minuteString = String.valueOf(minute);
+
+      if(second < 10)
+        secondString = "0" + second;
+      else
+        secondString = String.valueOf(second);
+
+      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
+      SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
+      theView.setTimeField(time);
+      try {
+        theModel.setTime(formatter.parse(time));
+      } catch (ParseException parseException) {
+        parseException.printStackTrace();
+      }
     }
   }
 }

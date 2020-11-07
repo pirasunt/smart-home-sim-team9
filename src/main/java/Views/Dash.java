@@ -72,7 +72,7 @@ public class Dash extends JFrame {
    * The Temp spinner.
    */
   JLabel tempLabel; // temperature spinner
-  JComboBox timeSpeed;
+  JLabel timeSpeed;
   JButton confirmTimeSpeed;
 
   /**
@@ -97,10 +97,11 @@ public class Dash extends JFrame {
    * @param date the date
    * @param time the time
    */
-  public Dash(int temp, String date, String time) {
+  public Dash(int temp, String date, String time, int delay) {
     tempLabel.setText(temp + "°C");
     dateField.setText(date);
     timeField.setText(time);
+    timeSpeed.setText(1000/delay + " X");
     timeConfirm = new JButton("OK");
     tabbedPane1.addMouseListener(
         new MouseAdapter() {
@@ -171,12 +172,11 @@ public class Dash extends JFrame {
     final JLabel label4 = new JLabel();
     label4.setText("Outside Temperature");
     panel1.add(label4, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    timeSpeed = new JComboBox();
+    timeSpeed = new JLabel();
     final DefaultComboBoxModel defaultComboBoxModel3 = new DefaultComboBoxModel();
     defaultComboBoxModel3.addElement("1x");
     defaultComboBoxModel3.addElement("10x");
     defaultComboBoxModel3.addElement("100x");
-    timeSpeed.setModel(defaultComboBoxModel3);
     panel1.add(timeSpeed, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     sp2 = new JScrollPane();
     p1.add(sp2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));

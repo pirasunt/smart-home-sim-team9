@@ -28,11 +28,33 @@ public class EditSimulationView extends JFrame{
     private final JButton timeConfirm;
     private JPanel userRoomPrivPanel; //This is dynamically generated, so can not use GUI Designer
     private JPanel mainPanel;
+    private JRadioButton oneTimeSpeed;
+    private JRadioButton tenTimeSpeed;
+    private JRadioButton hundredTimeSpeed;
 
 
-    public EditSimulationView(int temp){
+    public EditSimulationView(int temp, int delay){
         this.timeConfirm = new JButton("Confirm");
         this.tempSpinner.setValue(temp);
+
+        int speedFactor= 1000/delay;
+        switch(speedFactor) {
+            case 1:
+                this.oneTimeSpeed.setSelected(true);
+                break;
+            case 10:
+                this.tenTimeSpeed.setSelected(true);
+                break;
+            case 100:
+                this.hundredTimeSpeed.setSelected(true);
+                break;
+        }
+    }
+
+    public void addTimeSpeedRadioListener(ActionListener listenForSpeedChange){
+        this.oneTimeSpeed.addActionListener(listenForSpeedChange);
+        this.tenTimeSpeed.addActionListener(listenForSpeedChange);
+        this.hundredTimeSpeed.addActionListener(listenForSpeedChange);
     }
 
     public void addChangeDateListener(ActionListener listenForDateChange) {
@@ -57,7 +79,6 @@ public class EditSimulationView extends JFrame{
 
 
 
-
     public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime){
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
@@ -74,14 +95,11 @@ public class EditSimulationView extends JFrame{
         JLabel roomLabel = new JLabel("Current Room");
         JLabel privilegeLabel = new JLabel("Privilege");
 
-        userLabel.setFont(new Font(null, Font.BOLD, 14));
-        roomLabel.setFont(new Font(null, Font.BOLD, 14));
-        privilegeLabel.setFont(new Font(null, Font.BOLD, 14));
-
-        this.userRoomPrivPanel.add(userLabel);
-        this.userRoomPrivPanel.add(roomLabel);
-        this.userRoomPrivPanel.add(privilegeLabel);
-
+        JLabel[] tempArray = {userLabel, roomLabel, privilegeLabel};
+        for (JLabel label : tempArray) {
+            label.setFont(new Font(null, Font.BOLD, 14));
+            this.userRoomPrivPanel.add(label);
+        }
 
         //userLabels, userDropdowns & profileTypes arrays are the same length
         for(int i = 0; i < userLabels.length; i++) {

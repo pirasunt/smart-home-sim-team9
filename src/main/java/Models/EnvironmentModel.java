@@ -6,11 +6,13 @@ import Enums.ProfileType;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.swing.Timer;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
@@ -26,6 +28,7 @@ public class EnvironmentModel {
   private UserProfileModel currentUser;
   private boolean simulationRunning = false;
   private boolean windowsObstructed = false;
+  private Timer timer;
 
   private EnvironmentModel(
       House h,
@@ -43,6 +46,14 @@ public class EnvironmentModel {
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
     this(h, hg, 21, new GregorianCalendar(), profileList);
+  }
+
+  public Timer getTimer(){
+    return this.timer;
+  }
+
+  public void initializeTimer(int delay, ActionListener listenForTimer) {
+    this.timer = new Timer(delay, listenForTimer);
   }
 
   /**
@@ -352,6 +363,7 @@ public class EnvironmentModel {
   public void setTime(Date newTime) {
     this.currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
     this.currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
+    this.currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
   }
 
   /**

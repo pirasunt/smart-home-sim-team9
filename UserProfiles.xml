@@ -49,9 +49,9 @@
   </UserProfileModel>
   <UserProfileModel>
     <profileID>613b1a80-212a-41bf-8469-d35d73ac8a25</profileID>
-    <type>CHILD</type>
+    <type>GUEST</type>
     <name>Obama</name>
-    <roomID>8</roomID>
+    <roomID>9</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>dd087549-5c8a-4dd8-a3f1-a041683930ce</profileID>

@@ -32,6 +32,7 @@ public class EditSimulationController {
         theView.addChangeDateListener(new ChangeDateListener());
         theView.addChangeTimeListener(new ChangeTimeListener());
         theView.addTempSpinnerListener(new TempChangeListener());
+        theView.addTimeSpeedRadioListener(new TimeSpeedListener());
         createEditWindow();
 
 
@@ -177,6 +178,30 @@ public class EditSimulationController {
         @Override
         public void stateChanged(ChangeEvent e) {
             theModel.setTemperature(theView.getTempSpinnerValue());
+        }
+    }
+
+    private class TimeSpeedListener implements ActionListener {
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String selectedButton = ((JRadioButton)e.getSource()).getText();
+            
+           switch (selectedButton){
+               case "1 X":
+                   theModel.getTimer().setDelay(1000);
+                   break;
+               case "10 X":
+                   theModel.getTimer().setDelay(100);
+                   break;
+               case "100 X":
+                   theModel.getTimer().setDelay(10);
+                   break;
+           }
         }
     }
 }
