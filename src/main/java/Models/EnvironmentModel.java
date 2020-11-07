@@ -25,7 +25,7 @@ public class EnvironmentModel {
   private final Calendar currentCalObj;
   private final ArrayList<UserProfileModel> userProfileModelList;
   private int outsideTemperature;
-  private UserProfileModel currentUser;
+  private static UserProfileModel currentUser;
   private boolean simulationRunning = false;
   private boolean windowsObstructed = false;
   private Timer timer;
@@ -192,8 +192,8 @@ public class EnvironmentModel {
    *
    * @return Deep copy of currently selected user.
    */
-  public UserProfileModel getCurrentUser() {
-    return new UserProfileModel(this.currentUser);
+  public static UserProfileModel getCurrentUser() {
+    return new UserProfileModel(currentUser);
   }
 
   /**

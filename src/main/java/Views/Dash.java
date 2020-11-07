@@ -6,6 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
+import Enums.ProfileType;
+import Models.EnvironmentModel;
+import Models.UserProfileModel;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -110,6 +113,13 @@ public class Dash extends JFrame {
             super.mouseClicked(e);
           }
         });
+    setSHPVisibility();
+  }
+
+  private void setSHPVisibility() {
+    if (EnvironmentModel.getCurrentUser().getProfileType() != ProfileType.ADULT) {
+      tabbedPane1.setVisible(false);
+    }
   }
 
   {
