@@ -3,18 +3,10 @@ package Views;
 import Enums.ProfileType;
 import Models.Room;
 import Models.UserProfileModel;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
-
 /**
  * EnvironmentView is the visual representation of the entire system and is the module that
  * interacts directly with the user. Any operation requested by the user is then passed on to the
@@ -126,41 +118,7 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.addActionListener(listenForUserRoomDropDown);
   }
 
-  /**
-   * Method used to pass on the {@link JSpinner} listener responsibility to its caller.
-   *
-   * @param listenForTempSpinner Listener for the button that starts the user creation process
-   */
-  public void addTempSpinnerListener(ChangeListener listenForTempSpinner) {
-    this.dashboard.tempSpinner.addChangeListener(listenForTempSpinner);
-  }
 
-  /**
-   * Method used to pass on the {@link JButton} listener responsibility to its caller.
-   *
-   * @param listenForDateChange Listener for the button that starts a Date Change
-   */
-  public void addChangeDateListener(ActionListener listenForDateChange) {
-    this.dashboard.changeDate.addActionListener(listenForDateChange);
-  }
-
-  /**
-   * Method used to pass on the {@link JButton} listener responsibility to its caller.
-   *
-   * @param listenForTimeChange Listener for the button that starts a Time change
-   */
-  public void addChangeTimeListener(ActionListener listenForTimeChange) {
-    this.dashboard.changeTime.addActionListener(listenForTimeChange);
-  }
-
-  /**
-   * Method used to pass on the {@link JButton} listener responsibility to its caller.
-   *
-   * @param listenForTimeConfirm Listener for the button that applies the selected time
-   */
-  public void addConfirmTimeListener(ActionListener listenForTimeConfirm) {
-    this.dashboard.timeConfirm.addActionListener(listenForTimeConfirm);
-  }
 
   /**
    * Method used to pass on the {@link JButton} listener responsibility to its caller.
@@ -174,10 +132,10 @@ public class EnvironmentView extends JFrame {
   /**
    * Method used to pass on the {@link JButton} listener responsibility to its caller.
    *
-   * @param listenForWindowObstruction the listen for window obstruction
+   * @param listenForEditSimulation the listen for window obstruction
    */
-  public void addObstructionToggleListener(ActionListener listenForWindowObstruction) {
-    this.dashboard.toggleObstructionButton.addActionListener(listenForWindowObstruction);
+  public void addEditSimulationListener(ActionListener listenForEditSimulation) {
+    this.dashboard.editSimulationButton.addActionListener(listenForEditSimulation);
   }
 
   /**
@@ -187,9 +145,9 @@ public class EnvironmentView extends JFrame {
    * @param date The date of the simulated environment
    * @param time The time of the simulated environment
    */
-  public void createDash(int temp, String date, String time) {
+  public void createDash(int temp, String date, String time, int delay) {
     JFrame frame = new JFrame("Dashboard");
-    this.dashboard = new Dash(temp, date, time);
+    this.dashboard = new Dash(temp, date, time, delay);
     JPanel jp = this.dashboard.p1;
     frame.setContentPane(jp);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -242,87 +200,7 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.setSelectedItem(room);
   }
 
-  /**
-   * Changes the time passed.
-   *
-   * @param currentDate the current date
-   */
-  public void ChangeTime(Date currentDate) {
-    this.dashboard.setLayout(new GridLayout(2, 1, 3, 3));
 
-    SpinnerDateModel sm = new SpinnerDateModel(currentDate, null, null, Calendar.HOUR_OF_DAY);
-
-    dashboard.time_spinner = new JSpinner(sm);
-
-    JSpinner.DateEditor te = new JSpinner.DateEditor(dashboard.time_spinner, "hh:mm:ss a");
-    dashboard.time_spinner.setEditor(te);
-
-    this.dashboard.add(dashboard.time_spinner);
-
-    this.dashboard.add(dashboard.timeConfirm);
-    this.dashboard.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
-    this.dashboard.pack();
-    this.dashboard.setVisible(true);
-  }
-
-  /**
-   * Provides an interface that allows the Simulator user to change the Date
-   *
-   * @param formatter Object that performs the conversion between the user selecting a date on the
-   *     UI via a DatePicker to a usable String format to be stored in the {@link
-   *     Models.EnvironmentModel}. The core logic of formatter is found in {@link
-   *     Controllers.EnvironmentController}
-   */
-  public void ChangeDate(JFormattedTextField.AbstractFormatter formatter) {
-    SqlDateModel model = new SqlDateModel();
-    Properties p = new Properties();
-    p.put("text.today", "Today");
-    p.put("text.month", "Month");
-    p.put("text.year", "Year");
-    JDatePanelImpl panel = new JDatePanelImpl(model, p);
-    dashboard.datePicker = new JDatePickerImpl(panel, formatter);
-    this.dashboard.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
-    this.dashboard.add(dashboard.datePicker);
-    this.dashboard.pack();
-    this.dashboard.setVisible(true);
-  }
-
-  /**
-   * Gets the value from the {@link JSpinner} module used to change the Time of the simulated
-   * environment
-   *
-   * @return Value of the {@link JSpinner} that needs to be casted to a useable format
-   */
-  public Object getTimeSpinnerVal() {
-    return dashboard.time_spinner.getValue();
-  }
-
-  /**
-   * Sets the Time field of the simulator
-   *
-   * @param time String representation of the new Time to set
-   */
-  public void setTimeField(String time) {
-    this.dashboard.timeField.setText(time);
-  }
-
-  /**
-   * Sets Date field of the simulator
-   *
-   * @param date String representation of the new Date to set
-   */
-  public void setDateField(String date) {
-    this.dashboard.dateField.setText(date);
-  }
-
-  /**
-   * Gets the outside temperature of the simulated environment
-   *
-   * @return The currently set temperature as an integer
-   */
-  public int getTemperatureFromSpinner() {
-    return (int) dashboard.tempSpinner.getValue();
-  }
 
   /**
    * Creates an interface that allows the Simulator user to create new profiles The user needs to
@@ -383,34 +261,37 @@ public class EnvironmentView extends JFrame {
    * @param text the text
    */
   public void changeWindowsObstructedToggleText(String text) {
-    dashboard.toggleObstructionButton.setText(text);
+    dashboard.editSimulationButton.setText(text);
   }
+
+
   /** Used to clean up UI after the user is done creating a {@link UserProfileModel} */
   public void disposeCreateUser() {
     this.createUser.dispose();
   }
 
-  /** Used to clean up UI after the user is done using the Calendar Date Picker */
-  public void removeDateComponentPicker() {
-    this.dashboard.remove(dashboard.datePicker);
-  }
-
-  /** Used to clean up UI after the user is done using the Time Picker */
-  public void removeTimeComponentPicker() {
-    this.dashboard.remove(dashboard.time_spinner);
-    this.dashboard.remove(dashboard.timeConfirm);
-  }
 
   /** Destroys the Simulator Dashboard when called */
   public void disposeDash() {
     this.dashboard.dispose();
   }
 
+
+  public void refreshDash(String dateString, String timeString, int temp, int timerDelay) {
+    this.dashboard.dateField.setText(dateString);
+    this.dashboard.timeField.setText(timeString);
+    this.dashboard.tempLabel.setText(temp + "°C");
+    this.dashboard.timeSpeed.setText(Integer.toString(1000/timerDelay) + " X");
+
+    //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
+    this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());
+  }
   public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
 
-  public String getTimeSpeed(){
-    return dashboard.timeSpeed.getSelectedItem().toString();
+
+  public void setTimeField(String time){
+    this.dashboard.timeField.setText(time);
   }
 }

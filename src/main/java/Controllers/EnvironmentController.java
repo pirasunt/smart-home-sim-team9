@@ -2,25 +2,21 @@ package Controllers;
 
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
-import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
-import Models.Walls.WindowWall;
+import Views.EditSimulationView;
 import Views.CustomConsole;
 import Views.EnvironmentView;
-
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -41,64 +37,14 @@ public class EnvironmentController {
   public EnvironmentController(EnvironmentView v, EnvironmentModel m) {
     this.theView = v;
     this.theModel = m;
-
+    theModel.initializeTimer(1000, new TimerListener());
     this.theView.addUserListener(new StartListener());
     this.theView.addLocationListener(new LocationListener());
     this.theView.addSimulatorListener(new SimulatorListener());
     this.theView.addCreateUserListener(new CreateUserListener());
+
+
   }
-  /**
-   * Initializes the timer
-   */
-  Timer timer = new Timer(1000, new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
-      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
-      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
-      String amPM = theModel.getTimeString().substring(8);
-
-      String hourString;
-      String minuteString;
-      String secondString;
-
-      second++;
-
-      if(second > 59) {
-        minute++;
-        second = 0;
-      }
-      if(minute > 59) {
-        hour++;
-        minute = 0;
-      }
-      if(hour > 12){
-        hour = 1;
-        if(amPM == "AM")
-          amPM = "PM";
-        else
-          amPM = "AM";
-      }
-
-      if(hour < 10)
-        hourString = "0" + hour;
-      else
-        hourString = String.valueOf(hour);
-
-      if(minute < 10)
-        minuteString = "0" + minute;
-      else
-        minuteString = String.valueOf(minute);
-
-      if(second < 10)
-        secondString = "0" + second;
-      else
-        secondString = String.valueOf(second);
-
-      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
-      theView.setTimeField(time);
-    }
-  });
 
   private class StartListener implements ActionListener {
 
@@ -270,7 +216,7 @@ public class EnvironmentController {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
           theView.createDash(
-              theModel.getOutsideTemp(), theModel.getDateString(), theModel.getTimeString());
+              theModel.getOutsideTemp(), theModel.getDateString(), theModel.getTimeString(), theModel.getTimer().getDelay());
           UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
           for (int i = 0; i < allProfiles.length; i++) {
@@ -291,12 +237,8 @@ public class EnvironmentController {
 
           theView.addUserDropDownListener(new UserDropDownListener());
           theView.addUserRoomDropDownListener(new UserRoomDropDownListener());
-          theView.addTempSpinnerListener(new TempSpinnerListener());
-          theView.addChangeDateListener(new ChangeDateListener());
-          theView.addChangeTimeListener(new ChangeTimeListener());
           theView.addSimulationToggleListener(new SimulationToggleListener());
-          theView.addObstructionToggleListener(new ObstructWindowsToggleListener());
-          theView.addconfirmTimeSpeedListener(new confirmTimeSpeedListener());
+          theView.addEditSimulationListener(new EditSimulationListener());
 
         } else {
           CustomConsole.print(
@@ -345,11 +287,11 @@ public class EnvironmentController {
         if (theModel.getSimulationRunning() == true) {
           theModel.stopSimulation();
           theView.changeSimulationToggleText("Start Simulation");
-          timer.stop();
+          theModel.getTimer().stop();
         } else if (theModel.getSimulationRunning() == false) {
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
-          timer.restart();
+          theModel.getTimer().restart();
         }
       }
     }
@@ -370,107 +312,6 @@ public class EnvironmentController {
         Room newRoom = (Room) cb.getSelectedItem();
         if (newRoom.getId() != theModel.getCurrentUser().getRoomID()) {
           theModel.modifyProfileLocation(theModel.getCurrentUser(), newRoom);
-        }
-      }
-    }
-  }
-
-  private class TempSpinnerListener implements ChangeListener {
-    /**
-     * Invoked when the target of the listener has changed its state.
-     *
-     * @param e a ChangeEvent object
-     */
-    @Override
-    public void stateChanged(ChangeEvent e) {
-      theModel.setTemperature(
-          theView
-              .getTemperatureFromSpinner()); // Any change on Temp Spinner will update Environment
-      // attribute
-    }
-  }
-
-  private class ChangeDateListener implements ActionListener {
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        theView.ChangeDate(new CustomDateFormatter());
-    }
-
-    private class CustomDateFormatter extends JFormattedTextField.AbstractFormatter {
-      /**
-       * Parses <code>text</code> returning an arbitrary Object. Some formatters may return null.
-       *
-       * @param text String to convert
-       * @return Object representation of text
-       * @throws ParseException if there is an error in the conversion
-       */
-      private final String datePattern = "MMM dd, yyyy";
-
-      private final SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-      @Override
-      public Object stringToValue(String text) throws ParseException {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime((Date) dateFormatter.parseObject(text));
-        return cal;
-      }
-
-      /**
-       * Returns the string value to display for <code>value</code>.
-       *
-       * @param value Value to convert
-       * @return String representation of value
-       * @throws ParseException if there is an error in the conversion
-       */
-      @Override
-      public String valueToString(Object value) throws ParseException {
-        if (value != null) {
-          Calendar cal = (Calendar) value;
-          theView.setDateField(dateFormatter.format(cal.getTime()));
-          theModel.setDate(cal.getTime()); // Update Environment date
-          theView.removeDateComponentPicker();
-          theView.disposeDash();
-          return dateFormatter.format(cal.getTime());
-        }
-        return "";
-      }
-    }
-  }
-
-  private class ChangeTimeListener implements ActionListener {
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        theView.addConfirmTimeListener(new ConfirmTimeListener());
-        theView.ChangeTime(theModel.getDateObject());
-    }
-
-    private class ConfirmTimeListener implements ActionListener {
-      /**
-       * Invoked when an action occurs.
-       *
-       * @param e the event to be processed
-       */
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Object value = theView.getTimeSpinnerVal();
-        if (value instanceof Date) {
-          Date date = (Date) value;
-          SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
-          String time = formatter.format(date);
-          theView.setTimeField(time);
-          theModel.setTime(date); // Update Environment time
-          theView.removeTimeComponentPicker();
-          theView.disposeDash();
         }
       }
     }
@@ -510,7 +351,7 @@ public class EnvironmentController {
     }
   }
 
-  private class ObstructWindowsToggleListener implements ActionListener {
+  private class EditSimulationListener implements ActionListener {
 
     /**
      * Invoked when an action occurs.
@@ -519,6 +360,21 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
+      //Pass on responsibility of editing the simulation to its own controller and view.
+      //The Environment Model contains all the environment data that will be needed.
+
+      if(!theModel.getSimulationRunning()) {
+        EditSimulationView editSimView = new EditSimulationView(theModel.getOutsideTemp(), theModel.getTimer().getDelay());
+        new EditSimulationController(editSimView, theModel);
+
+        editSimView.addWindowListener(new EditSimulationWindowListener());
+      } else {
+        CustomConsole.print("ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
+      }
+
+      //The Following code will be reused for SHC
+/*
       if (theModel.isWindowObstructed()) {
         Room[] rooms = theModel.getRooms();
 
@@ -566,23 +422,158 @@ public class EnvironmentController {
         theModel.obstructWindows();
         theView.changeWindowsObstructedToggleText("Clear Windows");
       }
+      */
+    }
+
+    private class EditSimulationWindowListener implements WindowListener {
+      /**
+       * Invoked the first time a window is made visible.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowOpened(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when the user attempts to close the window
+       * from the window's system menu.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowClosing(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a window has been closed as the result
+       * of calling dispose on the window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowClosed(WindowEvent e) {
+        theView.refreshDash(theModel.getDateString(), theModel.getTimeString(), theModel.getOutsideTemp(), theModel.getTimer().getDelay());
+      }
+
+      /**
+       * Invoked when a window is changed from a normal to a
+       * minimized state. For many platforms, a minimized window
+       * is displayed as the icon specified in the window's
+       * iconImage property.
+       *
+       * @param e the event to be processed
+       * @see Frame#setIconImage
+       */
+      @Override
+      public void windowIconified(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a window is changed from a minimized
+       * to a normal state.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowDeiconified(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when the Window is set to be the active Window. Only a Frame or
+       * a Dialog can be the active Window. The native windowing system may
+       * denote the active Window or its children with special decorations, such
+       * as a highlighted title bar. The active Window is always either the
+       * focused Window, or the first Frame or Dialog that is an owner of the
+       * focused Window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowActivated(WindowEvent e) {
+
+      }
+
+      /**
+       * Invoked when a Window is no longer the active Window. Only a Frame or a
+       * Dialog can be the active Window. The native windowing system may denote
+       * the active Window or its children with special decorations, such as a
+       * highlighted title bar. The active Window is always either the focused
+       * Window, or the first Frame or Dialog that is an owner of the focused
+       * Window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowDeactivated(WindowEvent e) {
+
+      }
     }
   }
 
-  private class confirmTimeSpeedListener implements ActionListener {
+  private class TimerListener implements ActionListener {
     /**
-     * Invoked when the 'OK' Button is pressed for the time speed
+     * Invoked when an action occurs.
      *
      * @param e the event to be processed
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (theView.getTimeSpeed() == "10x")
-        timer.setDelay(100);
-      else if (theView.getTimeSpeed() == "100x")
-        timer.setDelay(10);
+      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
+      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
+      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
+      String amPM = theModel.getTimeString().substring(8);
+      amPM = amPM.replaceAll(" ", "");
+
+      String hourString;
+      String minuteString;
+      String secondString;
+
+      second++;
+
+      if(second > 59) {
+        minute++;
+        second = 0;
+      }
+      if(minute > 59) {
+        hour++;
+        minute = 0;
+      }
+      if(hour > 12){
+        hour = 1;
+        if(amPM.equals("AM"))
+          amPM = "PM";
+        else
+          amPM = "AM";
+      }
+
+      if(hour < 10)
+        hourString = "0" + hour;
       else
-        timer.setDelay(1000);
+        hourString = String.valueOf(hour);
+
+      if(minute < 10)
+        minuteString = "0" + minute;
+      else
+        minuteString = String.valueOf(minute);
+
+      if(second < 10)
+        secondString = "0" + second;
+      else
+        secondString = String.valueOf(second);
+
+      String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
+      SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
+      theView.setTimeField(time);
+      try {
+        theModel.setTime(formatter.parse(time));
+      } catch (ParseException parseException) {
+        parseException.printStackTrace();
+      }
     }
   }
 }

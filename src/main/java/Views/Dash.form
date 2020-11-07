@@ -31,12 +31,12 @@
                   <text value="Start Simulation"/>
                 </properties>
               </component>
-              <component id="60f20" class="javax.swing.JButton" binding="toggleObstructionButton" default-binding="true">
+              <component id="60f20" class="javax.swing.JButton" binding="editSimulationButton">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Obstruct Windows"/>
+                  <text value="Edit Simulation"/>
                 </properties>
               </component>
               <component id="525f6" class="javax.swing.JComboBox" binding="userProfileDropDown">
@@ -55,48 +55,26 @@
                   <model/>
                 </properties>
               </component>
-              <component id="9a57e" class="javax.swing.JButton" binding="changeDate">
-                <constraints>
-                  <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Change"/>
-                </properties>
-              </component>
               <component id="c310d" class="javax.swing.JLabel" binding="dateField">
                 <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="16" style="1"/>
                   <text value=""/>
                 </properties>
               </component>
               <component id="b82c4" class="javax.swing.JLabel" binding="timeField">
                 <constraints>
-                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
+                  <font size="16" style="1"/>
                   <text value=""/>
-                </properties>
-              </component>
-              <component id="d96ff" class="javax.swing.JButton" binding="changeTime">
-                <constraints>
-                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Change"/>
-                </properties>
-              </component>
-              <component id="48a64" class="javax.swing.JButton" binding="confirmTemp">
-                <constraints>
-                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="OK"/>
                 </properties>
               </component>
               <component id="d5bd6" class="javax.swing.JLabel">
@@ -115,11 +93,14 @@
                   <text value="Time"/>
                 </properties>
               </component>
-              <component id="85e31" class="javax.swing.JSpinner" binding="tempSpinner">
+              <component id="6f744" class="javax.swing.JLabel" binding="tempLabel">
                 <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <font size="16" style="1"/>
+                  <text value="Label"/>
+                </properties>
               </component>
               <component id="a41c4" class="javax.swing.JLabel">
                 <constraints>
@@ -129,32 +110,22 @@
                   <text value="Time Speed"/>
                 </properties>
               </component>
-              <component id="c738a" class="javax.swing.JButton" binding="confirmTimeSpeed">
-                <constraints>
-                  <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="OK"/>
-                </properties>
-              </component>
               <component id="7b47b" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Outside Temperature"/>
+                  <horizontalAlignment value="2"/>
+                  <text value="Outside &#10;Temperature"/>
                 </properties>
               </component>
-              <component id="1e0ef" class="javax.swing.JComboBox" binding="timeSpeed">
+              <component id="b6af3" class="javax.swing.JLabel" binding="timeSpeed">
                 <constraints>
-                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <model>
-                    <item value="1x"/>
-                    <item value="10x"/>
-                    <item value="100x"/>
-                  </model>
+                  <font name="Fira Code" size="16" style="1"/>
+                  <text value="Label"/>
                 </properties>
               </component>
             </children>
