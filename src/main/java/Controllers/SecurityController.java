@@ -5,8 +5,6 @@ import Models.SecurityModel;
 import Views.CustomConsole;
 import Views.SecurityView;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,8 +16,9 @@ public class SecurityController {
     this.secModel = secModel;
     this.secView = secView;
     secView.addAwayListener(new AwayModeListener());
-    secView.addIntervalListener(new IntervalSpinnerListener());
   }
+
+  public void initStartSpinner() {}
 
   private class AwayModeListener implements ActionListener {
 
@@ -30,29 +29,15 @@ public class SecurityController {
         secView.changeAwayModeText("Turn on Away Mode");
         // logic to turn off away mode
       } else {
-        if(EnvironmentModel.getHouse().hasObstruction()){
+        if (EnvironmentModel.getHouse().hasObstruction()) {
           CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
-        }
-        else{
+        } else {
           secModel.setAwayOn(true);
           secView.changeAwayModeText("Turn Away Mode off");
         }
         // logic to turn on away mode
 
       }
-    }
-  }
-
-  private class IntervalSpinnerListener implements ChangeListener {
-    /**
-     * Invoked when the target of the listener has changed its state.
-     *
-     * @param e a ChangeEvent object
-     */
-    @Override
-    public void stateChanged(ChangeEvent e) {
-      System.out.println(secView.getSpinner());
-      secModel.setAlertInterval(secView.getSpinner());
     }
   }
 }

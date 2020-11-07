@@ -33,7 +33,7 @@
     <profileID>0b73e74c-e770-43d8-8ab6-3ca0ec1783db</profileID>
     <type>CHILD</type>
     <name>Jay</name>
-    <roomID>0</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>71c1ce14-3370-4c3d-bcaa-de28d17be331</profileID>
@@ -51,7 +51,7 @@
     <profileID>613b1a80-212a-41bf-8469-d35d73ac8a25</profileID>
     <type>GUEST</type>
     <name>Obama</name>
-    <roomID>9</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>dd087549-5c8a-4dd8-a3f1-a041683930ce</profileID>
