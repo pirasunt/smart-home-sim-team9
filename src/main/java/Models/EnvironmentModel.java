@@ -25,7 +25,7 @@ public class EnvironmentModel {
   private static Calendar currentCalObj;
   private static ArrayList<UserProfileModel> userProfileModelList;
   private int outsideTemperature;
-  private UserProfileModel currentUser;
+  private static UserProfileModel currentUser;
   private static boolean simulationRunning = false;
   private boolean windowsObstructed = false;
   private static Timer timer;

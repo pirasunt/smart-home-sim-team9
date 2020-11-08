@@ -39,7 +39,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    assert env.getCurrentUser().getRoomID() == 2;
+    assert EnvironmentModel.getCurrentUser().getRoomID() == 2;
   }
 
   //use case 3.12
@@ -52,7 +52,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    UserProfileModel tmp = env.getCurrentUser().modifyLocation(3);
+    UserProfileModel tmp = EnvironmentModel.getCurrentUser().modifyLocation(3);
     assert tmp.getRoomID() == 3;
   }
 
