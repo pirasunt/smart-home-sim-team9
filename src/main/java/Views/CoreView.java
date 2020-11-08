@@ -24,6 +24,7 @@ public class CoreView extends JFrame{
         this.windowPanels.setLayout(new GridLayout(0, 4, 1, 20));
         this.windowPanels.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
+        //labels ArrayList same length as buttons ArrayList
         for(int i =0; i < labels.size(); i++){
             this.windowPanels.add(labels.get(i));
             this.windowPanels.add(openBtns.get(i));
@@ -37,6 +38,7 @@ public class CoreView extends JFrame{
         this.outsideDoorPanel.setLayout(new GridLayout(0, 3, 1, 20));
         this.outsideDoorPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
+        //labels ArrayList same length as buttons ArrayList
         for(int i =0; i < labels.size(); i++){
             this.outsideDoorPanel.add(labels.get(i));
             this.outsideDoorPanel.add(lockBtns.get(i));
@@ -50,6 +52,7 @@ public class CoreView extends JFrame{
         this.lightsPanel.setLayout(new GridLayout(0, 3, 1, 20));
         this.lightsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
+        //labels ArrayList same length as buttons ArrayList
         for(int i=0; i<labels.size(); i++){
             this.lightsPanel.add(labels.get(i));
             this.lightsPanel.add(onBtns.get(i));

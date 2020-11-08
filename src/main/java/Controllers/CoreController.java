@@ -22,6 +22,7 @@ public class CoreController {
     private CoreView theView;
     private EnvironmentModel theModel;
 
+
     public CoreController(CoreView v, EnvironmentModel m) {
         this.theModel = m;
         this.theView =v;
