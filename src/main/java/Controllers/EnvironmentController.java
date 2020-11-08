@@ -313,6 +313,7 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
       JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
       if (cb.getSelectedIndex() == -1) {
         CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());

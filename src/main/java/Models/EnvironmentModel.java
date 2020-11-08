@@ -1,22 +1,23 @@
 package Models;
 
+import Controllers.Observer;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
+import javax.swing.Timer;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.swing.Timer;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}**** manipulates the data within this class.
+ * Controllers.EnvironmentController}****** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
@@ -24,11 +25,12 @@ public class EnvironmentModel {
   private static HouseGraphic houseGraphic;
   private static Calendar currentCalObj;
   private static ArrayList<UserProfileModel> userProfileModelList;
-  private int outsideTemperature;
   private static UserProfileModel currentUser;
   private static boolean simulationRunning = false;
-  private boolean windowsObstructed = false;
   private static Timer timer;
+  private static ArrayList<Observer> observers;
+  private final boolean windowsObstructed = false;
+  private int outsideTemperature;
 
   private EnvironmentModel(
       House h,
@@ -41,7 +43,8 @@ public class EnvironmentModel {
     this.outsideTemperature = temperature;
     currentCalObj = cal;
     userProfileModelList = profileList;
-    this.currentUser = null;
+    currentUser = null;
+    observers = new ArrayList<>();
   }
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
@@ -55,16 +58,6 @@ public class EnvironmentModel {
    */
   public static Timer getTimer() {
     return timer;
-  }
-
-  /**
-   * Initialize timer.
-   *
-   * @param delay the delay
-   * @param listenForTimer the listen for timer
-   */
-  public void initializeTimer(int delay, ActionListener listenForTimer) {
-    timer = new Timer(delay, listenForTimer);
   }
 
   /**
@@ -119,6 +112,130 @@ public class EnvironmentModel {
   }
 
   /**
+   * Returns a deep copy of the currently selected user on the simulation
+   *
+   * @return Deep copy of currently selected user.
+   */
+  public static UserProfileModel getCurrentUser() {
+    return new UserProfileModel(currentUser);
+  }
+
+  /**
+   * Sets current user.
+   *
+   * @param currentUser the current user
+   */
+  public void setCurrentUser(UserProfileModel currentUser) {
+    EnvironmentModel.currentUser = new UserProfileModel(currentUser);
+    CustomConsole.print(
+        "Current user has been set to "
+            + EnvironmentModel.currentUser.getName()
+            + "/"
+            + EnvironmentModel.currentUser.getProfileType());
+  }
+
+  /**
+   * Gets the currently set date in the simulator in a pre-determined format
+   *
+   * @return String representation of a {@link Date} object
+   */
+  public static String getDateString() {
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+    return dateFormatter.format(currentCalObj.getTime());
+  }
+
+  /**
+   * Gets the currently set time in the simulator in a pre-determined format
+   *
+   * @return String representation of a {@link Date} object
+   */
+  public static String getTimeString() {
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
+    return dateFormatter.format(currentCalObj.getTime());
+  }
+
+  /**
+   * Gets the currently set date and time in the simulator in a pre-determined format
+   *
+   * @return Date object representing currently set date and time
+   */
+  public static Date getDateObject() {
+    return currentCalObj.getTime();
+  }
+
+  /**
+   * Sets the Date of the Simulator
+   *
+   * @param newDate {@link Date} object representing the desired date
+   */
+  public static void setDate(Calendar newDate) {
+    currentCalObj.set(
+        newDate.get(Calendar.YEAR),
+        newDate.get(Calendar.MONTH),
+        newDate.get(Calendar.DAY_OF_MONTH));
+  }
+
+  /**
+   * Sets the Time of the Simulator
+   *
+   * @param newTime {@link Date} object representing the desired time
+   */
+  public static void setTime(Date newTime) {
+    currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
+    currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
+    currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
+  }
+
+  /**
+   * Gets simulation object.
+   *
+   * @return the simulation running
+   */
+  public static boolean getSimulationRunning() {
+    return simulationRunning;
+  }
+
+  /**
+   * House is empty boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean houseIsEmpty() {
+    for (UserProfileModel u : userProfileModelList) {
+      if (u.getRoomID() != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Subscribe.
+   *
+   * @param ob the ob
+   */
+  public static void subscribe(Observer ob) {
+    observers.add(ob);
+  }
+
+  /** Notify observers. */
+  public static void notifyObservers() {
+    for (Observer o : observers) {
+      o.update();
+    }
+  }
+
+  /**
+   * Initialize timer.
+   *
+   * @param delay the delay
+   * @param listenForTimer the listen for timer
+   */
+  public void initializeTimer(int delay, ActionListener listenForTimer) {
+    timer = new Timer(delay, listenForTimer);
+  }
+
+  /**
    * Used to set the outside temperature in the simulation
    *
    * @param newTemp is the new temperature
@@ -152,6 +269,7 @@ public class EnvironmentModel {
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
     try {
+      notifyObservers();
       updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
       CustomConsole.print(
           "Set Room to: '"
@@ -178,11 +296,15 @@ public class EnvironmentModel {
 
     try {
       updateProfileEntry(profile.modifyPrivilege(newPrivilegeLevel), new File("UserProfiles.xml"));
-      CustomConsole.print("Updated privilege of user '" + profile.getName() + "' to '" + newPrivilegeLevel.toString() + "'.");
+      CustomConsole.print(
+          "Updated privilege of user '"
+              + profile.getName()
+              + "' to '"
+              + newPrivilegeLevel.toString()
+              + "'.");
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
     }
-
   }
 
   /**
@@ -203,29 +325,6 @@ public class EnvironmentModel {
     }
 
     houseGraphic.repaint();
-  }
-
-  /**
-   * Returns a deep copy of the currently selected user on the simulation
-   *
-   * @return Deep copy of currently selected user.
-   */
-  public static UserProfileModel getCurrentUser() {
-    return new UserProfileModel(currentUser);
-  }
-
-  /**
-   * Sets current user.
-   *
-   * @param currentUser the current user
-   */
-  public void setCurrentUser(UserProfileModel currentUser) {
-    this.currentUser = new UserProfileModel(currentUser);
-    CustomConsole.print(
-        "Current user has been set to "
-            + this.currentUser.getName()
-            + "/"
-            + this.currentUser.getProfileType());
   }
 
   /**
@@ -269,8 +368,7 @@ public class EnvironmentModel {
       userProfileModelList.set(index, updatedProfile);
 
       try {
-        UserProfileModel[] profileListAsArray =
-            new UserProfileModel[userProfileModelList.size()];
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
 
         CustomUserXStream uStream = new CustomUserXStream();
         uStream.toXML(
@@ -289,8 +387,8 @@ public class EnvironmentModel {
     }
 
     // Update currentUser entry if needed
-    if (this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
-      this.currentUser = updatedProfile;
+    if (currentUser.getProfileID() == updatedProfile.getProfileID()) {
+      currentUser = updatedProfile;
     }
 
     houseGraphic.repaint();
@@ -323,7 +421,7 @@ public class EnvironmentModel {
    * @return true if currentUser is set and false otherwise.
    */
   public boolean isCurrentUserSet() {
-    return !(this.currentUser == null);
+    return !(currentUser == null);
   }
 
   /**
@@ -333,55 +431,6 @@ public class EnvironmentModel {
    */
   public int getOutsideTemp() {
     return this.outsideTemperature;
-  }
-
-  /**
-   * Gets the currently set date in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public static String getDateString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
-    return dateFormatter.format(currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set time in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public static String getTimeString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
-    return dateFormatter.format(currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set date and time in the simulator in a pre-determined format
-   *
-   * @return Date object representing currently set date and time
-   */
-  public static Date getDateObject() {
-    return currentCalObj.getTime();
-  }
-
-  /**
-   * Sets the Date of the Simulator
-   *
-   * @param newDate {@link Date} object representing the desired date
-   */
-  public static void setDate(Calendar newDate) {
-    currentCalObj.set(newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
-  }
-
-  /**
-   * Sets the Time of the Simulator
-   *
-   * @param newTime {@link Date} object representing the desired time
-   */
-  public static void setTime(Date newTime) {
-    currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
-    currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
-    currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
   }
 
   /**
@@ -425,8 +474,7 @@ public class EnvironmentModel {
 
       try {
         userProfileModelList.add(userToAdd);
-        UserProfileModel[] profileListAsArray =
-            new UserProfileModel[userProfileModelList.size()];
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
         CustomConsole.print(
             "New user '"
                 + newUser.getName()
@@ -458,8 +506,7 @@ public class EnvironmentModel {
       if (userProfileModelList.get(i).getProfileID() == u.getProfileID()) {
         userProfileModelList.remove(i);
         try {
-          UserProfileModel[] profileListAsArray =
-              new UserProfileModel[userProfileModelList.size()];
+          UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
 
           CustomUserXStream uStream = new CustomUserXStream();
           uStream.toXML(
@@ -475,15 +522,6 @@ public class EnvironmentModel {
   }
 
   /**
-   * Gets simulation object.
-   *
-   * @return the simulation running
-   */
-  public static boolean getSimulationRunning() {
-    return simulationRunning;
-  }
-
-  /**
    * Returns boolean if the Windows are blocked..
    *
    * @return the boolean
@@ -494,29 +532,13 @@ public class EnvironmentModel {
 
   /** Turns on the simulation */
   public void startSimulation() {
-    this.simulationRunning = true;
+    simulationRunning = true;
     CustomConsole.print("The simulation has been started.");
   }
 
   /** Turns off the simulation */
   public void stopSimulation() {
-    this.simulationRunning = false;
+    simulationRunning = false;
     CustomConsole.print("The simulation has been stopped.");
   }
-
-  /**
-   * House is empty boolean.
-   *
-   * @return the boolean
-   */
-  public static boolean houseIsEmpty() {
-    for (UserProfileModel u: userProfileModelList){
-      if(u.getRoomID() != 0){
-        return false;
-      }
-    }
-    return true;
-  }
-
-
 }

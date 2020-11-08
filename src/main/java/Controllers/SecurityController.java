@@ -8,7 +8,7 @@ import Views.SecurityView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SecurityController {
+public class SecurityController implements Observer {
   private final SecurityModel secModel;
   private final SecurityView secView;
 
@@ -16,22 +16,26 @@ public class SecurityController {
     this.secModel = secModel;
     this.secView = secView;
     secView.addAwayListener(new AwayModeListener());
+    EnvironmentModel.subscribe(this);
+  }
+
+  @Override
+  public void update() {
+    System.out.println("do stuff");
   }
 
   private class AwayModeListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      if(EnvironmentModel.getSimulationRunning() == false){
+      if (EnvironmentModel.getSimulationRunning() == false) {
         CustomConsole.print("The simulation must be running in order to change the Away Status...");
-      }
-      else if (secModel.isAwayOn() && EnvironmentModel.getSimulationRunning() == true) {
+      } else if (SecurityModel.isAwayOn() && EnvironmentModel.getSimulationRunning() == true) {
         secModel.setAwayOn(false);
         secView.changeAwayModeText("Turn on Away Mode");
         secView.toggleSpinners(true);
         // logic to turn off away mode
-      }
-      else {
+      } else {
         boolean exceptionFound = false;
         if (EnvironmentModel.getSimulationRunning() == false) {
           CustomConsole.print(
