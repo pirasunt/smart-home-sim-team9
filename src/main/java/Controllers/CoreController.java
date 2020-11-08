@@ -79,7 +79,7 @@ public class CoreController {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(!window.isWindowOpen()) {
-                                window.openWindow();
+                                window.setWindowOpen(true);
                             }
                         }
                     });
@@ -88,7 +88,7 @@ public class CoreController {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(window.isWindowOpen()) {
-                                window.closeWindow();
+                                window.setWindowOpen(false);
                             }
                         }
                     });
@@ -98,9 +98,9 @@ public class CoreController {
                         public void itemStateChanged(ItemEvent e) {
 
                             if (e.getStateChange() == ItemEvent.SELECTED) {
-                                window.obstructWindow();
+                                window.setWindowObstructed(true);
                             } else {
-                                window.unobstructWindow();
+                                window.setWindowObstructed(false);
                             }
                         }
                     });
@@ -150,7 +150,7 @@ public class CoreController {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 if(!door.getDoorLocked()) {
-                                    door.lockDoor();
+                                    door.setDoorLocked(true);
                                 }
                             }
                         });
@@ -159,7 +159,7 @@ public class CoreController {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 if(door.getDoorLocked()) {
-                                    door.unlockDoor();
+                                    door.setDoorLocked(false);
                                 }
                             }
                         });

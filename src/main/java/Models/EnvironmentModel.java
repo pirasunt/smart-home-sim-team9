@@ -269,8 +269,8 @@ public class EnvironmentModel {
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
     try {
-      notifyObservers();
       updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
+      notifyObservers();
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()
