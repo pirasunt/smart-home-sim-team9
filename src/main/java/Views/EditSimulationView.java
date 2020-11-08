@@ -15,23 +15,22 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 
 public class EditSimulationView extends JFrame {
 
+    private final JButton timeConfirm;
     private JLabel dateField;
     private JButton changeDate;
     private JLabel timeField;
     private JButton changeTime;
-
     private JSpinner tempSpinner;
-
     private JFrame datePickerWindow;
-
     private JFrame timePickerWindow;
     private JSpinner timeSpinner;
-    private final JButton timeConfirm;
-    private JPanel userRoomPrivPanel; //This is dynamically generated, so can not use GUI Designer
+    private JPanel userRoomPrivPanel; // This is dynamically generated, so can not use GUI Designer
     private JPanel mainPanel;
     private JRadioButton oneTimeSpeed;
     private JRadioButton tenTimeSpeed;
@@ -42,7 +41,7 @@ public class EditSimulationView extends JFrame {
     private JPanel jp3;
     private JPanel jp4;
     private JPanel jp5;
-
+    private JTextArea privilegeDef;
 
     public EditSimulationView(int temp, int delay) {
         this.timeConfirm = new JButton("Confirm");
@@ -88,8 +87,12 @@ public class EditSimulationView extends JFrame {
         return (Integer) this.tempSpinner.getValue();
     }
 
-
-    public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime) {
+    public void setupEditScreen(
+            JLabel[] userLabels,
+            JComboBox<Room>[] userDropdowns,
+            JComboBox<ProfileType>[] profileTypes,
+            String currentDate,
+            String currentTime) {
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
         this.userRoomPrivPanel.setLayout(userSelectionGrid);
@@ -101,6 +104,9 @@ public class EditSimulationView extends JFrame {
         this.userRoomPrivPanel.add(new JLabel());
         this.userRoomPrivPanel.add(new JLabel());
 
+        this.privilegeDef.setText(
+                "ADULT: Access to ALL modules \nCHILD: Access to SHC module \nGUEST: Access to SHC module \nSTRANGER: Access to no modules");
+
         JLabel userLabel = new JLabel("Users", SwingConstants.CENTER);
         JLabel roomLabel = new JLabel("Current Room");
         JLabel privilegeLabel = new JLabel("Privilege");
@@ -111,13 +117,12 @@ public class EditSimulationView extends JFrame {
             this.userRoomPrivPanel.add(label);
         }
 
-        //userLabels, userDropdowns & profileTypes arrays are the same length
+        // userLabels, userDropdowns & profileTypes arrays are the same length
         for (int i = 0; i < userLabels.length; i++) {
             this.userRoomPrivPanel.add(userLabels[i]);
             this.userRoomPrivPanel.add(userDropdowns[i]);
             this.userRoomPrivPanel.add(profileTypes[i]);
         }
-
 
         this.add(this.mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -130,9 +135,8 @@ public class EditSimulationView extends JFrame {
      * Provides an interface that allows the Simulator user to change the Date
      *
      * @param formatter Object that performs the conversion between the user selecting a date on the
-     *                  UI via a DatePicker to a usable String format to be stored in the {@link
-     *                  EnvironmentModel}. The core logic of formatter is found in {@link
-     *                  EnvironmentController}
+     *                  UI via a DatePicker to a usable String format to be stored in the {@link EnvironmentModel}.
+     *                  The core logic of formatter is found in {@link EnvironmentController}
      */
     public void changeDate(JFormattedTextField.AbstractFormatter formatter) {
         SqlDateModel model = new SqlDateModel();
@@ -143,7 +147,6 @@ public class EditSimulationView extends JFrame {
         JDatePanelImpl panel = new JDatePanelImpl(model, p);
         JDatePickerImpl datePicker = new JDatePickerImpl(panel, formatter);
         datePickerWindow = new JFrame("Pick Date");
-
 
         datePickerWindow.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         datePickerWindow.add(datePicker);
@@ -159,7 +162,6 @@ public class EditSimulationView extends JFrame {
     public void removeDateComponentPicker() {
         this.datePickerWindow.dispose();
     }
-
 
     /**
      * Changes the time passed.
@@ -186,7 +188,6 @@ public class EditSimulationView extends JFrame {
         this.timePickerWindow.setVisible(true);
     }
 
-
     /**
      * Gets the value from the {@link JSpinner} module used to change the Time of the simulated
      * environment
@@ -205,7 +206,6 @@ public class EditSimulationView extends JFrame {
     public void setTimeField(String time) {
         this.timeField.setText(time);
     }
-
 
     public void removeTimeComponentPicker() {
         this.timePickerWindow.dispose();
