@@ -3,6 +3,7 @@ package Controllers;
 import Enums.WallType;
 import Models.EnvironmentModel;
 import Models.Room;
+import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
 import Models.Walls.WindowWall;
 import Views.CoreView;
@@ -26,7 +27,7 @@ public class CoreController {
         this.theView =v;
 
         this.createWindowSectionComponents();
-
+        this.createOutsideDoorComponents();
     }
 
     //Creates the Window Section buttons and adds functionality to each button
@@ -106,11 +107,62 @@ public class CoreController {
         theView.displayWindowSection(windowLabels, openButtons, closeButtons, obstructButtons);
         }
 
+    }
 
 
+    private void createOutsideDoorComponents(){
+
+        Room[] allRooms = theModel.getRooms();
+
+        ArrayList<JLabel> doorLabels = new ArrayList<>();
+        ArrayList<JRadioButton>  lockButtons = new ArrayList<>();
+        ArrayList<JRadioButton> unlockButtons = new ArrayList<>();
+
+        for(int i = 0; i < allRooms.length; i++){
+            Wall[] allWalls = allRooms[i].getAllWalls();
+
+            for(int j=0; j < allWalls.length; j++){
+                if(allWalls[j] != null){
+                    if(allWalls[j].getType() == WallType.OUTSIDE){
+                        OutsideWall door =  (OutsideWall) allWalls[j];
+
+                        doorLabels.add(new JLabel(allRooms[i].getName() + " door"));
+                        JRadioButton lockButton = new JRadioButton("Lock");
+                        JRadioButton unlockButton = new JRadioButton("Unlock");
+                        ButtonGroup doorButtonGroup = new ButtonGroup();
+                        doorButtonGroup.add(lockButton);
+                        doorButtonGroup.add(unlockButton);
+
+                        if(door.getDoorLocked()) {
+                            lockButton.setSelected(true);
+                        } else {
+                            unlockButton.setSelected(true);
+                        }
+
+                        lockButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                door.lockDoor();
+                            }
+                        });
+
+                        unlockButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                door.unlockDoor();
+                            }
+                        });
+
+                        lockButtons.add(lockButton);
+                        unlockButtons.add(unlockButton);
+
+                    }
+                }
+            }
+        }
 
 
-
+        theView.displayOutsideDoorsSection(doorLabels, lockButtons, unlockButtons);
     }
 
 

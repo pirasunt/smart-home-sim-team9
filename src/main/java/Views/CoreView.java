@@ -4,6 +4,7 @@ package Views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -11,6 +12,7 @@ public class CoreView extends JFrame{
     private JPanel windowPanels;
     private JPanel topLevelPane;
     private JScrollPane scrollPane;
+    private JPanel outsideDoorPanel;
 
     public CoreView(){
         this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
@@ -27,7 +29,20 @@ public class CoreView extends JFrame{
             this.windowPanels.add(obstructBtns.get(i));
         }
 
+    }
 
+    public void displayOutsideDoorsSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> lockBtns, ArrayList<JRadioButton> unlockBtns){ {
+
+        this.outsideDoorPanel.setLayout(new GridLayout(0, 3, 20, 20));
+
+
+        for(int i =0; i < labels.size(); i++){
+            this.outsideDoorPanel.add(labels.get(i));
+            this.outsideDoorPanel.add(lockBtns.get(i));
+            this.outsideDoorPanel.add(unlockBtns.get(i));
+        }
+
+    }
 
     }
 }
