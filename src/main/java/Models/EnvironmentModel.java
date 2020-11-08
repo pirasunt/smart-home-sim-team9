@@ -192,8 +192,8 @@ public class EnvironmentModel {
    *
    * @return Deep copy of currently selected user.
    */
-  public UserProfileModel getCurrentUser() {
-    return new UserProfileModel(this.currentUser);
+  public static UserProfileModel getCurrentUser() {
+    return new UserProfileModel(currentUser);
   }
 
   /**
