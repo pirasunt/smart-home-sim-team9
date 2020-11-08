@@ -4,30 +4,30 @@ import Tools.CustomTimer;
 import Views.CustomConsole;
 
 import javax.swing.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimerTask;
+import java.util.*;
 
 /** The type Security model. */
 public class SecurityModel {
 
   /** The Custom start. */
-  static StartAwayLights customStart;
+  private static StartAwayLights customStart;
   /** The Custom end. */
-  static EndAwayLights customEnd;
+  private static EndAwayLights customEnd;
   /** The Start t. */
-  static CustomTimer startT;
+  private static CustomTimer startT;
   /** The End t. */
-  static CustomTimer endT;
+  private static CustomTimer endT;
 
   private static SpinnerDateModel startModel;
   private static SpinnerDateModel endModel;
   private static boolean awayOn = false;
   private final Date startDate;
   private final Date endDate;
+  private final ArrayList<CustomTimer> authTimers;
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
+
+  private final ArrayList<NotifyAuthTask> authTasks;
   private Room[] roomsToLight = null;
 
   /** Instantiates a new Security model. */
@@ -40,11 +40,12 @@ public class SecurityModel {
     intervalModel.setMinimum(0);
     startT = new CustomTimer();
     endT = new CustomTimer();
+    authTimers = new ArrayList<>();
+    authTasks = new ArrayList<>();
   }
 
   /** Start away timer. */
   public static void startAwayTimer() {
-    System.out.println("I GOT CLICKED!!!");
 
     int timerDel = EnvironmentModel.getTimer().getDelay();
     int multiplier = 1;
@@ -197,6 +198,43 @@ public class SecurityModel {
      */
   }
 
+  /** Notify authorities. */
+  public void notifyAuthorities() {
+    CustomTimer temp = new CustomTimer();
+    NotifyAuthTask tempTask = new NotifyAuthTask();
+
+    int waitFor = intervalModel.getNumber().intValue();
+    if (waitFor == 0) {
+      tempTask.doNotify();
+    } else {
+
+      CustomConsole.print("Authorities will be notified in " + waitFor + " minutes.");
+      authTimers.add(temp);
+      authTasks.add(tempTask);
+
+      int timerDel = EnvironmentModel.getTimer().getDelay();
+      int multiplier = 1;
+      if (timerDel == 1000) {
+        multiplier = 1;
+      } else if (timerDel == 100) {
+        multiplier = 10;
+      } else if (timerDel == 10) {
+        multiplier = 100;
+      }
+
+      Date envTime = EnvironmentModel.getDateObject();
+      Calendar sCal = new GregorianCalendar();
+      sCal.setTime(envTime);
+      sCal.set(Calendar.YEAR, 1900 + envTime.getYear());
+      sCal.set(Calendar.DAY_OF_MONTH, envTime.getDate());
+      sCal.set(Calendar.MONTH, envTime.getMonth());
+      sCal.add(Calendar.MINUTE, waitFor);
+      long deltaStart =
+          (sCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
+      temp.schedule(tempTask, deltaStart);
+    }
+  }
+
   private static class StartAwayLights extends TimerTask {
 
     @Override
@@ -208,7 +246,11 @@ public class SecurityModel {
     /** Turn on selected lights. */
     public void turnOnSelectedLights() {
       System.out.println("lights on bitches");
-      CustomConsole.print("Light have been turned on via a timer!");
+      CustomConsole.print("Lights have been turned on via a timer!");
+      for (Room r: EnvironmentModel.getHouse().getRooms()){
+        r.turnOnLights();
+      }
+      EnvironmentModel.getHouseGraphic().repaint();
     }
   }
 
@@ -224,6 +266,23 @@ public class SecurityModel {
     public void turnOffSelectedLights() {
       System.out.println("lights off bitches");
       CustomConsole.print("Light have been turned off via a timer!");
+      for (Room r: EnvironmentModel.getHouse().getRooms()){
+        r.turnOffLights();
+      }
+      EnvironmentModel.getHouseGraphic().repaint();
+    }
+  }
+
+  private class NotifyAuthTask extends TimerTask {
+
+    @Override
+    public void run() {
+      doNotify();
+    }
+
+    /** Turn off selected lights. */
+    public void doNotify() {
+      CustomConsole.print("The authorities have been notified!");
     }
   }
 }

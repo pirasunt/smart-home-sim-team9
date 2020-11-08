@@ -8,10 +8,17 @@ import Views.SecurityView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/** The type Security controller. */
 public class SecurityController implements Observer {
   private final SecurityModel secModel;
   private final SecurityView secView;
 
+  /**
+   * Instantiates a new Security controller.
+   *
+   * @param secModel the sec model
+   * @param secView the sec view
+   */
   public SecurityController(SecurityModel secModel, SecurityView secView) {
     this.secModel = secModel;
     this.secView = secView;
@@ -21,7 +28,9 @@ public class SecurityController implements Observer {
 
   @Override
   public void update() {
-    System.out.println("do stuff");
+    if (SecurityModel.isAwayOn()) {
+      secModel.notifyAuthorities();
+    }
   }
 
   private class AwayModeListener implements ActionListener {
