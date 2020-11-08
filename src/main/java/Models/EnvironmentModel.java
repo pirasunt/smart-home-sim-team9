@@ -16,7 +16,7 @@ import javax.swing.Timer;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}*** manipulates the data within this class.
+ * Controllers.EnvironmentController}**** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
@@ -48,10 +48,21 @@ public class EnvironmentModel {
     this(h, hg, 21, new GregorianCalendar(), profileList);
   }
 
-  public static Timer getTimer(){
+  /**
+   * Get timer timer.
+   *
+   * @return the timer
+   */
+  public static Timer getTimer() {
     return timer;
   }
 
+  /**
+   * Initialize timer.
+   *
+   * @param delay the delay
+   * @param listenForTimer the listen for timer
+   */
   public void initializeTimer(int delay, ActionListener listenForTimer) {
     timer = new Timer(delay, listenForTimer);
   }
@@ -157,6 +168,12 @@ public class EnvironmentModel {
     houseGraphic.repaint();
   }
 
+  /**
+   * Modify user privilege.
+   *
+   * @param profile the profile
+   * @param newPrivilegeLevel the new privilege level
+   */
   public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
 
     try {
@@ -175,6 +192,7 @@ public class EnvironmentModel {
    *
    * @param profile The {@link UserProfileModel} object that needs its name modified
    * @param newName The new name of the user profile
+   * @param file the file
    */
   public void editProfileName(UserProfileModel profile, String newName, File file) {
 
@@ -391,6 +409,7 @@ public class EnvironmentModel {
    * Adds a new {@link UserProfileModel} to the internal List of this class
    *
    * @param newUser The new {@link UserProfileModel} to be added
+   * @param userProfilesFile the user profiles file
    * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This
    *     includes an empty profile name or non-set {@link ProfileType}
    */
@@ -432,6 +451,7 @@ public class EnvironmentModel {
    * Remove the inputted user profile from the list.
    *
    * @param u the user to be removed.
+   * @param userProfilesFile the user profiles file
    */
   public void removeUserProfile(UserProfileModel u, File userProfilesFile) {
     for (int i = 0; i < userProfileModelList.size(); i++) {
@@ -484,7 +504,12 @@ public class EnvironmentModel {
     CustomConsole.print("The simulation has been stopped.");
   }
 
-  public static boolean houseIsEmpty(){
+  /**
+   * House is empty boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean houseIsEmpty() {
     for (UserProfileModel u: userProfileModelList){
       if(u.getRoomID() != 0){
         return false;
