@@ -28,6 +28,7 @@ public class CoreController {
 
         this.createWindowSectionComponents();
         this.createOutsideDoorComponents();
+        this.createLightsSection();
     }
 
     //Creates the Window Section buttons and adds functionality to each button
@@ -161,8 +162,55 @@ public class CoreController {
             }
         }
 
-
         theView.displayOutsideDoorsSection(doorLabels, lockButtons, unlockButtons);
+    }
+
+
+    private void createLightsSection(){
+
+        Room[] allRooms = theModel.getRooms();
+
+        ArrayList<JLabel> lightLabels = new ArrayList<>();
+        ArrayList<JRadioButton>  onButtons = new ArrayList<>();
+        ArrayList<JRadioButton> offButtons = new ArrayList<>();
+
+        for(int i =0; i < allRooms.length; i++){
+
+            lightLabels.add(new JLabel(allRooms[i].getName()));
+
+            JRadioButton onButton = new JRadioButton("On");
+            JRadioButton offButton = new JRadioButton("Off");
+            ButtonGroup lightsBtnGroup = new ButtonGroup();
+            lightsBtnGroup.add(onButton);
+            lightsBtnGroup.add(offButton);
+
+            if(allRooms[i].getLightsOn()){
+                onButton.setSelected(true);
+            } else {
+                offButton.setSelected(true);
+            }
+
+            int currentRoomIndex = i;
+            onButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    allRooms[currentRoomIndex].turnOnLights();
+                }
+            });
+
+            offButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    allRooms[currentRoomIndex].turnOffLights();
+                }
+            });
+
+            onButtons.add(onButton);
+            offButtons.add(offButton);
+
+        }
+
+        theView.displayLightsSection(lightLabels, onButtons, offButtons);
     }
 
 

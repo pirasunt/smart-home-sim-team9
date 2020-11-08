@@ -10,9 +10,10 @@ import java.util.ArrayList;
 
 public class CoreView extends JFrame{
     private JPanel windowPanels;
-    private JPanel topLevelPane;
+    private JPanel topLevelPane; //Needs to be bound to a field for the Form Builder to build this section
     private JScrollPane scrollPane;
     private JPanel outsideDoorPanel;
+    private JPanel lightsPanel;
 
     public CoreView(){
         this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
@@ -31,7 +32,7 @@ public class CoreView extends JFrame{
 
     }
 
-    public void displayOutsideDoorsSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> lockBtns, ArrayList<JRadioButton> unlockBtns){ {
+    public void displayOutsideDoorsSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> lockBtns, ArrayList<JRadioButton> unlockBtns){
 
         this.outsideDoorPanel.setLayout(new GridLayout(0, 3, 20, 20));
 
@@ -41,8 +42,19 @@ public class CoreView extends JFrame{
             this.outsideDoorPanel.add(lockBtns.get(i));
             this.outsideDoorPanel.add(unlockBtns.get(i));
         }
-
     }
 
+
+    public void displayLightsSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> onBtns, ArrayList<JRadioButton> offBtns){
+
+        this.lightsPanel.setLayout(new GridLayout(0, 3, 20, 20));
+
+
+        for(int i=0; i<labels.size(); i++){
+            this.lightsPanel.add(labels.get(i));
+            this.lightsPanel.add(onBtns.get(i));
+            this.lightsPanel.add(offBtns.get(i));
+        }
     }
+
 }
