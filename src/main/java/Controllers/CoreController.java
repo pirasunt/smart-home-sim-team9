@@ -73,17 +73,22 @@ public class CoreController {
                         obstructButton.setSelected(false);
                     }
 
+
                     openButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            window.openWindow();
+                            if(!window.isWindowOpen()) {
+                                window.openWindow();
+                            }
                         }
                     });
 
                     closeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            window.closeWindow();
+                            if(window.isWindowOpen()) {
+                                window.closeWindow();
+                            }
                         }
                     });
 
@@ -143,14 +148,18 @@ public class CoreController {
                         lockButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                door.lockDoor();
+                                if(!door.getDoorLocked()) {
+                                    door.lockDoor();
+                                }
                             }
                         });
 
                         unlockButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                door.unlockDoor();
+                                if(door.getDoorLocked()) {
+                                    door.unlockDoor();
+                                }
                             }
                         });
 
@@ -194,14 +203,18 @@ public class CoreController {
             onButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    allRooms[currentRoomIndex].turnOnLights();
+                    if(!allRooms[currentRoomIndex].getLightsOn()) {
+                        allRooms[currentRoomIndex].turnOnLights();
+                    }
                 }
             });
 
             offButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    allRooms[currentRoomIndex].turnOffLights();
+                    if(allRooms[currentRoomIndex].getLightsOn()) {
+                        allRooms[currentRoomIndex].turnOffLights();
+                    }
                 }
             });
 
