@@ -79,6 +79,7 @@ public class Dash extends JFrame {
    */
   JLabel timeSpeed;
   private SecurityView shp;
+  private CoreView coreView;
 
   /**
    * The Confirm time speed.
@@ -130,4 +131,7 @@ public class Dash extends JFrame {
     }
   }
 
+  CoreView getCoreView() {
+    return this.coreView;
+  }
 }

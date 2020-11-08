@@ -6,8 +6,9 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.SecurityModel;
 import Models.UserProfileModel;
-import Views.CustomConsole;
+import Views.CoreView;
 import Views.EditSimulationView;
+import Views.CustomConsole;
 import Views.EnvironmentView;
 
 import javax.swing.*;
@@ -216,12 +217,18 @@ public class EnvironmentController {
       if (theModel.isCurrentUserSet()) {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
-          theView.createDash(
+
+
+
+          CoreView SHC = theView.createDash(
               theModel.getOutsideTemp(),
               EnvironmentModel.getDateString(),
               EnvironmentModel.getTimeString(),
               EnvironmentModel.getTimer().getDelay());
           UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
+
+          //SHC MVC
+          new CoreController(SHC, theModel);
 
           for (int i = 0; i < allProfiles.length; i++) {
             boolean isCurrentUser = false;

@@ -143,7 +143,7 @@ public class EnvironmentView extends JFrame {
    * @param time The time of the simulated environment
    * @param delay the delay
    */
-  public void createDash(int temp, String date, String time, int delay) {
+  public CoreView createDash(int temp, String date, String time, int delay) {
     JFrame frame = new JFrame("Dashboard");
     this.dashboard = new Dash(temp, date, time, delay);
     JPanel jp = this.dashboard.p1;
@@ -151,6 +151,8 @@ public class EnvironmentView extends JFrame {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.pack();
     frame.setVisible(true);
+
+    return dashboard.getCoreView();
   }
 
   /**
