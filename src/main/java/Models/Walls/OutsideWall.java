@@ -14,7 +14,11 @@ public class OutsideWall extends Wall {
     super(WallType.OUTSIDE);
   }
 
-  /** Instantiates a new Outside wall with an id. */
+  /**
+   * Instantiates a new Outside wall with an id.
+   *
+   * @param id the id
+   */
   public OutsideWall(int id) {
     super(WallType.OUTSIDE);
 
@@ -22,23 +26,18 @@ public class OutsideWall extends Wall {
   }
 
   /**
-   * Returns the value of the attribute doorLocked which is true if the door is locked, false otherwise.
+   * Returns the value of the attribute doorLocked which is true if the door is locked, false
+   * otherwise.
+   *
    * @return if the door is locked or not.
    */
-  public boolean getDoorLocked(){
+  public boolean getDoorLocked() {
     return this.doorLocked;
   }
 
   /**
-   * Returns the value of the attribute lightsOn which is true if the light is on, false otherwise.
-   * @return if the light is on or not.
-   */
-  public boolean getLightsOn(){
-    return this.lightsOn;
-  }
-
-  /**
    * Set the value of the doorLocked attribute describing if this outside door is locked or not.
+   *
    * @param doorLocked the value you wish the attribute to have after this method call.
    */
   public void setDoorLocked(boolean doorLocked) {
@@ -46,44 +45,46 @@ public class OutsideWall extends Wall {
   }
 
   /**
-   * Method to be used when a door is being locked automatically be the system.
+   * Returns the value of the attribute lightsOn which is true if the light is on, false otherwise.
+   *
+   * @return if the light is on or not.
    */
-  public void lockDoor(){
-
-    this.doorLocked = true;
-    CustomConsole.print("Door with outside access " + doorId + " has been locked.");
-  }
-
-  /**
-   * Method to be used when a door is being locked automatically be the system.
-   */
-  public void unlockDoor(){
-
-    this.doorLocked = false;
-    CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+  public boolean getLightsOn() {
+    return this.lightsOn;
   }
 
   /**
    * Method to set if the lights at this door are on or off.
+   *
    * @param lightsOn the value you wish the attribute lightsOn to take
    */
   public void setLightsOn(boolean lightsOn) {
     this.lightsOn = lightsOn;
   }
 
-  /**
-   * Method to be used when a door is being locked automatically be the system.
-   */
-  public void turnLightsOn(){
+  /** Method to be used when a door is being locked automatically be the system. */
+  public void lockDoor() {
+
+    this.doorLocked = true;
+    CustomConsole.print("Door with outside access " + doorId + " has been locked.");
+  }
+
+  /** Method to be used when a door is being locked automatically be the system. */
+  public void unlockDoor() {
+
+    this.doorLocked = false;
+    CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+  }
+
+  /** Method to be used when a door is being locked automatically be the system. */
+  public void turnLightsOn() {
 
     this.lightsOn = true;
     CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
   }
 
-  /**
-   * Method to be used when a door is being locked automatically be the system.
-   */
-  public void turnLightsOff(){
+  /** Method to be used when a door is being locked automatically be the system. */
+  public void turnLightsOff() {
 
     this.lightsOn = false;
     CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");

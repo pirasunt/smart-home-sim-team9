@@ -1,34 +1,36 @@
 package Models;
 
+import Controllers.Observer;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
+import javax.swing.Timer;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.swing.Timer;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}*** manipulates the data within this class.
+ * Controllers.EnvironmentController}****** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
   private static House house;
   private static HouseGraphic houseGraphic;
-  private final Calendar currentCalObj;
-  private final ArrayList<UserProfileModel> userProfileModelList;
-  private int outsideTemperature;
+  private static Calendar currentCalObj;
+  private static ArrayList<UserProfileModel> userProfileModelList;
   private static UserProfileModel currentUser;
-  private boolean simulationRunning = false;
-  private boolean windowsObstructed = false;
-  private Timer timer;
+  private static boolean simulationRunning = false;
+  private static Timer timer;
+  private static ArrayList<Observer> observers;
+  private final boolean windowsObstructed = false;
+  private int outsideTemperature;
 
   private EnvironmentModel(
       House h,
@@ -39,21 +41,23 @@ public class EnvironmentModel {
     house = h;
     houseGraphic = hg;
     this.outsideTemperature = temperature;
-    this.currentCalObj = cal;
-    this.userProfileModelList = profileList;
-    this.currentUser = null;
+    currentCalObj = cal;
+    userProfileModelList = profileList;
+    currentUser = null;
+    observers = new ArrayList<>();
   }
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
     this(h, hg, 21, new GregorianCalendar(), profileList);
   }
 
-  public Timer getTimer(){
-    return this.timer;
-  }
-
-  public void initializeTimer(int delay, ActionListener listenForTimer) {
-    this.timer = new Timer(delay, listenForTimer);
+  /**
+   * Get timer timer.
+   *
+   * @return the timer
+   */
+  public static Timer getTimer() {
+    return timer;
   }
 
   /**
@@ -108,6 +112,130 @@ public class EnvironmentModel {
   }
 
   /**
+   * Returns a deep copy of the currently selected user on the simulation
+   *
+   * @return Deep copy of currently selected user.
+   */
+  public static UserProfileModel getCurrentUser() {
+    return new UserProfileModel(currentUser);
+  }
+
+  /**
+   * Sets current user.
+   *
+   * @param currentUser the current user
+   */
+  public void setCurrentUser(UserProfileModel currentUser) {
+    EnvironmentModel.currentUser = new UserProfileModel(currentUser);
+    CustomConsole.print(
+        "Current user has been set to "
+            + EnvironmentModel.currentUser.getName()
+            + "/"
+            + EnvironmentModel.currentUser.getProfileType());
+  }
+
+  /**
+   * Gets the currently set date in the simulator in a pre-determined format
+   *
+   * @return String representation of a {@link Date} object
+   */
+  public static String getDateString() {
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+    return dateFormatter.format(currentCalObj.getTime());
+  }
+
+  /**
+   * Gets the currently set time in the simulator in a pre-determined format
+   *
+   * @return String representation of a {@link Date} object
+   */
+  public static String getTimeString() {
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
+    return dateFormatter.format(currentCalObj.getTime());
+  }
+
+  /**
+   * Gets the currently set date and time in the simulator in a pre-determined format
+   *
+   * @return Date object representing currently set date and time
+   */
+  public static Date getDateObject() {
+    return currentCalObj.getTime();
+  }
+
+  /**
+   * Sets the Date of the Simulator
+   *
+   * @param newDate {@link Date} object representing the desired date
+   */
+  public static void setDate(Calendar newDate) {
+    currentCalObj.set(
+        newDate.get(Calendar.YEAR),
+        newDate.get(Calendar.MONTH),
+        newDate.get(Calendar.DAY_OF_MONTH));
+  }
+
+  /**
+   * Sets the Time of the Simulator
+   *
+   * @param newTime {@link Date} object representing the desired time
+   */
+  public static void setTime(Date newTime) {
+    currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
+    currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
+    currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
+  }
+
+  /**
+   * Gets simulation object.
+   *
+   * @return the simulation running
+   */
+  public static boolean getSimulationRunning() {
+    return simulationRunning;
+  }
+
+  /**
+   * House is empty boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean houseIsEmpty() {
+    for (UserProfileModel u : userProfileModelList) {
+      if (u.getRoomID() != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Subscribe.
+   *
+   * @param ob the ob
+   */
+  public static void subscribe(Observer ob) {
+    observers.add(ob);
+  }
+
+  /** Notify observers. */
+  public static void notifyObservers() {
+    for (Observer o : observers) {
+      o.update();
+    }
+  }
+
+  /**
+   * Initialize timer.
+   *
+   * @param delay the delay
+   * @param listenForTimer the listen for timer
+   */
+  public void initializeTimer(int delay, ActionListener listenForTimer) {
+    timer = new Timer(delay, listenForTimer);
+  }
+
+  /**
    * Used to set the outside temperature in the simulation
    *
    * @param newTemp is the new temperature
@@ -122,10 +250,10 @@ public class EnvironmentModel {
    * @return UserProfile Array of all registered user profile in the environment
    */
   public UserProfileModel[] getAllUserProfiles() {
-    UserProfileModel[] up = new UserProfileModel[this.userProfileModelList.size()];
+    UserProfileModel[] up = new UserProfileModel[userProfileModelList.size()];
 
     for (int i = 0; i < up.length; i++) {
-      up[i] = new UserProfileModel(this.userProfileModelList.get(i));
+      up[i] = new UserProfileModel(userProfileModelList.get(i));
     }
     return up;
   }
@@ -141,6 +269,7 @@ public class EnvironmentModel {
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
     try {
+      notifyObservers();
       updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
       CustomConsole.print(
           "Set Room to: '"
@@ -157,15 +286,25 @@ public class EnvironmentModel {
     houseGraphic.repaint();
   }
 
+  /**
+   * Modify user privilege.
+   *
+   * @param profile the profile
+   * @param newPrivilegeLevel the new privilege level
+   */
   public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
 
     try {
       updateProfileEntry(profile.modifyPrivilege(newPrivilegeLevel), new File("UserProfiles.xml"));
-      CustomConsole.print("Updated privilege of user '" + profile.getName() + "' to '" + newPrivilegeLevel.toString() + "'.");
+      CustomConsole.print(
+          "Updated privilege of user '"
+              + profile.getName()
+              + "' to '"
+              + newPrivilegeLevel.toString()
+              + "'.");
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
     }
-
   }
 
   /**
@@ -175,6 +314,7 @@ public class EnvironmentModel {
    *
    * @param profile The {@link UserProfileModel} object that needs its name modified
    * @param newName The new name of the user profile
+   * @param file the file
    */
   public void editProfileName(UserProfileModel profile, String newName, File file) {
 
@@ -188,29 +328,6 @@ public class EnvironmentModel {
   }
 
   /**
-   * Returns a deep copy of the currently selected user on the simulation
-   *
-   * @return Deep copy of currently selected user.
-   */
-  public static UserProfileModel getCurrentUser() {
-    return new UserProfileModel(currentUser);
-  }
-
-  /**
-   * Sets current user.
-   *
-   * @param currentUser the current user
-   */
-  public void setCurrentUser(UserProfileModel currentUser) {
-    this.currentUser = new UserProfileModel(currentUser);
-    CustomConsole.print(
-        "Current user has been set to "
-            + this.currentUser.getName()
-            + "/"
-            + this.currentUser.getProfileType());
-  }
-
-  /**
    * Get a copy of a {@link UserProfileModel} with the specified {@link UUID}
    *
    * @param id The UUID of the {@link UserProfileModel} that one is looking for
@@ -220,9 +337,9 @@ public class EnvironmentModel {
    */
   public UserProfileModel getUserByID(UUID id) throws NonExistantUserProfileException {
     UserProfileModel temp = null;
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (id == this.userProfileModelList.get(i).getProfileID()) {
-        temp = new UserProfileModel(this.userProfileModelList.get(i));
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (id == userProfileModelList.get(i).getProfileID()) {
+        temp = new UserProfileModel(userProfileModelList.get(i));
         break;
       }
     }
@@ -239,8 +356,8 @@ public class EnvironmentModel {
 
     boolean existingProfile = false;
     int index = -1;
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (this.userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
         existingProfile = true;
         index = i;
       }
@@ -248,15 +365,14 @@ public class EnvironmentModel {
 
     if (existingProfile && index >= 0) {
 
-      this.userProfileModelList.set(index, updatedProfile);
+      userProfileModelList.set(index, updatedProfile);
 
       try {
-        UserProfileModel[] profileListAsArray =
-            new UserProfileModel[this.userProfileModelList.size()];
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
 
         CustomUserXStream uStream = new CustomUserXStream();
         uStream.toXML(
-            this.userProfileModelList.toArray(profileListAsArray),
+            userProfileModelList.toArray(profileListAsArray),
             new FileOutputStream(userProfilesFile));
       } catch (Exception e) {
       }
@@ -271,8 +387,8 @@ public class EnvironmentModel {
     }
 
     // Update currentUser entry if needed
-    if (this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
-      this.currentUser = updatedProfile;
+    if (currentUser.getProfileID() == updatedProfile.getProfileID()) {
+      currentUser = updatedProfile;
     }
 
     houseGraphic.repaint();
@@ -287,9 +403,9 @@ public class EnvironmentModel {
   public UserProfileModel[] getProfilesByCategory(ProfileType desiredProfileType) {
     ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (this.userProfileModelList.get(i).getProfileType() == desiredProfileType)
-        temp.add(new UserProfileModel(this.userProfileModelList.get(i))); // Deep copy
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileType() == desiredProfileType)
+        temp.add(new UserProfileModel(userProfileModelList.get(i))); // Deep copy
     }
     UserProfileModel[] temp2 = new UserProfileModel[temp.size()];
     for (int i = 0; i < temp.size(); i++) {
@@ -305,7 +421,7 @@ public class EnvironmentModel {
    * @return true if currentUser is set and false otherwise.
    */
   public boolean isCurrentUserSet() {
-    return !(this.currentUser == null);
+    return !(currentUser == null);
   }
 
   /**
@@ -315,55 +431,6 @@ public class EnvironmentModel {
    */
   public int getOutsideTemp() {
     return this.outsideTemperature;
-  }
-
-  /**
-   * Gets the currently set date in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public String getDateString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
-    return dateFormatter.format(this.currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set time in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public String getTimeString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
-    return dateFormatter.format(this.currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set date and time in the simulator in a pre-determined format
-   *
-   * @return Date object representing currently set date and time
-   */
-  public Date getDateObject() {
-    return this.currentCalObj.getTime();
-  }
-
-  /**
-   * Sets the Date of the Simulator
-   *
-   * @param newDate {@link Date} object representing the desired date
-   */
-  public void setDate(Calendar newDate) {
-    this.currentCalObj.set(newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
-  }
-
-  /**
-   * Sets the Time of the Simulator
-   *
-   * @param newTime {@link Date} object representing the desired time
-   */
-  public void setTime(Date newTime) {
-    this.currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
-    this.currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
-    this.currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
   }
 
   /**
@@ -391,6 +458,7 @@ public class EnvironmentModel {
    * Adds a new {@link UserProfileModel} to the internal List of this class
    *
    * @param newUser The new {@link UserProfileModel} to be added
+   * @param userProfilesFile the user profiles file
    * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This
    *     includes an empty profile name or non-set {@link ProfileType}
    */
@@ -405,9 +473,8 @@ public class EnvironmentModel {
       UserProfileModel userToAdd = new UserProfileModel(newUser);
 
       try {
-        this.userProfileModelList.add(userToAdd);
-        UserProfileModel[] profileListAsArray =
-            new UserProfileModel[this.userProfileModelList.size()];
+        userProfileModelList.add(userToAdd);
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
         CustomConsole.print(
             "New user '"
                 + newUser.getName()
@@ -417,10 +484,10 @@ public class EnvironmentModel {
 
         CustomUserXStream uStream = new CustomUserXStream();
         uStream.toXML(
-            this.userProfileModelList.toArray(profileListAsArray),
+            userProfileModelList.toArray(profileListAsArray),
             new FileOutputStream(userProfilesFile));
       } catch (FileNotFoundException e) {
-        this.userProfileModelList.remove(userToAdd);
+        userProfileModelList.remove(userToAdd);
         CustomConsole.print("Error writing to UserProfiles.xml; user was not created.");
       }
     }
@@ -432,35 +499,26 @@ public class EnvironmentModel {
    * Remove the inputted user profile from the list.
    *
    * @param u the user to be removed.
+   * @param userProfilesFile the user profiles file
    */
   public void removeUserProfile(UserProfileModel u, File userProfilesFile) {
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (this.userProfileModelList.get(i).getProfileID() == u.getProfileID()) {
-        this.userProfileModelList.remove(i);
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileID() == u.getProfileID()) {
+        userProfileModelList.remove(i);
         try {
-          UserProfileModel[] profileListAsArray =
-              new UserProfileModel[this.userProfileModelList.size()];
+          UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
 
           CustomUserXStream uStream = new CustomUserXStream();
           uStream.toXML(
-              this.userProfileModelList.toArray(profileListAsArray),
+              userProfileModelList.toArray(profileListAsArray),
               new FileOutputStream(userProfilesFile));
         } catch (FileNotFoundException e) {
-          this.userProfileModelList.add(u);
+          userProfileModelList.add(u);
           CustomConsole.print("Error removing user from UserProfiles.xml; user was not deleted.");
         }
         break;
       }
     }
-  }
-
-  /**
-   * Gets simulation object.
-   *
-   * @return the simulation running
-   */
-  public boolean getSimulationRunning() {
-    return this.simulationRunning;
   }
 
   /**
@@ -474,25 +532,13 @@ public class EnvironmentModel {
 
   /** Turns on the simulation */
   public void startSimulation() {
-    this.simulationRunning = true;
+    simulationRunning = true;
     CustomConsole.print("The simulation has been started.");
   }
 
   /** Turns off the simulation */
   public void stopSimulation() {
-    this.simulationRunning = false;
+    simulationRunning = false;
     CustomConsole.print("The simulation has been stopped.");
-  }
-
-  /** Obstructs all windows */
-  public void obstructWindows() {
-    CustomConsole.print("Obstructing all windows!");
-    this.windowsObstructed = true;
-  }
-
-  /** Removes obstruction from all windows */
-  public void clearWindows() {
-    CustomConsole.print("Clearing all windows!");
-    this.windowsObstructed = false;
   }
 }

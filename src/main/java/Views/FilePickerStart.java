@@ -101,6 +101,17 @@ public class FilePickerStart extends JFrame {
    * @param height the height
    */
   public static void run(JFrame frame, int width, int height) {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(width, height);
     frame.setVisible(true);
@@ -111,6 +122,7 @@ public class FilePickerStart extends JFrame {
   class OpenL implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       JFileChooser c = new JFileChooser();
+      c.setCurrentDirectory(new File(System.getProperty("user.dir")));
       // Demonstrate "Open" dialog:
       int rVal = c.showOpenDialog(FilePickerStart.this);
       if (rVal == JFileChooser.APPROVE_OPTION) {

@@ -24,7 +24,7 @@ public class UserProfileModelTest {
     EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
     env.setCurrentUser(u);
     env.editProfileName(u, "New", new File("src/test/UserProfileTests.xml"));
-    assert env.getCurrentUser().getName().equals("New");
+    assert EnvironmentModel.getCurrentUser().getName().equals("New");
   }
 
   // unit test for 3.2 -> add

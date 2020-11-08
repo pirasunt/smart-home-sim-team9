@@ -48,7 +48,6 @@ public class EnvironmentView extends JFrame {
     this.pack();
     this.setLocationRelativeTo(null);
     this.setVisible(true);
-
   }
 
   /**
@@ -118,8 +117,6 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.addActionListener(listenForUserRoomDropDown);
   }
 
-
-
   /**
    * Method used to pass on the {@link JButton} listener responsibility to its caller.
    *
@@ -144,6 +141,7 @@ public class EnvironmentView extends JFrame {
    * @param temp The outside temperature of the simulated environment
    * @param date The date of the simulated environment
    * @param time The time of the simulated environment
+   * @param delay the delay
    */
   public void createDash(int temp, String date, String time, int delay) {
     JFrame frame = new JFrame("Dashboard");
@@ -200,15 +198,9 @@ public class EnvironmentView extends JFrame {
     this.dashboard.userRoomDropDown.setSelectedItem(room);
   }
 
-
-
   /**
    * Creates an interface that allows the Simulator user to create new profiles The user needs to
-<<<<<<< HEAD
-   * specify the new profile's name as well as the profileType. The latter is displayed
-=======
-   * specify the new profile's name as well as the {@link 'profileType'}. The latter is displayed
->>>>>>> dev
+   * specify the new profile's name as well as the. The latter is displayed
    */
   public void userCreationWindow() {
     this.createUser = new JFrame("Create a new User");
@@ -264,34 +256,33 @@ public class EnvironmentView extends JFrame {
     dashboard.editSimulationButton.setText(text);
   }
 
-
   /** Used to clean up UI after the user is done creating a {@link UserProfileModel} */
   public void disposeCreateUser() {
     this.createUser.dispose();
   }
-
 
   /** Destroys the Simulator Dashboard when called */
   public void disposeDash() {
     this.dashboard.dispose();
   }
 
-
   public void refreshDash(String dateString, String timeString, int temp, int timerDelay) {
     this.dashboard.dateField.setText(dateString);
     this.dashboard.timeField.setText(timeString);
     this.dashboard.tempLabel.setText(temp + "°C");
-    this.dashboard.timeSpeed.setText(Integer.toString(1000/timerDelay) + " X");
+    this.dashboard.timeSpeed.setText(1000 / timerDelay + " X");
 
-    //This will trigger the userProfileDropDown ActionListener and will update the room of the current user on the DASH
-    this.dashboard.userProfileDropDown.setSelectedIndex(this.dashboard.userProfileDropDown.getSelectedIndex());
+    // This will trigger the userProfileDropDown ActionListener and will update the room of the
+    // current user on the DASH
+    this.dashboard.userProfileDropDown.setSelectedIndex(
+        this.dashboard.userProfileDropDown.getSelectedIndex());
   }
+
   public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
 
-
-  public void setTimeField(String time){
+  public void setTimeField(String time) {
     this.dashboard.timeField.setText(time);
   }
 }

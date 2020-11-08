@@ -5,54 +5,69 @@ import Models.SecurityModel;
 import Views.CustomConsole;
 import Views.SecurityView;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SecurityController {
+/** The type Security controller. */
+public class SecurityController implements Observer {
   private final SecurityModel secModel;
   private final SecurityView secView;
 
+  /**
+   * Instantiates a new Security controller.
+   *
+   * @param secModel the sec model
+   * @param secView the sec view
+   */
   public SecurityController(SecurityModel secModel, SecurityView secView) {
     this.secModel = secModel;
     this.secView = secView;
     secView.addAwayListener(new AwayModeListener());
-    secView.addIntervalListener(new IntervalSpinnerListener());
+    EnvironmentModel.subscribe(this);
+  }
+
+  @Override
+  public void update() {
+    if (SecurityModel.isAwayOn()) {
+      secModel.notifyAuthorities();
+    }
   }
 
   private class AwayModeListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (secModel.isAwayOn()) {
+      if (EnvironmentModel.getSimulationRunning() == false) {
+        CustomConsole.print("The simulation must be running in order to change the Away Status...");
+      } else if (SecurityModel.isAwayOn() && EnvironmentModel.getSimulationRunning() == true) {
         secModel.setAwayOn(false);
         secView.changeAwayModeText("Turn on Away Mode");
+        secView.toggleSpinners(true);
         // logic to turn off away mode
       } else {
-        if(EnvironmentModel.getHouse().hasObstruction()){
-          CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
+        boolean exceptionFound = false;
+        if (EnvironmentModel.getSimulationRunning() == false) {
+          CustomConsole.print(
+              "Simulation is not running, Away Mode will not be enabled. Please start the simulation");
+          exceptionFound = true;
         }
-        else{
+        if (EnvironmentModel.getHouse().hasObstruction()) {
+          CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
+          exceptionFound = true;
+        }
+        if (!EnvironmentModel.houseIsEmpty()) {
+          CustomConsole.print(
+              "Someone is in the house, please remove them before enabling Away Mode.");
+          exceptionFound = true;
+        }
+        if (!exceptionFound) {
           secModel.setAwayOn(true);
+          secView.toggleSpinners(false);
           secView.changeAwayModeText("Turn Away Mode off");
         }
         // logic to turn on away mode
 
       }
-    }
-  }
-
-  private class IntervalSpinnerListener implements ChangeListener {
-    /**
-     * Invoked when the target of the listener has changed its state.
-     *
-     * @param e a ChangeEvent object
-     */
-    @Override
-    public void stateChanged(ChangeEvent e) {
-      System.out.println(secView.getSpinner());
-      secModel.setAlertInterval(secView.getSpinner());
     }
   }
 }
