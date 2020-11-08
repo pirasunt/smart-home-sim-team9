@@ -1,6 +1,7 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Models.EnvironmentModel;
 import Views.CustomConsole;
 
 /** The type Outside wall. */
@@ -42,6 +43,7 @@ public class OutsideWall extends Wall {
    */
   public void setDoorLocked(boolean doorLocked) {
     this.doorLocked = doorLocked;
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /**
@@ -60,12 +62,14 @@ public class OutsideWall extends Wall {
    */
   public void setLightsOn(boolean lightsOn) {
     this.lightsOn = lightsOn;
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void lockDoor() {
 
     this.doorLocked = true;
+    EnvironmentModel.getHouseGraphic().repaint();
     CustomConsole.print("Door with outside access " + doorId + " has been locked.");
   }
 
@@ -73,6 +77,7 @@ public class OutsideWall extends Wall {
   public void unlockDoor() {
 
     this.doorLocked = false;
+    EnvironmentModel.getHouseGraphic().repaint();
     CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
   }
 
@@ -80,6 +85,7 @@ public class OutsideWall extends Wall {
   public void turnLightsOn() {
 
     this.lightsOn = true;
+    EnvironmentModel.getHouseGraphic().repaint();
     CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
   }
 
@@ -87,6 +93,7 @@ public class OutsideWall extends Wall {
   public void turnLightsOff() {
 
     this.lightsOn = false;
+    EnvironmentModel.getHouseGraphic().repaint();
     CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
   }
 }
