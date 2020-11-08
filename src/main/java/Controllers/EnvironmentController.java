@@ -4,10 +4,12 @@ import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
 import Models.EnvironmentModel;
 import Models.Room;
+import Models.SecurityModel;
 import Models.UserProfileModel;
-import Views.EditSimulationView;
 import Views.CustomConsole;
+import Views.EditSimulationView;
 import Views.EnvironmentView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -42,8 +44,6 @@ public class EnvironmentController {
     this.theView.addLocationListener(new LocationListener());
     this.theView.addSimulatorListener(new SimulatorListener());
     this.theView.addCreateUserListener(new CreateUserListener());
-
-
   }
 
   private class StartListener implements ActionListener {
@@ -169,7 +169,8 @@ public class EnvironmentController {
     public void actionPerformed(ActionEvent e) {
       if (theModel.isCurrentUserSet()) {
 
-        CustomConsole.print("Selecting location for " + theModel.getCurrentUser().getName() + "...");
+        CustomConsole.print(
+            "Selecting location for " + theModel.getCurrentUser().getName() + "...");
         Room[] roomList = theModel.getRooms();
 
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
@@ -216,7 +217,10 @@ public class EnvironmentController {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
           theView.createDash(
-              theModel.getOutsideTemp(), theModel.getDateString(), theModel.getTimeString(), theModel.getTimer().getDelay());
+              theModel.getOutsideTemp(),
+              EnvironmentModel.getDateString(),
+              EnvironmentModel.getTimeString(),
+              EnvironmentModel.getTimer().getDelay());
           UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
 
           for (int i = 0; i < allProfiles.length; i++) {
@@ -284,14 +288,18 @@ public class EnvironmentController {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        if (theModel.getSimulationRunning() == true) {
+        if (EnvironmentModel.getSimulationRunning() == true) {
+          SecurityModel.cancelAllTimers();
           theModel.stopSimulation();
           theView.changeSimulationToggleText("Start Simulation");
-          theModel.getTimer().stop();
-        } else if (theModel.getSimulationRunning() == false) {
+          EnvironmentModel.getTimer().stop();
+        } else if (EnvironmentModel.getSimulationRunning() == false) {
+          if (SecurityModel.isAwayOn()) {
+            SecurityModel.startAwayTimer();
+          }
           theModel.startSimulation();
           theView.changeSimulationToggleText("Stop Simulation");
-          theModel.getTimer().restart();
+          EnvironmentModel.getTimer().restart();
         }
       }
     }
@@ -361,20 +369,22 @@ public class EnvironmentController {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-      //Pass on responsibility of editing the simulation to its own controller and view.
-      //The Environment Model contains all the environment data that will be needed.
+      // Pass on responsibility of editing the simulation to its own controller and view.
+      // The Environment Model contains all the environment data that will be needed.
 
-      if(!theModel.getSimulationRunning()) {
-        EditSimulationView editSimView = new EditSimulationView(theModel.getOutsideTemp(), theModel.getTimer().getDelay());
+      if (!EnvironmentModel.getSimulationRunning()) {
+        EditSimulationView editSimView =
+            new EditSimulationView(theModel.getOutsideTemp(), EnvironmentModel.getTimer().getDelay());
         new EditSimulationController(editSimView, theModel);
 
         editSimView.addWindowListener(new EditSimulationWindowListener());
       } else {
-        CustomConsole.print("ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
+        CustomConsole.print(
+            "ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
       }
 
-      //The Following code will be reused for SHC
-/*
+      // The Following code will be reused for SHC
+      /*
       if (theModel.isWindowObstructed()) {
         Room[] rooms = theModel.getRooms();
 
@@ -432,86 +442,71 @@ public class EnvironmentController {
        * @param e the event to be processed
        */
       @Override
-      public void windowOpened(WindowEvent e) {
-
-      }
+      public void windowOpened(WindowEvent e) {}
 
       /**
-       * Invoked when the user attempts to close the window
-       * from the window's system menu.
+       * Invoked when the user attempts to close the window from the window's system menu.
        *
        * @param e the event to be processed
        */
       @Override
-      public void windowClosing(WindowEvent e) {
-
-      }
+      public void windowClosing(WindowEvent e) {}
 
       /**
-       * Invoked when a window has been closed as the result
-       * of calling dispose on the window.
+       * Invoked when a window has been closed as the result of calling dispose on the window.
        *
        * @param e the event to be processed
        */
       @Override
       public void windowClosed(WindowEvent e) {
-        theView.refreshDash(theModel.getDateString(), theModel.getTimeString(), theModel.getOutsideTemp(), theModel.getTimer().getDelay());
+        theView.refreshDash(
+            EnvironmentModel.getDateString(),
+            EnvironmentModel.getTimeString(),
+            theModel.getOutsideTemp(),
+            EnvironmentModel.getTimer().getDelay());
       }
 
       /**
-       * Invoked when a window is changed from a normal to a
-       * minimized state. For many platforms, a minimized window
-       * is displayed as the icon specified in the window's
-       * iconImage property.
+       * Invoked when a window is changed from a normal to a minimized state. For many platforms, a
+       * minimized window is displayed as the icon specified in the window's iconImage property.
        *
        * @param e the event to be processed
        * @see Frame#setIconImage
        */
       @Override
-      public void windowIconified(WindowEvent e) {
-
-      }
+      public void windowIconified(WindowEvent e) {}
 
       /**
-       * Invoked when a window is changed from a minimized
-       * to a normal state.
+       * Invoked when a window is changed from a minimized to a normal state.
        *
        * @param e the event to be processed
        */
       @Override
-      public void windowDeiconified(WindowEvent e) {
-
-      }
+      public void windowDeiconified(WindowEvent e) {}
 
       /**
-       * Invoked when the Window is set to be the active Window. Only a Frame or
-       * a Dialog can be the active Window. The native windowing system may
-       * denote the active Window or its children with special decorations, such
-       * as a highlighted title bar. The active Window is always either the
-       * focused Window, or the first Frame or Dialog that is an owner of the
-       * focused Window.
-       *
-       * @param e the event to be processed
-       */
-      @Override
-      public void windowActivated(WindowEvent e) {
-
-      }
-
-      /**
-       * Invoked when a Window is no longer the active Window. Only a Frame or a
-       * Dialog can be the active Window. The native windowing system may denote
-       * the active Window or its children with special decorations, such as a
-       * highlighted title bar. The active Window is always either the focused
-       * Window, or the first Frame or Dialog that is an owner of the focused
+       * Invoked when the Window is set to be the active Window. Only a Frame or a Dialog can be the
+       * active Window. The native windowing system may denote the active Window or its children
+       * with special decorations, such as a highlighted title bar. The active Window is always
+       * either the focused Window, or the first Frame or Dialog that is an owner of the focused
        * Window.
        *
        * @param e the event to be processed
        */
       @Override
-      public void windowDeactivated(WindowEvent e) {
+      public void windowActivated(WindowEvent e) {}
 
-      }
+      /**
+       * Invoked when a Window is no longer the active Window. Only a Frame or a Dialog can be the
+       * active Window. The native windowing system may denote the active Window or its children
+       * with special decorations, such as a highlighted title bar. The active Window is always
+       * either the focused Window, or the first Frame or Dialog that is an owner of the focused
+       * Window.
+       *
+       * @param e the event to be processed
+       */
+      @Override
+      public void windowDeactivated(WindowEvent e) {}
     }
   }
 
@@ -523,10 +518,10 @@ public class EnvironmentController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      int hour = Integer.parseInt(theModel.getTimeString().substring(0,2));
-      int minute = Integer.parseInt(theModel.getTimeString().substring(3,5));
-      int second = Integer.parseInt(theModel.getTimeString().substring(6,8));
-      String amPM = theModel.getTimeString().substring(8);
+      int hour = Integer.parseInt(EnvironmentModel.getTimeString().substring(0, 2));
+      int minute = Integer.parseInt(EnvironmentModel.getTimeString().substring(3, 5));
+      int second = Integer.parseInt(EnvironmentModel.getTimeString().substring(6, 8));
+      String amPM = EnvironmentModel.getTimeString().substring(8);
       amPM = amPM.replaceAll(" ", "");
 
       String hourString;
@@ -535,42 +530,34 @@ public class EnvironmentController {
 
       second++;
 
-      if(second > 59) {
+      if (second > 59) {
         minute++;
         second = 0;
       }
-      if(minute > 59) {
+      if (minute > 59) {
         hour++;
         minute = 0;
       }
-      if(hour > 12){
+      if (hour > 12) {
         hour = 1;
-        if(amPM.equals("AM"))
-          amPM = "PM";
-        else
-          amPM = "AM";
+        if (amPM.equals("AM")) amPM = "PM";
+        else amPM = "AM";
       }
 
-      if(hour < 10)
-        hourString = "0" + hour;
-      else
-        hourString = String.valueOf(hour);
+      if (hour < 10) hourString = "0" + hour;
+      else hourString = String.valueOf(hour);
 
-      if(minute < 10)
-        minuteString = "0" + minute;
-      else
-        minuteString = String.valueOf(minute);
+      if (minute < 10) minuteString = "0" + minute;
+      else minuteString = String.valueOf(minute);
 
-      if(second < 10)
-        secondString = "0" + second;
-      else
-        secondString = String.valueOf(second);
+      if (second < 10) secondString = "0" + second;
+      else secondString = String.valueOf(second);
 
       String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
       SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
       theView.setTimeField(time);
       try {
-        theModel.setTime(formatter.parse(time));
+        EnvironmentModel.setTime(formatter.parse(time));
       } catch (ParseException parseException) {
         parseException.printStackTrace();
       }

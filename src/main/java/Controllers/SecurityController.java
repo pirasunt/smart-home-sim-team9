@@ -18,8 +18,6 @@ public class SecurityController {
     secView.addAwayListener(new AwayModeListener());
   }
 
-  public void initStartSpinner() {}
-
   private class AwayModeListener implements ActionListener {
 
     @Override
@@ -27,12 +25,28 @@ public class SecurityController {
       if (secModel.isAwayOn()) {
         secModel.setAwayOn(false);
         secView.changeAwayModeText("Turn on Away Mode");
+        secModel.cancelAllTimers();
+        secView.toggleSpinners(true);
         // logic to turn off away mode
       } else {
+        boolean exceptionFound = false;
+        if (EnvironmentModel.getSimulationRunning() == false) {
+          CustomConsole.print(
+              "Simulation is not running, Away Mode will not be enabled. Please start the simulation");
+          exceptionFound = true;
+        }
         if (EnvironmentModel.getHouse().hasObstruction()) {
           CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
-        } else {
+          exceptionFound = true;
+        }
+        if (!EnvironmentModel.houseIsEmpty()) {
+          CustomConsole.print(
+              "Someone is in the house, please remove them before enabling Away Mode.");
+          exceptionFound = true;
+        }
+        if (!exceptionFound) {
           secModel.setAwayOn(true);
+          secView.toggleSpinners(false);
           secView.changeAwayModeText("Turn Away Mode off");
         }
         // logic to turn on away mode

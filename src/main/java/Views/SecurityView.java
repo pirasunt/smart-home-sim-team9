@@ -46,4 +46,10 @@ public class SecurityView {
   public JSpinner getEndTime() {
     return endTime;
   }
+
+  public void toggleSpinners(boolean shouldAllowEdit) {
+    startTime.setEnabled(shouldAllowEdit);
+    endTime.setEnabled(shouldAllowEdit);
+    intervalSpinner.setEnabled(shouldAllowEdit);
+  }
 }
