@@ -23,12 +23,11 @@ public class SecurityModel {
 
   private static SpinnerDateModel startModel;
   private static SpinnerDateModel endModel;
+  private static boolean awayOn = false;
   private final Date startDate;
   private final Date endDate;
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
-
-  private static boolean awayOn = false;
   private Room[] roomsToLight = null;
 
   /** Instantiates a new Security model. */
@@ -45,6 +44,7 @@ public class SecurityModel {
 
   /** Start away timer. */
   public static void startAwayTimer() {
+    System.out.println("I GOT CLICKED!!!");
 
     int timerDel = EnvironmentModel.getTimer().getDelay();
     int multiplier = 1;
@@ -83,9 +83,9 @@ public class SecurityModel {
       endCal.add(Calendar.DATE, 1);
     }
     long deltaStart =
-        sCal.getTimeInMillis() - EnvironmentModel.getDateObject().getTime() / multiplier;
+        (sCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
     long deltaEnd =
-        endCal.getTimeInMillis() - EnvironmentModel.getDateObject().getTime() / multiplier;
+        (endCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
     long dayLen = 1000 * 60 * 60 * 24 / multiplier;
 
     if (deltaStart < 0) {
@@ -96,6 +96,37 @@ public class SecurityModel {
     }
     endT.schedule(customEnd, deltaEnd, dayLen);
     CustomConsole.print("Away Mode lighting has been set!");
+  }
+
+  /**
+   * Is away on boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean isAwayOn() {
+    return awayOn;
+  }
+
+  /**
+   * Sets away on.
+   *
+   * @param shouldTurnAwayOn the away on
+   */
+  public void setAwayOn(boolean shouldTurnAwayOn) {
+    if (shouldTurnAwayOn) {
+      EnvironmentModel.getHouse().lockAndClose(true);
+      EnvironmentModel.getHouseGraphic().repaint();
+      startAwayTimer();
+    } else {
+      cancelAllTimers();
+    }
+    awayOn = shouldTurnAwayOn;
+  }
+
+  /** Cancel all timers. */
+  public static void cancelAllTimers() {
+    startT.cancel();
+    endT.cancel();
   }
 
   /**
@@ -126,32 +157,6 @@ public class SecurityModel {
   }
 
   /**
-   * Is away on boolean.
-   *
-   * @return the boolean
-   */
-  public static boolean isAwayOn() {
-    return awayOn;
-  }
-
-  /**
-   * Sets away on.
-   *
-   * @param awayOn the away on
-   */
-  public void setAwayOn(boolean awayOn) {
-    // TODO: Verify if obstruction should be checked here or in Controller (rn its controller)
-    if (awayOn) {
-      EnvironmentModel.getHouse().lockAndClose(true);
-      EnvironmentModel.getHouseGraphic().repaint();
-    }
-    else{
-      startAwayTimer();
-    }
-
-    this.awayOn = awayOn;
-  }
-  /**
    * Get rooms to light room [ ].
    *
    * @return the room [ ]
@@ -168,13 +173,6 @@ public class SecurityModel {
   public void setRoomsToLight(Room[] roomsToLight) {
     this.roomsToLight = roomsToLight;
   }
-
-  /** Cancel all timers. */
-  public static void cancelAllTimers() {
-    startT.cancel();
-    endT.cancel();
-  }
-
 
   /**
    * Timer stuff.

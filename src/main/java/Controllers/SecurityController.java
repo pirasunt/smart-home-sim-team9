@@ -22,13 +22,16 @@ public class SecurityController {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      if (secModel.isAwayOn()) {
+      if(EnvironmentModel.getSimulationRunning() == false){
+        CustomConsole.print("The simulation must be running in order to change the Away Status...");
+      }
+      else if (secModel.isAwayOn() && EnvironmentModel.getSimulationRunning() == true) {
         secModel.setAwayOn(false);
         secView.changeAwayModeText("Turn on Away Mode");
-        secModel.cancelAllTimers();
         secView.toggleSpinners(true);
         // logic to turn off away mode
-      } else {
+      }
+      else {
         boolean exceptionFound = false;
         if (EnvironmentModel.getSimulationRunning() == false) {
           CustomConsole.print(
