@@ -149,7 +149,13 @@ public class EnvironmentView extends JFrame {
     JPanel jp = this.dashboard.p1;
     frame.setContentPane(jp);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
+
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+    Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+
+    frame.setSize((int) rect.getWidth()/2, (int) rect.getHeight());
+    frame.setLocation(0,0);
     frame.setVisible(true);
 
     return dashboard.getCoreView();
@@ -280,6 +286,10 @@ public class EnvironmentView extends JFrame {
         this.dashboard.userProfileDropDown.getSelectedIndex());
   }
 
+  public void refreshDash() {
+    this.dashboard.repaint();
+  }
+
   public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
@@ -287,4 +297,5 @@ public class EnvironmentView extends JFrame {
   public void setTimeField(String time) {
     this.dashboard.timeField.setText(time);
   }
+
 }

@@ -217,9 +217,6 @@ public class EnvironmentController {
       if (theModel.isCurrentUserSet()) {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
-
-
-
           CoreView SHC = theView.createDash(
               theModel.getOutsideTemp(),
               EnvironmentModel.getDateString(),
@@ -288,6 +285,8 @@ public class EnvironmentController {
             }
           }
         }
+
+        theView.refreshDash();
       }
     }
 
@@ -383,64 +382,13 @@ public class EnvironmentController {
       if (!EnvironmentModel.getSimulationRunning()) {
         EditSimulationView editSimView =
             new EditSimulationView(theModel.getOutsideTemp(), EnvironmentModel.getTimer().getDelay());
-        new EditSimulationController(editSimView, theModel);
+        new EditSimulationController(editSimView, theModel, theView);
 
         editSimView.addWindowListener(new EditSimulationWindowListener());
       } else {
         CustomConsole.print(
             "ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
       }
-
-      // The Following code will be reused for SHC
-      /*
-      if (theModel.isWindowObstructed()) {
-        Room[] rooms = theModel.getRooms();
-
-        for (Room r : rooms) {
-          if (r.getId() == 0) continue;
-
-          if (r.getLeftWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getLeftWall()).setWindowObstructed(false);
-          }
-          if (r.getRightWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getRightWall()).setWindowObstructed(false);
-          }
-          if (r.getTopWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getTopWall()).setWindowObstructed(false);
-          }
-          if (r.getBottomWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getBottomWall()).setWindowObstructed(false);
-          }
-        }
-
-        theModel.getHouseGraphic().repaint();
-        theModel.clearWindows();
-        theView.changeWindowsObstructedToggleText("Obstruct Windows");
-      } else if (!theModel.isWindowObstructed()) {
-        Room[] rooms = theModel.getRooms();
-
-        for (Room r : rooms) {
-          if (r.getId() == 0) continue;
-
-          if (r.getLeftWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getLeftWall()).setWindowObstructed(true);
-          }
-          if (r.getRightWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getRightWall()).setWindowObstructed(true);
-          }
-          if (r.getTopWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getTopWall()).setWindowObstructed(true);
-          }
-          if (r.getBottomWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getBottomWall()).setWindowObstructed(true);
-          }
-        }
-
-        theModel.getHouseGraphic().repaint();
-        theModel.obstructWindows();
-        theView.changeWindowsObstructedToggleText("Clear Windows");
-      }
-      */
     }
 
     private class EditSimulationWindowListener implements WindowListener {

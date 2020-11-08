@@ -2,7 +2,12 @@ package Views;
 
 import Controllers.SecurityController;
 import Models.SecurityModel;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class SecurityView {
@@ -53,4 +58,7 @@ public class SecurityView {
     endTime.setEnabled(shouldAllowEdit);
     intervalSpinner.setEnabled(shouldAllowEdit);
   }
+
+  public JPanel getWrapper() { return this.shpWrap; }
+
 }

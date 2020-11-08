@@ -67,33 +67,37 @@ public class OutsideWall extends Wall {
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void lockDoor() {
-
-    this.doorLocked = true;
-    EnvironmentModel.getHouseGraphic().repaint();
-    CustomConsole.print("Door with outside access " + doorId + " has been locked.");
+    if (!doorLocked) {
+      this.doorLocked = true;
+      EnvironmentModel.getHouseGraphic().repaint();
+      CustomConsole.print("Door with outside access " + doorId + " has been locked.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void unlockDoor() {
-
-    this.doorLocked = false;
-    EnvironmentModel.getHouseGraphic().repaint();
-    CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+    if (doorLocked) {
+      this.doorLocked = false;
+      EnvironmentModel.getHouseGraphic().repaint();
+      CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void turnLightsOn() {
-
-    this.lightsOn = true;
-    EnvironmentModel.getHouseGraphic().repaint();
-    CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
+    if (!lightsOn) {
+      this.lightsOn = true;
+      EnvironmentModel.getHouseGraphic().repaint();
+      CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void turnLightsOff() {
-
-    this.lightsOn = false;
-    EnvironmentModel.getHouseGraphic().repaint();
-    CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
+    if (lightsOn) {
+      this.lightsOn = false;
+      EnvironmentModel.getHouseGraphic().repaint();
+      CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
+    }
   }
 }
