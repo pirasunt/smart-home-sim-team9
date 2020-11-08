@@ -35,7 +35,9 @@ public class HouseGraphic extends JPanel {
     this.house = home;
   }
 
-  /** Init. */
+  /** Init.
+   * @param environment the environment
+   * */
   public void init(EnvironmentModel environment) {
     this.environment = environment;
     JScrollPane scrollPane = new JScrollPane(this);

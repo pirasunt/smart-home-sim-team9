@@ -31,6 +31,12 @@ public class EditSimulationView extends JFrame{
     private JRadioButton oneTimeSpeed;
     private JRadioButton tenTimeSpeed;
     private JRadioButton hundredTimeSpeed;
+    private JPanel jp0;
+    private JPanel jp1;
+    private JPanel jp2;
+    private JPanel jp3;
+    private JPanel jp4;
+    private JPanel jp5;
 
 
     public EditSimulationView(int temp, int delay){

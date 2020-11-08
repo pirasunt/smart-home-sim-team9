@@ -16,6 +16,8 @@ public class SecurityView {
   private JSpinner startTime;
   private JSpinner endTime;
   private JLabel endLabel;
+  private JLabel alertAuthoritiesAfterThisLabel;
+  private JPanel jpWrap;
 
   public SecurityView() {
     startTime.setModel(sModel.getStartModel());

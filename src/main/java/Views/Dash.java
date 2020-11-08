@@ -8,89 +8,58 @@ import java.awt.event.MouseEvent;
 
 import Enums.ProfileType;
 import Models.EnvironmentModel;
-import Models.UserProfileModel;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.jdatepicker.impl.JDatePickerImpl;
 
-
-/**
- * The type Dash.
- */
+/** The type Dash. */
 public class Dash extends JFrame {
-  /**
-   * The Stop simulation button.
-   */
+  /** The Stop simulation button. */
   JButton toggleSimulationButton;
-  /**
-   * The Edit action button.
-   */
+  /** The Edit action button. */
   JButton editSimulationButton;
-  /**
-   * The Tabbed pane 1.
-   */
+  /** The Tabbed pane 1. */
   JTabbedPane tabbedPane1;
-  /**
-   * The P 1.
-   */
+  /** The P 1. */
   JPanel p1;
-  /**
-   * The Sp 1.
-   */
+  /** The Sp 1. */
   JScrollPane sp1;
-  /**
-   * The Sp 2.
-   */
+  /** The Sp 2. */
   JScrollPane sp2;
-  /**
-   * The Tab 2.
-   */
+  /** The Tab 2. */
   JPanel Tab2;
-  /**
-   * The Tab 1.
-   */
+  /** The Tab 1. */
   JPanel Tab1;
 
-  /**
-   * The User profile drop down.
-   */
+  /** The User profile drop down. */
   JComboBox userProfileDropDown; // Current User Profile
 
-  /**
-   * The User room drop down.
-   */
+  /** The User room drop down. */
   JComboBox userRoomDropDown; // Current User Profile's Room
 
-  /**
-   * The Date field.
-   */
+  /** The Date field. */
   JLabel dateField; // Date field
 
-  /**
-   * The Time field.
-   */
+  /** The Time field. */
   JLabel timeField; // Time Field
 
-  /**
-   * The Temp spinner.
-   */
+  /** The Temp spinner. */
   JLabel tempLabel; // temperature spinner
+
+  /** The Time speed. */
   JLabel timeSpeed;
+  private SecurityView shp;
+
+  /** The Confirm time speed. */
   JButton confirmTimeSpeed;
 
-  /**
-   * The Date picker.
-   */
+  /** The Date picker. */
   JDatePickerImpl datePicker;
 
-  /**
-   * The Time spinner.
-   */
+  /** The Time spinner. */
   JSpinner time_spinner;
 
-  /**
-   * The Time confirm.
-   */
+  /** The Time confirm. */
   JButton timeConfirm;
 
   /**
@@ -99,6 +68,7 @@ public class Dash extends JFrame {
    * @param temp the temp
    * @param date the date
    * @param time the time
+   * @param delay the delay
    */
   public Dash(int temp, String date, String time, int delay) {
     tempLabel.setText(temp + "°C");
@@ -206,9 +176,6 @@ public class Dash extends JFrame {
     tabbedPane1.addTab("+", panel3);
   }
 
-  /**
-   * @noinspection ALL
-   */
   public JComponent $$$getRootComponent$$$() {
     return p1;
   }
