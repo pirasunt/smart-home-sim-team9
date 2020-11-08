@@ -1,7 +1,12 @@
 package Views;
 
+import Controllers.EnvironmentController;
 import Enums.ProfileType;
+import Models.EnvironmentModel;
 import Models.Room;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
@@ -12,7 +17,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-public class EditSimulationView extends JFrame{
+public class EditSimulationView extends JFrame {
 
     private JLabel dateField;
     private JButton changeDate;
@@ -39,12 +44,12 @@ public class EditSimulationView extends JFrame{
     private JPanel jp5;
 
 
-    public EditSimulationView(int temp, int delay){
+    public EditSimulationView(int temp, int delay) {
         this.timeConfirm = new JButton("Confirm");
         this.tempSpinner.setValue(temp);
 
-        int speedFactor= 1000/delay;
-        switch(speedFactor) {
+        int speedFactor = 1000 / delay;
+        switch (speedFactor) {
             case 1:
                 this.oneTimeSpeed.setSelected(true);
                 break;
@@ -57,7 +62,7 @@ public class EditSimulationView extends JFrame{
         }
     }
 
-    public void addTimeSpeedRadioListener(ActionListener listenForSpeedChange){
+    public void addTimeSpeedRadioListener(ActionListener listenForSpeedChange) {
         this.oneTimeSpeed.addActionListener(listenForSpeedChange);
         this.tenTimeSpeed.addActionListener(listenForSpeedChange);
         this.hundredTimeSpeed.addActionListener(listenForSpeedChange);
@@ -75,17 +80,16 @@ public class EditSimulationView extends JFrame{
         this.timeConfirm.addActionListener(listenForTimeConfirm);
     }
 
-    public void addTempSpinnerListener(ChangeListener listenForTempChange){
+    public void addTempSpinnerListener(ChangeListener listenForTempChange) {
         this.tempSpinner.addChangeListener(listenForTempChange);
     }
 
-    public Integer getTempSpinnerValue(){
-        return (Integer)this.tempSpinner.getValue();
+    public Integer getTempSpinnerValue() {
+        return (Integer) this.tempSpinner.getValue();
     }
 
 
-
-    public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime){
+    public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime) {
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
         this.userRoomPrivPanel.setLayout(userSelectionGrid);
@@ -97,7 +101,7 @@ public class EditSimulationView extends JFrame{
         this.userRoomPrivPanel.add(new JLabel());
         this.userRoomPrivPanel.add(new JLabel());
 
-        JLabel userLabel = new JLabel("Users",SwingConstants.CENTER);
+        JLabel userLabel = new JLabel("Users", SwingConstants.CENTER);
         JLabel roomLabel = new JLabel("Current Room");
         JLabel privilegeLabel = new JLabel("Privilege");
 
@@ -108,7 +112,7 @@ public class EditSimulationView extends JFrame{
         }
 
         //userLabels, userDropdowns & profileTypes arrays are the same length
-        for(int i = 0; i < userLabels.length; i++) {
+        for (int i = 0; i < userLabels.length; i++) {
             this.userRoomPrivPanel.add(userLabels[i]);
             this.userRoomPrivPanel.add(userDropdowns[i]);
             this.userRoomPrivPanel.add(profileTypes[i]);
@@ -126,9 +130,9 @@ public class EditSimulationView extends JFrame{
      * Provides an interface that allows the Simulator user to change the Date
      *
      * @param formatter Object that performs the conversion between the user selecting a date on the
-     *     UI via a DatePicker to a usable String format to be stored in the {@link
-     *     Models.EnvironmentModel}. The core logic of formatter is found in {@link
-     *     Controllers.EnvironmentController}
+     *                  UI via a DatePicker to a usable String format to be stored in the {@link
+     *                  EnvironmentModel}. The core logic of formatter is found in {@link
+     *                  EnvironmentController}
      */
     public void changeDate(JFormattedTextField.AbstractFormatter formatter) {
         SqlDateModel model = new SqlDateModel();
@@ -148,14 +152,13 @@ public class EditSimulationView extends JFrame{
         datePickerWindow.setVisible(true);
     }
 
-    public void setDateField(String date){
+    public void setDateField(String date) {
         this.dateField.setText(date);
     }
 
     public void removeDateComponentPicker() {
         this.datePickerWindow.dispose();
     }
-
 
 
     /**
