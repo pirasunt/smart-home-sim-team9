@@ -1,6 +1,7 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Models.EnvironmentModel;
 import Views.CustomConsole;
 
 /** The type Window wall. */
@@ -47,6 +48,7 @@ public class WindowWall extends Wall {
    */
   public void setWindowObstructed(boolean windowObstructed) {
     this.windowObstructed = windowObstructed;
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /**
@@ -65,37 +67,46 @@ public class WindowWall extends Wall {
    */
   public void setWindowOpen(boolean windowOpen) {
     this.windowOpen = windowOpen;
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method called when window has to be opened by the system automatically. */
   public void openWindow() {
     if (windowObstructed) {
       CustomConsole.print("Window " + windowId + " is obstructed and cannot be opened.");
-    } else {
+    } else if (!windowOpen) {
       windowOpen = true;
       CustomConsole.print("Window " + windowId + " has been opened.");
     }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method called when the window has to be closed by the system automatically */
   public void closeWindow() {
     if (windowObstructed) {
       CustomConsole.print("Window " + windowId + " is obstructed and cannot be closed.");
-    } else {
+    } else if (windowOpen){
       windowOpen = false;
       CustomConsole.print("Window " + windowId + " has been closed.");
     }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method called when the window has to be obstructed by the system automatically */
   public void obstructWindow() {
-    windowObstructed = true;
-    CustomConsole.print("Window " + windowId + " has been obstructed.");
+    if (!windowObstructed) {
+      windowObstructed = true;
+      CustomConsole.print("Window " + windowId + " has been obstructed.");
+    }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method called when the window has to be unobstructed by the system automatically */
   public void unobstructWindow() {
-    windowObstructed = false;
-    CustomConsole.print("Window " + windowId + " has been unobstructed.");
+    if (windowObstructed) {
+      windowObstructed = false;
+      CustomConsole.print("Window " + windowId + " has been unobstructed.");
+    }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 }

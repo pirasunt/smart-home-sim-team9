@@ -120,18 +120,25 @@ public class Room {
    */
   public void setLightsOn(boolean value) {
     this.lightsOn = value;
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method to be used when lights are turned off while the simulator is running */
   public void turnOffLights() {
-    lightsOn = false;
-    CustomConsole.print("Lights in room: " + name + " have been turned off.");
+    if (lightsOn) {
+      lightsOn = false;
+      CustomConsole.print("Lights in room: " + name + " have been turned off.");
+    }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /** Method to be used when lights are turned on while the simulator is running */
   public void turnOnLights() {
-    lightsOn = true;
-    CustomConsole.print("Lights in room: " + name + " have been turned on.");
+    if (!lightsOn) {
+      lightsOn = true;
+      CustomConsole.print("Lights in room: " + name + " have been turned on.");
+    }
+    EnvironmentModel.getHouseGraphic().repaint();
   }
 
   /**
