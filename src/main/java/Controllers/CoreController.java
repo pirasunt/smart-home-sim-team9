@@ -17,19 +17,25 @@ import java.awt.event.ItemListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CoreController {
+public class CoreController implements Observer{
 
     private CoreView theView;
     private EnvironmentModel theModel;
+    private ArrayList<Room> previousLightConfiguration;
+    private final CoreController selfReference; //For inner classes
 
 
     public CoreController(CoreView v, EnvironmentModel m) {
         this.theModel = m;
         this.theView =v;
-
+        this.selfReference= this;
         this.createWindowSectionComponents();
         this.createOutsideDoorComponents();
         this.createLightsSection();
+
+        theView.addTurnOnAutoLightsListener(new AutoLightTurnOnListener());
+        theView.addTurnOffAutoLightsListener(new AutoLightTurnOffListener());
+
     }
 
     //Creates the Window Section buttons and adds functionality to each button
@@ -79,7 +85,7 @@ public class CoreController {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(!window.isWindowOpen()) {
-                                window.openWindow();
+                                window.setWindowOpen(true);
                             }
                         }
                     });
@@ -88,7 +94,7 @@ public class CoreController {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if(window.isWindowOpen()) {
-                                window.closeWindow();
+                                window.setWindowOpen(false);
                             }
                         }
                     });
@@ -98,9 +104,9 @@ public class CoreController {
                         public void itemStateChanged(ItemEvent e) {
 
                             if (e.getStateChange() == ItemEvent.SELECTED) {
-                                window.obstructWindow();
+                                window.setWindowObstructed(true);
                             } else {
-                                window.unobstructWindow();
+                                window.setWindowObstructed(false);
                             }
                         }
                     });
@@ -150,7 +156,7 @@ public class CoreController {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 if(!door.getDoorLocked()) {
-                                    door.lockDoor();
+                                    door.setDoorLocked(true);
                                 }
                             }
                         });
@@ -159,7 +165,7 @@ public class CoreController {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 if(door.getDoorLocked()) {
-                                    door.unlockDoor();
+                                    door.setDoorLocked(false);
                                 }
                             }
                         });
@@ -224,9 +230,93 @@ public class CoreController {
 
         }
 
-        theView.displayLightsSection(lightLabels, onButtons, offButtons);
+        theView.displayLightsSection(lightLabels, onButtons, offButtons, theModel.getAutomaticLights());
     }
 
 
+    private class AutoLightTurnOnListener implements ActionListener {
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
+            if(!theModel.getAutomaticLights()){
+                theModel.setAutomaticLights(true);
+                theView.setLightButtonStatus(false); //Disables manual radio buttons for each room
+
+                //Save Previous Config
+                previousLightConfiguration = new ArrayList<>();
+                Room[] allRooms = theModel.getRooms();
+
+                for(Room r: allRooms){
+                    if(r.getLightsOn())
+                        previousLightConfiguration.add(r);
+                }
+
+                //Initial Setup for Auto-Lighting
+                for(Room r:allRooms){
+                    if(r.getAllUsersInRoom(theModel).size() == 0){
+                        r.setLightsOn(false);
+                    } else {
+                        r.setLightsOn(true);
+                    }
+                }
+
+                EnvironmentModel.subscribe(selfReference);
+
+
+            }
+        }
+    }
+
+    private class AutoLightTurnOffListener implements ActionListener {
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if(theModel.getAutomaticLights()){
+                theModel.setAutomaticLights(false);
+                theView.setLightButtonStatus(true); //Enables manual radio buttons for each room
+
+                Room[] allRooms = theModel.getRooms();
+
+                for(Room r: allRooms){
+                    r.setLightsOn(false);
+                }
+                if(previousLightConfiguration != null) {
+                    for (Room r : previousLightConfiguration) {
+                        r.setLightsOn(true);
+                    }
+                }
+                previousLightConfiguration = null;
+
+                EnvironmentModel.unsubscribe(selfReference);
+
+            }
+
+        }
+    }
+
+    @Override
+    public void update(int oldRoomID, int newRoomID) {
+        Room oldRoom = theModel.getRoomByID(oldRoomID);
+        Room newRoom = theModel.getRoomByID(newRoomID);
+
+        //Turn off light if there is no one remaining in the room
+        if(oldRoomID != 0 && oldRoom.getAllUsersInRoom(theModel).size() == 0){
+            oldRoom.setLightsOn(false);
+        }
+
+        //Ignore case when user is moved to/from Outside
+        if(newRoomID != 0)
+            newRoom.setLightsOn(true);
+
+    }
 }

@@ -35,13 +35,16 @@ public class EditSimulationView extends JFrame {
     private JRadioButton oneTimeSpeed;
     private JRadioButton tenTimeSpeed;
     private JRadioButton hundredTimeSpeed;
-    private JPanel jp0;
-    private JPanel jp1;
-    private JPanel jp2;
+    private JPanel changeTempPanel;
+    private JPanel changeDatePanel;
+    private JPanel changeTimePanel;
     private JPanel jp3;
     private JPanel jp4;
-    private JPanel jp5;
-    private JTextArea privilegeDef;
+    private JPanel timeSpeedPanel;
+    private JLabel privilegeDef;
+    private JSeparator changeTempSeparator;
+    private JSeparator changeDateSeparator;
+    private JSeparator changeTimeSeparator;
 
     public EditSimulationView(int temp, int delay) {
         this.timeConfirm = new JButton("Confirm");
@@ -92,11 +95,25 @@ public class EditSimulationView extends JFrame {
             JComboBox<Room>[] userDropdowns,
             JComboBox<ProfileType>[] profileTypes,
             String currentDate,
-            String currentTime) {
+            String currentTime,
+            boolean isSimRunning) {
+
+        //If simulator is running, remove panels that changes temperature, date and time
+        if(isSimRunning){
+            this.changeTempPanel.setVisible(false);
+            this.changeDatePanel.setVisible(false);
+            this.changeTimePanel.setVisible(false);
+            this.timeSpeedPanel.setVisible(false);
+            this.changeTempSeparator.setVisible(false);
+            this.changeDateSeparator.setVisible(false);
+            this.changeTimeSeparator.setVisible(false);
+            CustomConsole.print("WARNING: The Simulation is turned on. Unable to Change Temperature, Date, Time and Time Speed");
+        }
+
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
         this.userRoomPrivPanel.setLayout(userSelectionGrid);
-        this.userRoomPrivPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        this.userRoomPrivPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 5));
         this.dateField.setText(currentDate);
         this.timeField.setText(currentTime);
 

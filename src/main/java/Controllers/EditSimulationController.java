@@ -22,17 +22,23 @@ public class EditSimulationController {
   private final EditSimulationView theView;
   private final EnvironmentModel theModel;
   private final EnvironmentView envView;
+  private boolean isSimRunning;
 
-  public EditSimulationController(EditSimulationView v, EnvironmentModel m, EnvironmentView v2) {
+  public EditSimulationController(EditSimulationView v, EnvironmentModel m, EnvironmentView v2, boolean simulatorStatus) {
     this.theModel = m;
     this.theView = v;
     this.envView = v2;
+    this.isSimRunning = simulatorStatus;
 
-    theView.addChangeDateListener(new ChangeDateListener());
-    theView.addChangeTimeListener(new ChangeTimeListener());
-    theView.addTempSpinnerListener(new TempChangeListener());
-    theView.addTimeSpeedRadioListener(new TimeSpeedListener());
+    //Only add Temp, Date and Time listeners if the simulation is NOT running
+    if(!isSimRunning) {
+      theView.addChangeDateListener(new ChangeDateListener());
+      theView.addChangeTimeListener(new ChangeTimeListener());
+      theView.addTempSpinnerListener(new TempChangeListener());
+      theView.addTimeSpeedRadioListener(new TimeSpeedListener());
+    }
     createEditWindow();
+
   }
 
   private void createEditWindow() {
@@ -89,7 +95,7 @@ public class EditSimulationController {
         roomDropdowns,
         profileTypes,
         theModel.getDateString(),
-        theModel.getTimeString());
+        theModel.getTimeString(), this.isSimRunning);
 
     envView.refreshDash();
   }

@@ -1,35 +1,32 @@
 package Models;
 
+import Enums.WallType;
+import Models.Walls.OutsideWall;
+import Models.Walls.Wall;
 import Tools.CustomTimer;
 import Views.CustomConsole;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /** The type Security model. */
 public class SecurityModel {
 
-  /** The Custom start. */
-  private static StartAwayLights customStart;
-  /** The Custom end. */
-  private static EndAwayLights customEnd;
-  /** The Start t. */
-  private static CustomTimer startT;
-  /** The End t. */
-  private static CustomTimer endT;
-
+  private static ArrayList<Room> roomsToLight = null;
+  private static ScheduledFuture<?> startExec;
+  private static ScheduledFuture<?> endExec;
   private static SpinnerDateModel startModel;
   private static SpinnerDateModel endModel;
   private static boolean awayOn = false;
   private final Date startDate;
   private final Date endDate;
   private final ArrayList<CustomTimer> authTimers;
+  private final ArrayList<NotifyAuthTask> authTasks;
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
-
-  private final ArrayList<NotifyAuthTask> authTasks;
-  private Room[] roomsToLight = null;
-
   /** Instantiates a new Security model. */
   public SecurityModel() {
     startDate = new Date();
@@ -38,14 +35,14 @@ public class SecurityModel {
     endModel = new SpinnerDateModel(endDate, null, null, Calendar.MINUTE);
     intervalModel = new SpinnerNumberModel();
     intervalModel.setMinimum(0);
-    startT = new CustomTimer();
-    endT = new CustomTimer();
     authTimers = new ArrayList<>();
     authTasks = new ArrayList<>();
+    roomsToLight = new ArrayList<>();
   }
 
   /** Start away timer. */
   public static void startAwayTimer() {
+    cancelAllTimers();
 
     int timerDel = EnvironmentModel.getTimer().getDelay();
     int multiplier = 1;
@@ -56,13 +53,10 @@ public class SecurityModel {
     } else if (timerDel == 10) {
       multiplier = 100;
     }
-    customStart = new StartAwayLights();
-    customEnd = new EndAwayLights();
 
-    startT = new CustomTimer();
-    endT = new CustomTimer();
-
-    Date envTime = EnvironmentModel.getDateObject();
+    Date _envTime = EnvironmentModel.getDateObject();
+    Calendar envTime = new GregorianCalendar();
+    envTime.setTime(_envTime);
     Date start = startModel.getDate();
     Date end = endModel.getDate();
 
@@ -70,32 +64,51 @@ public class SecurityModel {
     Calendar endCal = new GregorianCalendar();
 
     sCal.setTime(start);
-    sCal.set(Calendar.YEAR, 1900 + envTime.getYear());
-    sCal.set(Calendar.DAY_OF_MONTH, envTime.getDate());
-    sCal.set(Calendar.MONTH, envTime.getMonth());
+    sCal.set(Calendar.YEAR, envTime.get(Calendar.YEAR));
+    sCal.set(Calendar.DAY_OF_MONTH, envTime.get(Calendar.DAY_OF_MONTH));
+    sCal.set(Calendar.MONTH, envTime.get(Calendar.MONTH));
 
     endCal.setTime(end);
-    endCal.set(Calendar.YEAR, 1900 + envTime.getYear());
-    endCal.set(Calendar.DAY_OF_MONTH, envTime.getDate());
-    endCal.set(Calendar.MONTH, envTime.getMonth());
-    boolean endIsBefore = end.before(start);
+    endCal.set(Calendar.YEAR, envTime.get(Calendar.YEAR));
+    endCal.set(Calendar.DAY_OF_MONTH, envTime.get(Calendar.DAY_OF_MONTH));
+    endCal.set(Calendar.MONTH, envTime.get(Calendar.MONTH));
+    boolean endIsBefore = endCal.before(sCal);
 
     if (endIsBefore) {
       endCal.add(Calendar.DATE, 1);
     }
-    long deltaStart =
-        (sCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
-    long deltaEnd =
-        (endCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
+    long deltaStart = (sCal.getTimeInMillis() - (envTime.getTimeInMillis())) / multiplier;
+    long deltaEnd = (endCal.getTimeInMillis() - (envTime.getTimeInMillis())) / multiplier;
     long dayLen = 1000 * 60 * 60 * 24 / multiplier;
 
-    if (deltaStart < 0) {
-      // start the lights right away and set the end timer because we're in the zone
-      customStart.turnOnSelectedLights();
+    if (deltaStart < 0 && deltaEnd < 0) {
+      // verify if both events are in the past, then we schedule them "tommorow"
+      startExec =
+          Executors.newSingleThreadScheduledExecutor()
+              .scheduleAtFixedRate(
+                  new StartAwayLights(), deltaStart + dayLen, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+          Executors.newSingleThreadScheduledExecutor()
+              .scheduleAtFixedRate(
+                  new EndAwayLights(), deltaEnd + dayLen, dayLen, TimeUnit.MILLISECONDS);
+
+    } else if (deltaStart < 0) {
+      // if the end is in the future but lights should be on
+      new StartAwayLights().turnOnSelectedLights();
+      endExec =
+          Executors.newSingleThreadScheduledExecutor()
+              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
+      //      endExec.scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen,
+      // TimeUnit.MILLISECONDS);
     } else {
-      startT.schedule(customStart, deltaStart, dayLen);
+      startExec =
+          Executors.newSingleThreadScheduledExecutor()
+              .scheduleAtFixedRate(
+                  new StartAwayLights(), deltaStart, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+          Executors.newSingleThreadScheduledExecutor()
+              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
     }
-    endT.schedule(customEnd, deltaEnd, dayLen);
     CustomConsole.print("Away Mode lighting has been set!");
   }
 
@@ -126,8 +139,46 @@ public class SecurityModel {
 
   /** Cancel all timers. */
   public static void cancelAllTimers() {
-    startT.cancel();
-    endT.cancel();
+    if (startExec != null) {
+      startExec.cancel(true);
+    }
+    if (endExec != null) {
+      endExec.cancel(true);
+    }
+  }
+
+  /**
+   * Gets auth timers.
+   *
+   * @return the auth timers
+   */
+  public ArrayList<CustomTimer> getAuthTimers() {
+    return authTimers;
+  }
+
+  /**
+   * Add to light list.
+   *
+   * @param roomToAdd the room to add
+   */
+  public void addToLightList(Room roomToAdd) {
+    roomsToLight.add(roomToAdd);
+  }
+
+  /**
+   * Remove from light list boolean.
+   *
+   * @param toRemove the to remove
+   * @return the boolean
+   */
+  public boolean removeFromLightList(Room toRemove) {
+    for (int i = 0; i < roomsToLight.size(); i++) {
+      if (roomsToLight.get(i).getId() == toRemove.getId()) {
+        roomsToLight.remove(i);
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -155,47 +206,6 @@ public class SecurityModel {
    */
   public SpinnerDateModel getEndModel() {
     return endModel;
-  }
-
-  /**
-   * Get rooms to light room [ ].
-   *
-   * @return the room [ ]
-   */
-  public Room[] getRoomsToLight() {
-    return roomsToLight;
-  }
-
-  /**
-   * Sets rooms to light.
-   *
-   * @param roomsToLight the rooms to light
-   */
-  public void setRoomsToLight(Room[] roomsToLight) {
-    this.roomsToLight = roomsToLight;
-  }
-
-  /**
-   * Timer stuff.
-   *
-   * @param start the start
-   * @param end the end
-   */
-  public void timerStuff(String start, String end) {
-    /**
-     * get current time calculate how many seconds (or ms) until the start make a thread with that
-     * delay? execute once done repeat for end
-     *
-     * <p>--
-     *
-     * <p>if paused, cancel thread, when resume, recalc time -- if time changed, cancel thread check
-     * if action should have happened and should be happening if so, do them else make a new thread
-     * with tht delay
-     *
-     * <p>--
-     *
-     * <p>if away mode off, cancel all threads
-     */
   }
 
   /** Notify authorities. */
@@ -235,7 +245,8 @@ public class SecurityModel {
     }
   }
 
-  private static class StartAwayLights extends TimerTask {
+  /** The type Start away lights. */
+  public static class StartAwayLights implements Runnable {
 
     @Override
     public void run() {
@@ -245,16 +256,24 @@ public class SecurityModel {
 
     /** Turn on selected lights. */
     public void turnOnSelectedLights() {
-      System.out.println("lights on bitches");
       CustomConsole.print("Lights have been turned on via a timer!");
-      for (Room r: EnvironmentModel.getHouse().getRooms()){
-        r.turnOnLights();
+      for (Room room : roomsToLight) {
+        room.turnOnLights();
+      }
+      for (Room r : EnvironmentModel.getHouse().getRooms()) {
+        for (Wall w : r.getAllWalls()) {
+          if (w.getType() == WallType.OUTSIDE) {
+            OutsideWall tmp = (OutsideWall) w;
+            tmp.turnLightsOn();
+          }
+        }
       }
       EnvironmentModel.getHouseGraphic().repaint();
     }
   }
 
-  private static class EndAwayLights extends TimerTask {
+  /** The type End away lights. */
+  public static class EndAwayLights implements Runnable {
 
     @Override
     public void run() {
@@ -264,10 +283,17 @@ public class SecurityModel {
 
     /** Turn off selected lights. */
     public void turnOffSelectedLights() {
-      System.out.println("lights off bitches");
       CustomConsole.print("Light have been turned off via a timer!");
-      for (Room r: EnvironmentModel.getHouse().getRooms()){
-        r.turnOffLights();
+      for (Room room : roomsToLight) {
+        room.turnOffLights();
+      }
+      for (Room r : EnvironmentModel.getHouse().getRooms()) {
+        for (Wall w : r.getAllWalls()) {
+          if (w.getType() == WallType.OUTSIDE) {
+            OutsideWall tmp = (OutsideWall) w;
+            tmp.turnLightsOff();
+          }
+        }
       }
       EnvironmentModel.getHouseGraphic().repaint();
     }
