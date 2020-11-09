@@ -7,6 +7,8 @@ import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Date;
 
@@ -84,5 +86,24 @@ public class EnvironmentModelTest {
     assert env.getSimulationRunning() == false;
     env.startSimulation();
     assert env.getSimulationRunning() == true;
+  }
+
+  // use case 3 delivery 2
+  @Test
+  void testTimer() {
+    UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", -1);
+    House house = new House();
+    HouseGraphic hg = new HouseGraphic(house);
+    EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
+    ActionListener a = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    };
+    env.initializeTimer(100, a);
+    assert env.getTimer().getDelay() == 100;
+    env.getTimer().setDelay(10);
+    assert env.getTimer().getDelay() == 10;
   }
 }
