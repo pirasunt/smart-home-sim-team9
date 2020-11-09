@@ -24,20 +24,9 @@ public class SecurityModel {
   private final Date startDate;
   private final Date endDate;
   private final ArrayList<CustomTimer> authTimers;
-
-  /**
-   * Gets auth timers.
-   *
-   * @return the auth timers
-   */
-  public ArrayList<CustomTimer> getAuthTimers() {
-    return authTimers;
-  }
-
   private final ArrayList<NotifyAuthTask> authTasks;
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
-
   /** Instantiates a new Security model. */
   public SecurityModel() {
     startDate = new Date();
@@ -156,6 +145,15 @@ public class SecurityModel {
     if (endExec != null) {
       endExec.cancel(true);
     }
+  }
+
+  /**
+   * Gets auth timers.
+   *
+   * @return the auth timers
+   */
+  public ArrayList<CustomTimer> getAuthTimers() {
+    return authTimers;
   }
 
   /**
