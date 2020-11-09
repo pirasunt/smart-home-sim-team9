@@ -21,13 +21,11 @@ public class EditSimulationController {
 
   private final EditSimulationView theView;
   private final EnvironmentModel theModel;
-  private final EnvironmentView envView;
   private boolean isSimRunning;
 
-  public EditSimulationController(EditSimulationView v, EnvironmentModel m, EnvironmentView v2, boolean simulatorStatus) {
+  public EditSimulationController(EditSimulationView v, EnvironmentModel m, boolean simulatorStatus) {
     this.theModel = m;
     this.theView = v;
-    this.envView = v2;
     this.isSimRunning = simulatorStatus;
 
     //Only add Temp, Date and Time listeners if the simulation is NOT running
@@ -97,7 +95,7 @@ public class EditSimulationController {
         theModel.getDateString(),
         theModel.getTimeString(), this.isSimRunning);
 
-    envView.refreshDash();
+    //envView.refreshDash();
   }
 
   private class ChangeDateListener implements ActionListener {
