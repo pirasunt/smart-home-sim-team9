@@ -24,6 +24,16 @@ public class SecurityModel {
   private final Date startDate;
   private final Date endDate;
   private final ArrayList<CustomTimer> authTimers;
+
+  /**
+   * Gets auth timers.
+   *
+   * @return the auth timers
+   */
+  public ArrayList<CustomTimer> getAuthTimers() {
+    return authTimers;
+  }
+
   private final ArrayList<NotifyAuthTask> authTasks;
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
@@ -237,7 +247,8 @@ public class SecurityModel {
     }
   }
 
-  private static class StartAwayLights implements Runnable {
+  /** The type Start away lights. */
+  public static class StartAwayLights implements Runnable {
 
     @Override
     public void run() {
@@ -247,7 +258,6 @@ public class SecurityModel {
 
     /** Turn on selected lights. */
     public void turnOnSelectedLights() {
-      System.out.println("lights on bitches");
       CustomConsole.print("Lights have been turned on via a timer!");
       for (Room room : roomsToLight) {
         room.turnOnLights();
@@ -264,7 +274,8 @@ public class SecurityModel {
     }
   }
 
-  private static class EndAwayLights implements Runnable {
+  /** The type End away lights. */
+  public static class EndAwayLights implements Runnable {
 
     @Override
     public void run() {
