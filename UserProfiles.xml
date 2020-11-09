@@ -3,7 +3,7 @@
     <profileID>165d65e7-2183-4759-a0d5-5671cd66591d</profileID>
     <type>ADULT</type>
     <name>Admin</name>
-    <roomID>0</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>6dbe504b-09ac-456d-8429-16c7ec63dc11</profileID>
@@ -21,7 +21,7 @@
     <profileID>f1b31665-e37f-484b-9492-260a1399a6b9</profileID>
     <type>STRANGER</type>
     <name>Robber</name>
-    <roomID>0</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>0335f794-adb7-4d69-b2ab-6bbd119776fb</profileID>

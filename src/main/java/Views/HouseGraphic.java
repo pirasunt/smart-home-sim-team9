@@ -208,7 +208,7 @@ public class HouseGraphic extends JPanel {
     int newX = xCoord + 2;
     int newY = yCoord + 45;
     for (UserProfileModel user : room.getAllUsersInRoom(environment)) {
-      g.drawString("\u263A " + user.getName(), newX, newY);
+      g.drawString("\uD83D\uDE00 " + user.getName(), newX, newY);
       newY += 15;
     }
   }
