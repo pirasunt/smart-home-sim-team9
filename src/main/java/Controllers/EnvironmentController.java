@@ -379,16 +379,13 @@ public class EnvironmentController {
       // Pass on responsibility of editing the simulation to its own controller and view.
       // The Environment Model contains all the environment data that will be needed.
 
-      if (!EnvironmentModel.getSimulationRunning()) {
+
         EditSimulationView editSimView =
             new EditSimulationView(theModel.getOutsideTemp(), EnvironmentModel.getTimer().getDelay());
-        new EditSimulationController(editSimView, theModel, theView);
+        new EditSimulationController(editSimView, theModel, theView, EnvironmentModel.getSimulationRunning());
 
         editSimView.addWindowListener(new EditSimulationWindowListener());
-      } else {
-        CustomConsole.print(
-            "ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
-      }
+
     }
 
     private class EditSimulationWindowListener implements WindowListener {
