@@ -103,5 +103,7 @@ public class EnvironmentModelTest {
     };
     env.initializeTimer(100, a);
     assert env.getTimer().getDelay() == 100;
+    env.getTimer().setDelay(10);
+    assert env.getTimer().getDelay() == 10;
   }
 }
