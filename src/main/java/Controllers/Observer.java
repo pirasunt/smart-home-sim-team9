@@ -1,5 +1,8 @@
 package Controllers;
 
+import Models.Room;
+
 public interface Observer {
-    void update();
+
+    void update(int oldRoomID, int newRoomID);
 }

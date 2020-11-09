@@ -31,6 +31,7 @@ public class EnvironmentModel {
   private static ArrayList<Observer> observers;
   private final boolean windowsObstructed = false;
   private int outsideTemperature;
+  private boolean automaticLights;
 
   private EnvironmentModel(
       House h,
@@ -44,6 +45,7 @@ public class EnvironmentModel {
     currentCalObj = cal;
     userProfileModelList = profileList;
     currentUser = null;
+    automaticLights = false;
     observers = new ArrayList<>();
   }
 
@@ -218,10 +220,14 @@ public class EnvironmentModel {
     observers.add(ob);
   }
 
+  public static void unsubscribe(Observer ob) {
+    observers.remove(ob);
+  }
+
   /** Notify observers. */
-  public static void notifyObservers() {
+  public static void notifyObservers(int oldRoomID, int newRoomID) {
     for (Observer o : observers) {
-      o.update();
+      o.update(oldRoomID, newRoomID);
     }
   }
 
@@ -268,9 +274,12 @@ public class EnvironmentModel {
    */
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
+    int oldRoomID = profile.getRoomID();
+    int newRoomID = room.getId();
+
     try {
       updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
-      notifyObservers();
+      notifyObservers(oldRoomID, newRoomID);
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()
@@ -455,6 +464,15 @@ public class EnvironmentModel {
   }
 
   /**
+   * Returns a Room with the matching roomID
+   * @param roomID Integer that uniquely represents a room
+   * @return Room
+   */
+  public Room getRoomByID(int roomID){
+    return house.getRoomById(roomID);
+  }
+
+  /**
    * Adds a new {@link UserProfileModel} to the internal List of this class
    *
    * @param newUser The new {@link UserProfileModel} to be added
@@ -534,6 +552,18 @@ public class EnvironmentModel {
   public void startSimulation() {
     simulationRunning = true;
     CustomConsole.print("The simulation has been started.");
+  }
+
+  /**
+   * Sets the status of the automatic lighting system. True turns on the auto-lighting system whereas false turns it off
+   * @param newStatus
+   */
+  public void setAutomaticLights(boolean newStatus){
+    this.automaticLights = newStatus;
+  }
+
+  public boolean getAutomaticLights(){
+    return this.automaticLights;
   }
 
   /** Turns off the simulation */
