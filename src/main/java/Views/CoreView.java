@@ -27,7 +27,7 @@ public class CoreView extends JFrame {
         this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
     }
 
-    public void displayWindowSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> openBtns, ArrayList<JRadioButton> closeBtns, ArrayList<JCheckBox> obstructBtns) {
+    public void   displayWindowSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> openBtns, ArrayList<JRadioButton> closeBtns, ArrayList<JCheckBox> obstructBtns) {
 
         this.windowPanels.setLayout(new GridLayout(0, 4, 1, 20));
         this.windowPanels.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
