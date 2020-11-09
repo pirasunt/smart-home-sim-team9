@@ -1,5 +1,8 @@
 package Models;
 
+import Enums.WallType;
+import Models.Walls.OutsideWall;
+import Models.Walls.Wall;
 import Tools.CustomTimer;
 import Views.CustomConsole;
 
@@ -12,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 /** The type Security model. */
 public class SecurityModel {
 
+  private static ArrayList<Room> roomsToLight = null;
   private static ScheduledFuture<?> startExec;
   private static ScheduledFuture<?> endExec;
   private static SpinnerDateModel startModel;
@@ -24,8 +28,6 @@ public class SecurityModel {
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
 
-  private Room[] roomsToLight = null;
-
   /** Instantiates a new Security model. */
   public SecurityModel() {
     startDate = new Date();
@@ -36,16 +38,12 @@ public class SecurityModel {
     intervalModel.setMinimum(0);
     authTimers = new ArrayList<>();
     authTasks = new ArrayList<>();
+    roomsToLight = new ArrayList<>();
   }
 
   /** Start away timer. */
   public static void startAwayTimer() {
-    if (startExec != null) {
-      startExec.cancel(true);
-    }
-    if (endExec != null) {
-      endExec.cancel(true);
-    }
+    cancelAllTimers();
 
     int timerDel = EnvironmentModel.getTimer().getDelay();
     int multiplier = 1;
@@ -142,8 +140,37 @@ public class SecurityModel {
 
   /** Cancel all timers. */
   public static void cancelAllTimers() {
-    startExec.cancel(true);
-    endExec.cancel(true);
+    if (startExec != null) {
+      startExec.cancel(true);
+    }
+    if (endExec != null) {
+      endExec.cancel(true);
+    }
+  }
+
+  /**
+   * Add to light list.
+   *
+   * @param roomToAdd the room to add
+   */
+  public void addToLightList(Room roomToAdd) {
+    roomsToLight.add(roomToAdd);
+  }
+
+  /**
+   * Remove from light list boolean.
+   *
+   * @param toRemove the to remove
+   * @return the boolean
+   */
+  public boolean removeFromLightList(Room toRemove) {
+    for (int i = 0; i < roomsToLight.size(); i++) {
+      if (roomsToLight.get(i).getId() == toRemove.getId()) {
+        roomsToLight.remove(i);
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -171,47 +198,6 @@ public class SecurityModel {
    */
   public SpinnerDateModel getEndModel() {
     return endModel;
-  }
-
-  /**
-   * Get rooms to light room [ ].
-   *
-   * @return the room [ ]
-   */
-  public Room[] getRoomsToLight() {
-    return roomsToLight;
-  }
-
-  /**
-   * Sets rooms to light.
-   *
-   * @param roomsToLight the rooms to light
-   */
-  public void setRoomsToLight(Room[] roomsToLight) {
-    this.roomsToLight = roomsToLight;
-  }
-
-  /**
-   * Timer stuff.
-   *
-   * @param start the start
-   * @param end the end
-   */
-  public void timerStuff(String start, String end) {
-    /**
-     * get current time calculate how many seconds (or ms) until the start make a thread with that
-     * delay? execute once done repeat for end
-     *
-     * <p>--
-     *
-     * <p>if paused, cancel thread, when resume, recalc time -- if time changed, cancel thread check
-     * if action should have happened and should be happening if so, do them else make a new thread
-     * with tht delay
-     *
-     * <p>--
-     *
-     * <p>if away mode off, cancel all threads
-     */
   }
 
   /** Notify authorities. */
@@ -263,8 +249,16 @@ public class SecurityModel {
     public void turnOnSelectedLights() {
       System.out.println("lights on bitches");
       CustomConsole.print("Lights have been turned on via a timer!");
+      for (Room room : roomsToLight) {
+        room.turnOnLights();
+      }
       for (Room r : EnvironmentModel.getHouse().getRooms()) {
-        r.turnOnLights();
+        for (Wall w : r.getAllWalls()) {
+          if (w.getType() == WallType.OUTSIDE) {
+            OutsideWall tmp = (OutsideWall) w;
+            tmp.turnLightsOn();
+          }
+        }
       }
       EnvironmentModel.getHouseGraphic().repaint();
     }
@@ -280,10 +274,17 @@ public class SecurityModel {
 
     /** Turn off selected lights. */
     public void turnOffSelectedLights() {
-      System.out.println("lights off bitches");
       CustomConsole.print("Light have been turned off via a timer!");
+      for (Room room : roomsToLight) {
+        room.turnOffLights();
+      }
       for (Room r : EnvironmentModel.getHouse().getRooms()) {
-        r.turnOffLights();
+        for (Wall w : r.getAllWalls()) {
+          if (w.getType() == WallType.OUTSIDE) {
+            OutsideWall tmp = (OutsideWall) w;
+            tmp.turnLightsOff();
+          }
+        }
       }
       EnvironmentModel.getHouseGraphic().repaint();
     }
