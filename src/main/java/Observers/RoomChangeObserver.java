@@ -1,8 +1,8 @@
-package Controllers;
+package Observers;
 
 import Models.Room;
 
-public interface Observer {
+public interface RoomChangeObserver {
 
     void update(int oldRoomID, int newRoomID);
 }

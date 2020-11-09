@@ -3,6 +3,7 @@ package Controllers;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.SecurityModel;
+import Observers.RoomChangeObserver;
 import Views.CustomConsole;
 import Views.SecurityView;
 
@@ -12,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /** The type Security controller. */
-public class SecurityController implements Observer {
+public class SecurityController implements RoomChangeObserver {
   private final SecurityModel secModel;
   private final SecurityView secView;
 

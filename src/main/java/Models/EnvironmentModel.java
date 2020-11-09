@@ -1,9 +1,10 @@
 package Models;
 
-import Controllers.Observer;
+import Observers.RoomChangeObserver;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
+import Observers.TimeChangeObserver;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
@@ -28,8 +29,9 @@ public class EnvironmentModel {
   private static UserProfileModel currentUser;
   private static boolean simulationRunning = false;
   private static Timer timer;
-  private static ArrayList<Observer> observers;
-  private final boolean windowsObstructed = false;
+  private static ArrayList<RoomChangeObserver> roomChangeObservers;
+  private static ArrayList<TimeChangeObserver> timeChangeObservers;
+  private boolean windowsObstructed = false;
   private int outsideTemperature;
   private boolean automaticLights;
 
@@ -46,7 +48,8 @@ public class EnvironmentModel {
     userProfileModelList = profileList;
     currentUser = null;
     automaticLights = false;
-    observers = new ArrayList<>();
+    roomChangeObservers = new ArrayList<>();
+    timeChangeObservers = new ArrayList<>();
   }
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
@@ -54,7 +57,7 @@ public class EnvironmentModel {
   }
 
   /**
-   * Get timer timer.
+   * Get timer.
    *
    * @return the timer
    */
@@ -186,6 +189,7 @@ public class EnvironmentModel {
     currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
     currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
     currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
+    notifyTimeChangeObservers(getTimeString());
   }
 
   /**
@@ -216,18 +220,30 @@ public class EnvironmentModel {
    *
    * @param ob the ob
    */
-  public static void subscribe(Observer ob) {
-    observers.add(ob);
+  public static void subscribe(RoomChangeObserver ob) {
+    roomChangeObservers.add(ob);
+  }
+  public static void subscribe(TimeChangeObserver ob) {
+    timeChangeObservers.add(ob);
   }
 
-  public static void unsubscribe(Observer ob) {
-    observers.remove(ob);
+  public static void unsubscribe(RoomChangeObserver ob) {
+    roomChangeObservers.remove(ob);
+  }
+  public static void unsubscribe(TimeChangeObserver ob) {
+    timeChangeObservers.remove(ob);
   }
 
   /** Notify observers. */
-  public static void notifyObservers(int oldRoomID, int newRoomID) {
-    for (Observer o : observers) {
+  public static void notifyRoomChangeObservers(int oldRoomID, int newRoomID) {
+    for (RoomChangeObserver o : roomChangeObservers) {
       o.update(oldRoomID, newRoomID);
+    }
+  }
+
+  public static void notifyTimeChangeObservers(String newTime) {
+    for (TimeChangeObserver o : timeChangeObservers) {
+      o.update(newTime);
     }
   }
 
@@ -279,7 +295,7 @@ public class EnvironmentModel {
 
     try {
       updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
-      notifyObservers(oldRoomID, newRoomID);
+      notifyRoomChangeObservers(oldRoomID, newRoomID);
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()

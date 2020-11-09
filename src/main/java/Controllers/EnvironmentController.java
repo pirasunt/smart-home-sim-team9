@@ -210,7 +210,7 @@ public class EnvironmentController {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (theModel.isCurrentUserSet()) {
-        if (theModel.getCurrentUser().getRoomID() != 0) {
+
 
           theModel.initializeTimer(1000, new ActionListener() {
             @Override
@@ -268,12 +268,6 @@ public class EnvironmentController {
 
           new CoreController(dashView.getSHC(), theModel);
 
-        } else {
-          CustomConsole.print(
-              "ERROR: Please set location for selected user: '"
-                  + theModel.getCurrentUser().getName()
-                  + "'");
-        }
       } else {
         CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");
       }

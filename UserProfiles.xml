@@ -9,11 +9,11 @@
     <profileID>6dbe504b-09ac-456d-8429-16c7ec63dc11</profileID>
     <type>ADULT</type>
     <name>Timmy</name>
-    <roomID>0</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>30cfc455-e126-4ba0-a2db-809b26b2966f</profileID>
-    <type>STRANGER</type>
+    <type>CHILD</type>
     <name>Thief</name>
     <roomID>0</roomID>
   </UserProfileModel>
@@ -21,7 +21,7 @@
     <profileID>f1b31665-e37f-484b-9492-260a1399a6b9</profileID>
     <type>STRANGER</type>
     <name>Robber</name>
-    <roomID>0</roomID>
+    <roomID>5</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>0335f794-adb7-4d69-b2ab-6bbd119776fb</profileID>

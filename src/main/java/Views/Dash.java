@@ -11,6 +11,7 @@ import Enums.ProfileType;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
+import Observers.TimeChangeObserver;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -18,7 +19,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 /**
  * The type Dash.
  */
-public class Dash extends JFrame {
+public class Dash extends JFrame implements TimeChangeObserver {
   /**
    * The Stop simulation button.
    */
@@ -47,7 +48,6 @@ public class Dash extends JFrame {
    * The Tab 1.
    */
   private JPanel wrapperPanel;
-
   /**
    * The User profile drop down.
    */
@@ -82,26 +82,6 @@ public class Dash extends JFrame {
   private JPanel shpTab;
 
   /**
-   * The Confirm time speed.
-   */
-  private JButton confirmTimeSpeed;
-
-  /**
-   * The Date picker.
-   */
-  private JDatePickerImpl datePicker;
-
-  /**
-   * The Time spinner.
-   */
-  private JSpinner time_spinner;
-
-  /**
-   * The Time confirm.
-   */
-  private JButton timeConfirm;
-
-  /**
    * Instantiates a new Dashboard frame.
    *
    * @param temp  the temp
@@ -114,7 +94,8 @@ public class Dash extends JFrame {
     dateField.setText(date);
     timeField.setText(time);
     timeSpeed.setText(1000 / delay + " X");
-    timeConfirm = new JButton("OK");
+
+    EnvironmentModel.subscribe(this);
 
 
     JPanel jp = this.smartModulesPanel;
@@ -290,4 +271,13 @@ public class Dash extends JFrame {
   }
 
 
+  /**
+   * Updates the time of the observer
+   *
+   * @param newTime String representation of the new Time Value
+   */
+  @Override
+  public void update(String newTime) {
+    this.timeField.setText(newTime);
+  }
 }

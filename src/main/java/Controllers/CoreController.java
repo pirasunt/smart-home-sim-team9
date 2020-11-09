@@ -6,18 +6,17 @@ import Models.Room;
 import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
 import Models.Walls.WindowWall;
+import Observers.RoomChangeObserver;
 import Views.CoreView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CoreController implements Observer{
+public class CoreController implements RoomChangeObserver {
 
     private CoreView theView;
     private EnvironmentModel theModel;
@@ -306,17 +305,17 @@ public class CoreController implements Observer{
 
     @Override
     public void update(int oldRoomID, int newRoomID) {
-        Room oldRoom = theModel.getRoomByID(oldRoomID);
-        Room newRoom = theModel.getRoomByID(newRoomID);
+        if (oldRoomID > 0 && newRoomID > 0) {
+            Room oldRoom = theModel.getRoomByID(oldRoomID);
+            Room newRoom = theModel.getRoomByID(newRoomID);
 
-        //Turn off light if there is no one remaining in the room
-        if(oldRoomID != 0 && oldRoom.getAllUsersInRoom(theModel).size() == 0){
-            oldRoom.setLightsOn(false);
+            //Turn off light if there is no one remaining in the room
+            if (oldRoom.getAllUsersInRoom(theModel).size() == 0) {
+                oldRoom.setLightsOn(false);
+            }
+
+                newRoom.setLightsOn(true);
+
         }
-
-        //Ignore case when user is moved to/from Outside
-        if(newRoomID != 0)
-            newRoom.setLightsOn(true);
-
     }
 }
