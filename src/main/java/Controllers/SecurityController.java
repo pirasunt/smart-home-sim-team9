@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.EnvironmentModel;
+import Models.Room;
 import Models.SecurityModel;
 import Views.CustomConsole;
 import Views.SecurityView;
@@ -27,7 +28,7 @@ public class SecurityController implements Observer {
   }
 
   @Override
-  public void update() {
+  public void update(int oldRoomID, int newRoomID) {
     if (SecurityModel.isAwayOn()) {
       secModel.notifyAuthorities();
     }

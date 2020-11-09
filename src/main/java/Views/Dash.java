@@ -41,13 +41,9 @@ public class Dash extends JFrame {
    */
   JScrollPane sp2;
   /**
-   * The Tab 2.
-   */
-  JPanel Tab2;
-  /**
    * The Tab 1.
    */
-  JPanel Tab1;
+  JPanel wrapperPanel;
 
   /**
    * The User profile drop down.
@@ -79,6 +75,8 @@ public class Dash extends JFrame {
    */
   JLabel timeSpeed;
   private SecurityView shp;
+  private CoreView coreView;
+  private JPanel shpTab;
 
   /**
    * The Confirm time speed.
@@ -121,13 +119,45 @@ public class Dash extends JFrame {
                 super.mouseClicked(e);
               }
             });
+
     setSHPVisibility();
+    setSHCVisibility();
+  }
+
+  @Override
+  public void repaint() {
+    setSHPVisibility();
+    setSHCVisibility();
+
+    super.repaint();
+  }
+
+
+  private void setSHCVisibility() {
+    if (EnvironmentModel.getCurrentUser().getProfileType() == ProfileType.STRANGER) {
+      tabbedPane1.setEnabledAt(0, false);
+      coreView.getWrapper().setVisible(false);
+    } else {
+      tabbedPane1.setEnabledAt(0, true);
+      coreView.getWrapper().setVisible(true);
+    }
   }
 
   private void setSHPVisibility() {
     if (EnvironmentModel.getCurrentUser().getProfileType() != ProfileType.ADULT) {
-      tabbedPane1.setVisible(false);
-    }
+      tabbedPane1.setEnabledAt(1, false);
+      shp.getWrapper().setVisible(false);
+    } else
+      tabbedPane1.setEnabledAt(1, true);
+      shp.getWrapper().setVisible(true);
+  }
+
+  CoreView getCoreView() {
+    return this.coreView;
+  }
+
+  private void createUIComponents() {
+    // TODO: place custom component creation code here
   }
 
 }

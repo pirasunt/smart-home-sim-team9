@@ -143,14 +143,22 @@ public class EnvironmentView extends JFrame {
    * @param time The time of the simulated environment
    * @param delay the delay
    */
-  public void createDash(int temp, String date, String time, int delay) {
+  public CoreView createDash(int temp, String date, String time, int delay) {
     JFrame frame = new JFrame("Dashboard");
     this.dashboard = new Dash(temp, date, time, delay);
     JPanel jp = this.dashboard.p1;
     frame.setContentPane(jp);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
+
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+    Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+
+    frame.setSize((int) rect.getWidth()/2, (int) rect.getHeight());
+    frame.setLocation(0,0);
     frame.setVisible(true);
+
+    return dashboard.getCoreView();
   }
 
   /**
@@ -278,6 +286,10 @@ public class EnvironmentView extends JFrame {
         this.dashboard.userProfileDropDown.getSelectedIndex());
   }
 
+  public void refreshDash() {
+    this.dashboard.repaint();
+  }
+
   public void addconfirmTimeSpeedListener(ActionListener changeTimeSpeed) {
     this.dashboard.confirmTimeSpeed.addActionListener(changeTimeSpeed);
   }
@@ -285,4 +297,5 @@ public class EnvironmentView extends JFrame {
   public void setTimeField(String time) {
     this.dashboard.timeField.setText(time);
   }
+
 }

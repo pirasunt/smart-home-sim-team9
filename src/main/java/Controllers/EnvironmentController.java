@@ -6,8 +6,9 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.SecurityModel;
 import Models.UserProfileModel;
-import Views.CustomConsole;
+import Views.CoreView;
 import Views.EditSimulationView;
+import Views.CustomConsole;
 import Views.EnvironmentView;
 
 import javax.swing.*;
@@ -216,12 +217,15 @@ public class EnvironmentController {
       if (theModel.isCurrentUserSet()) {
         if (theModel.getCurrentUser().getRoomID() != -1) {
 
-          theView.createDash(
+          CoreView SHC = theView.createDash(
               theModel.getOutsideTemp(),
               EnvironmentModel.getDateString(),
               EnvironmentModel.getTimeString(),
               EnvironmentModel.getTimer().getDelay());
           UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
+
+          //SHC MVC
+          new CoreController(SHC, theModel);
 
           for (int i = 0; i < allProfiles.length; i++) {
             boolean isCurrentUser = false;
@@ -281,6 +285,8 @@ public class EnvironmentController {
             }
           }
         }
+
+        theView.refreshDash();
       }
     }
 
@@ -373,67 +379,13 @@ public class EnvironmentController {
       // Pass on responsibility of editing the simulation to its own controller and view.
       // The Environment Model contains all the environment data that will be needed.
 
-      if (!EnvironmentModel.getSimulationRunning()) {
+
         EditSimulationView editSimView =
             new EditSimulationView(theModel.getOutsideTemp(), EnvironmentModel.getTimer().getDelay());
-        new EditSimulationController(editSimView, theModel);
+        new EditSimulationController(editSimView, theModel, theView, EnvironmentModel.getSimulationRunning());
 
         editSimView.addWindowListener(new EditSimulationWindowListener());
-      } else {
-        CustomConsole.print(
-            "ERROR: CAN NOT EDIT SIMULATION WHILE IT IS RUNNING. PLEASE STOP SIMULATION FIRST");
-      }
 
-      // The Following code will be reused for SHC
-      /*
-      if (theModel.isWindowObstructed()) {
-        Room[] rooms = theModel.getRooms();
-
-        for (Room r : rooms) {
-          if (r.getId() == 0) continue;
-
-          if (r.getLeftWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getLeftWall()).setWindowObstructed(false);
-          }
-          if (r.getRightWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getRightWall()).setWindowObstructed(false);
-          }
-          if (r.getTopWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getTopWall()).setWindowObstructed(false);
-          }
-          if (r.getBottomWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getBottomWall()).setWindowObstructed(false);
-          }
-        }
-
-        theModel.getHouseGraphic().repaint();
-        theModel.clearWindows();
-        theView.changeWindowsObstructedToggleText("Obstruct Windows");
-      } else if (!theModel.isWindowObstructed()) {
-        Room[] rooms = theModel.getRooms();
-
-        for (Room r : rooms) {
-          if (r.getId() == 0) continue;
-
-          if (r.getLeftWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getLeftWall()).setWindowObstructed(true);
-          }
-          if (r.getRightWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getRightWall()).setWindowObstructed(true);
-          }
-          if (r.getTopWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getTopWall()).setWindowObstructed(true);
-          }
-          if (r.getBottomWall().getType() == WallType.WINDOWS) {
-            ((WindowWall) r.getBottomWall()).setWindowObstructed(true);
-          }
-        }
-
-        theModel.getHouseGraphic().repaint();
-        theModel.obstructWindows();
-        theView.changeWindowsObstructedToggleText("Clear Windows");
-      }
-      */
     }
 
     private class EditSimulationWindowListener implements WindowListener {

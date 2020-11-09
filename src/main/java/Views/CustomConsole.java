@@ -43,8 +43,14 @@ public class CustomConsole {
             textArea,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+    Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+
+    frame.setSize((int) rect.getWidth()/2, (int) rect.getHeight()/2 - 30);
+    frame.setLocation((int) rect.getWidth()/2, (int) rect.getHeight()/2);
     frame.add(jsp);
-    frame.pack();
     frame.setVisible(true);
   }
 }
