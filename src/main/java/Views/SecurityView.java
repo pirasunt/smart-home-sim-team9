@@ -15,15 +15,15 @@ import java.util.ArrayList;
  */
 public class SecurityView {
   private final ArrayList<JRadioButton> lightsRadioButtons = new ArrayList<>();
+  SecurityModel sModel;
+  SecurityController sc;
   /**
    * The model.
    */
-  SecurityModel sModel = new SecurityModel();
 
   /**
    * The controller.
    */
-  SecurityController sc = new SecurityController(sModel, this);
 
   private JPanel shpWrap;
   private JPanel Tab1;
@@ -40,6 +40,9 @@ public class SecurityView {
    * Instantiates a new Security view.
    */
   public SecurityView() {
+    sModel = new SecurityModel();
+    sc = new SecurityController(sModel, this);
+
     startTime.setModel(sModel.getStartModel());
     JSpinner.DateEditor de = new JSpinner.DateEditor(startTime, "hh:mm a");
     de.getTextField().setEditable(false);
