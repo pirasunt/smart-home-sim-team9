@@ -3,8 +3,8 @@
 /.idea/
 *.iml
 /target
-/UserProfiles.xml
-/log.txt
+UserProfiles.xml
+log.txt
 /src/test/UserProfileTests.xml
 
 # Eclipse
