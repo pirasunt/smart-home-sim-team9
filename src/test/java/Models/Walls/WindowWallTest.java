@@ -44,10 +44,10 @@ public class WindowWallTest {
 
     ww.setWindowOpen(true);
     ww.closeWindow();
-    assert ww.isWindowOpen() == false;
+    assert ww.isWindowOpen() == true;
 
     ww.setWindowOpen(false);
     ww.openWindow();
-    assert ww.isWindowOpen() == true;
+    assert ww.isWindowOpen() == false;
   }
 }
