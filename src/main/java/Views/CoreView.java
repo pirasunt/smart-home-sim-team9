@@ -1,14 +1,9 @@
 package Views;
 
 
-
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -27,7 +22,7 @@ public class CoreView extends JFrame {
         this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
     }
 
-    public void   displayWindowSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> openBtns, ArrayList<JRadioButton> closeBtns, ArrayList<JCheckBox> obstructBtns) {
+    public void displayWindowSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> openBtns, ArrayList<JRadioButton> closeBtns, ArrayList<JCheckBox> obstructBtns) {
 
         this.windowPanels.setLayout(new GridLayout(0, 4, 1, 20));
         this.windowPanels.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -61,7 +56,6 @@ public class CoreView extends JFrame {
             this.outsideDoorPanel.add(unlockBtns.get(i));
         }
     }
-
 
     public void displayLightsSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> onBtns, ArrayList<JRadioButton> offBtns, boolean autoLightStatus) {
 

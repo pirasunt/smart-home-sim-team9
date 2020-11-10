@@ -127,6 +127,8 @@ public class DashController {
                 theView.changeSimulationToggleText("Stop Simulation");
                 Context.restartTimer();
             }
+
+            CoreController.updateWindowSection();
         }
     }
 
