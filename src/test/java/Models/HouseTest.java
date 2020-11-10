@@ -5,12 +5,22 @@ import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
 import Models.Walls.Wall;
 import Views.CoreView;
+import Views.CustomConsole;
 import Views.HouseGraphic;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 public class HouseTest {
+
+  CoreView cv = new CoreView();
+  @BeforeEach
+  public void initEach() {
+    CustomConsole.init();
+    EnvironmentModel.resetInstance();
+  }
+
   @Test
   void shouldAddRoomsCorrectly() {
     House h = new House();
@@ -25,7 +35,7 @@ public class HouseTest {
     testHouse.addRoom(new Room("test", new Wall(), new Wall(), new Wall(), new Wall(), 1));
     HouseGraphic hg = new HouseGraphic(testHouse);
     UserProfileModel testUser = new UserProfileModel(ProfileType.ADULT, "test", 1);
-    CoreController SHC = new CoreController(new CoreView(), EnvironmentModel.createSimulation(testHouse,hg, testUser));
+    CoreController SHC = new CoreController(cv, EnvironmentModel.createSimulation(testHouse,hg, testUser));
 
     Room testRoom = testHouse.getRooms().get(0);
 
