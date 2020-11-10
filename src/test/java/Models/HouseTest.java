@@ -33,7 +33,8 @@ public class HouseTest {
     testHouse.addRoom(new Room("test", new Wall(), new Wall(), new Wall(), new Wall(), 1));
     HouseGraphic hg = new HouseGraphic(testHouse);
     UserProfileModel testUser = new UserProfileModel(ProfileType.ADULT, "test", 1);
-    CoreController SHC = new CoreController(new CoreView(), EnvironmentModel.createSimulation(testHouse,hg, testUser));
+    CoreView cv = new CoreView();
+    CoreController SHC = new CoreController(cv, EnvironmentModel.createSimulation(testHouse,hg, testUser));
 
     Room testRoom = testHouse.getRooms().get(0);
 
