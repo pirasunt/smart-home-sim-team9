@@ -1,6 +1,7 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Models.Context;
 import Models.EnvironmentModel;
 import Views.CustomConsole;
 
@@ -48,7 +49,7 @@ public class WindowWall extends Wall {
    */
   public void setWindowObstructed(boolean windowObstructed) {
     this.windowObstructed = windowObstructed;
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 
   /**
@@ -67,7 +68,7 @@ public class WindowWall extends Wall {
    */
   public void setWindowOpen(boolean windowOpen) {
     this.windowOpen = windowOpen;
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 
   /** Method called when window has to be opened by the system automatically. */
@@ -78,7 +79,7 @@ public class WindowWall extends Wall {
       windowOpen = true;
       CustomConsole.print("Window " + windowId + " has been opened.");
     }
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 
   /** Method called when the window has to be closed by the system automatically */
@@ -89,7 +90,7 @@ public class WindowWall extends Wall {
       windowOpen = false;
       CustomConsole.print("Window " + windowId + " has been closed.");
     }
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 
   /** Method called when the window has to be obstructed by the system automatically */
@@ -98,7 +99,7 @@ public class WindowWall extends Wall {
       windowObstructed = true;
       CustomConsole.print("Window " + windowId + " has been obstructed.");
     }
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 
   /** Method called when the window has to be unobstructed by the system automatically */
@@ -107,6 +108,6 @@ public class WindowWall extends Wall {
       windowObstructed = false;
       CustomConsole.print("Window " + windowId + " has been unobstructed.");
     }
-    EnvironmentModel.getHouseGraphic().repaint();
+    Context.repaintHouseGraphic();
   }
 }

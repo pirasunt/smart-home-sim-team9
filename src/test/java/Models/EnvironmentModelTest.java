@@ -41,7 +41,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    assert EnvironmentModel.getCurrentUser().getRoomID() == 2;
+    assert Context.getCurrentUser().getRoomID() == 2;
   }
 
   //use case 3.12
@@ -54,7 +54,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    UserProfileModel tmp = EnvironmentModel.getCurrentUser().modifyLocation(3);
+    UserProfileModel tmp = Context.getCurrentUser().modifyLocation(3);
     assert tmp.getRoomID() == 3;
   }
 
@@ -69,8 +69,8 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     Date d = new Date();
-    env.setTime(d);
-    assert env.getDateObject().equals(d);
+    Context.setTime(d);
+    assert Context.getDateObject().equals(d);
   }
 
   // unit test 3.1
@@ -101,9 +101,9 @@ public class EnvironmentModelTest {
 
       }
     };
-    env.initializeTimer(100, a);
-    assert env.getTimer().getDelay() == 100;
-    env.getTimer().setDelay(10);
-    assert env.getTimer().getDelay() == 10;
+    env.initializeTimer(a);
+    assert Context.getDelay() == 100;
+    Context.setDelay(10);
+    assert Context.getDelay() == 10;
   }
 }

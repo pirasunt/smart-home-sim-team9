@@ -2,10 +2,7 @@ package Controllers;
 
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
-import Models.EnvironmentModel;
-import Models.Room;
-import Models.SecurityModel;
-import Models.UserProfileModel;
+import Models.*;
 import Views.*;
 
 import javax.swing.*;
@@ -167,11 +164,11 @@ public class EnvironmentController {
       if (theModel.isCurrentUserSet()) {
 
         CustomConsole.print(
-            "Selecting location for " + theModel.getCurrentUser().getName() + "...");
+            "Selecting location for " + Context.getCurrentUser().getName() + "...");
         Room[] roomList = theModel.getRooms();
 
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
-        JFrame frame = new JFrame("Select Location for " + theModel.getCurrentUser().getName());
+        JFrame frame = new JFrame("Select Location for " + Context.getCurrentUser().getName());
         frame.setLayout(userSelectionGrid);
 
         for (int i = 0; i < roomList.length; i++) {
@@ -181,7 +178,7 @@ public class EnvironmentController {
               new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                  theModel.modifyProfileLocation(theModel.getCurrentUser(), currentRoom);
+                  theModel.modifyProfileLocation(Context.getCurrentUser(), currentRoom);
                   frame.dispose();
                 }
               });
@@ -212,13 +209,13 @@ public class EnvironmentController {
       if (theModel.isCurrentUserSet()) {
 
 
-          theModel.initializeTimer(1000, new ActionListener() {
+          theModel.initializeTimer(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              int hour = Integer.parseInt(EnvironmentModel.getTimeString().substring(0, 2));
-              int minute = Integer.parseInt(EnvironmentModel.getTimeString().substring(3, 5));
-              int second = Integer.parseInt(EnvironmentModel.getTimeString().substring(6, 8));
-              String amPM = EnvironmentModel.getTimeString().substring(8);
+              int hour = Integer.parseInt(Context.getTimeString().substring(0, 2));
+              int minute = Integer.parseInt(Context.getTimeString().substring(3, 5));
+              int second = Integer.parseInt(Context.getTimeString().substring(6, 8));
+              String amPM = Context.getTimeString().substring(8);
               amPM = amPM.replaceAll(" ", "");
 
               String hourString;
@@ -253,7 +250,7 @@ public class EnvironmentController {
               String time = hourString + ":" + minuteString + ":" + secondString + " " + amPM;
               SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
               try {
-                EnvironmentModel.setTime(formatter.parse(time));
+                Context.setTime(formatter.parse(time));
               } catch (ParseException parseException) {
                 parseException.printStackTrace();
               }
@@ -261,9 +258,9 @@ public class EnvironmentController {
           });
 
           Dash dashView = new Dash(theModel.getOutsideTemp(),
-                  EnvironmentModel.getDateString(),
-                  EnvironmentModel.getTimeString(),
-                  EnvironmentModel.getTimer().getDelay());
+                  Context.getDateString(),
+                  Context.getTimeString(),
+                  Context.getDelay());
           new DashController(theModel, dashView);
 
           new CoreController(dashView.getSHC(), theModel);

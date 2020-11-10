@@ -1,10 +1,7 @@
 package Controllers;
 
 import Custom.NonExistantUserProfileException;
-import Models.EnvironmentModel;
-import Models.Room;
-import Models.SecurityModel;
-import Models.UserProfileModel;
+import Models.*;
 import Views.CoreView;
 import Views.CustomConsole;
 import Views.Dash;
@@ -39,7 +36,7 @@ public class DashController {
 
         for (int i = 0; i < allProfiles.length; i++) {
             boolean isCurrentUser = false;
-            if (theModel.getCurrentUser().getProfileID() == allProfiles[i].getProfileID())
+            if (Context.getCurrentUser().getProfileID() == allProfiles[i].getProfileID())
                 isCurrentUser = true;
 
             theView.addProfileToDropDown(allProfiles[i], isCurrentUser);
@@ -48,7 +45,7 @@ public class DashController {
         allRooms = theModel.getRooms();
         for (int i = 0; i < allRooms.length; i++) {
             boolean isCurrentRoom = false;
-            if (theModel.getCurrentUser().getRoomID() == allRooms[i].getId()) isCurrentRoom = true;
+            if (Context.getCurrentUser().getRoomID() == allRooms[i].getId()) isCurrentRoom = true;
 
             theView.addRoomToDropDown(allRooms[i], isCurrentRoom);
         }
@@ -77,11 +74,11 @@ public class DashController {
                 nonExistantUserProfileException.printStackTrace();
             }
 
-            if (theModel.getCurrentUser().getRoomID() == 0) {
+            if (Context.getCurrentUser().getRoomID() == 0) {
                 theView.setRoomDropDownIndex(0);
             } else {
                 for (int i = 0; i < allRooms.length; i++) {
-                    if (allRooms[i].getId() == theModel.getCurrentUser().getRoomID()) {
+                    if (allRooms[i].getId() == Context.getCurrentUser().getRoomID()) {
                         theView.setRoomDropDownItem(allRooms[i]);
                         break;
                     }
@@ -103,11 +100,11 @@ public class DashController {
 
             JComboBox cb = (JComboBox) e.getSource(); // Newly Selected item
             if (cb.getSelectedIndex() == -1) {
-                CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + theModel.getCurrentUser().getName());
+                CustomConsole.print("NO LOCATION HAS BEEN SET FOR: " + Context.getCurrentUser().getName());
             } else {
                 Room newRoom = (Room) cb.getSelectedItem();
-                if (newRoom.getId() != theModel.getCurrentUser().getRoomID()) {
-                    theModel.modifyProfileLocation(theModel.getCurrentUser(), newRoom);
+                if (newRoom.getId() != Context.getCurrentUser().getRoomID()) {
+                    theModel.modifyProfileLocation(Context.getCurrentUser(), newRoom);
                 }
             }
         }
@@ -121,14 +118,14 @@ public class DashController {
                 SecurityModel.cancelAllTimers();
                 theModel.stopSimulation();
                 theView.changeSimulationToggleText("Start Simulation");
-                EnvironmentModel.getTimer().stop();
+                Context.stopTimer();
             } else if (EnvironmentModel.getSimulationRunning() == false) {
                 if (SecurityModel.isAwayOn()) {
                     SecurityModel.startAwayTimer();
                 }
                 theModel.startSimulation();
                 theView.changeSimulationToggleText("Stop Simulation");
-                EnvironmentModel.getTimer().restart();
+                Context.restartTimer();
             }
         }
     }
@@ -148,7 +145,7 @@ public class DashController {
 
 
             EditSimulationView editSimView =
-                    new EditSimulationView(theModel.getOutsideTemp(), EnvironmentModel.getTimer().getDelay());
+                    new EditSimulationView(theModel.getOutsideTemp(), Context.getDelay());
             new EditSimulationController(editSimView, theModel, EnvironmentModel.getSimulationRunning());
 
             editSimView.addWindowListener(new EditSimulationWindowListener());
@@ -180,10 +177,10 @@ public class DashController {
             @Override
             public void windowClosed(WindowEvent e) {
                 theView.refreshDash(
-                        EnvironmentModel.getDateString(),
-                        EnvironmentModel.getTimeString(),
+                        Context.getDateString(),
+                        Context.getTimeString(),
                         theModel.getOutsideTemp(),
-                        EnvironmentModel.getTimer().getDelay());
+                        Context.getDelay());
             }
 
             /**

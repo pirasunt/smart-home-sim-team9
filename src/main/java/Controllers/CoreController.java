@@ -305,17 +305,17 @@ public class CoreController implements RoomChangeObserver {
 
     @Override
     public void update(int oldRoomID, int newRoomID) {
-        if (oldRoomID > 0 && newRoomID > 0) {
-            Room oldRoom = theModel.getRoomByID(oldRoomID);
-            Room newRoom = theModel.getRoomByID(newRoomID);
+        Room oldRoom = theModel.getRoomByID(oldRoomID);
+        Room newRoom = theModel.getRoomByID(newRoomID);
 
-            //Turn off light if there is no one remaining in the room
-            if (oldRoom.getAllUsersInRoom(theModel).size() == 0) {
-                oldRoom.setLightsOn(false);
-            }
-
-                newRoom.setLightsOn(true);
-
+        //Turn off light if there is no one remaining in the room
+        if(oldRoomID != 0 && oldRoom.getAllUsersInRoom(theModel).size() == 0){
+            oldRoom.setLightsOn(false);
         }
+
+        //Ignore case when user is moved to/from Outside
+        if(newRoomID != 0)
+            newRoom.setLightsOn(true);
+
     }
 }

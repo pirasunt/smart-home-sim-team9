@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 
 
 import Enums.ProfileType;
+import Models.Context;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
@@ -95,7 +96,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
     timeField.setText(time);
     timeSpeed.setText(1000 / delay + " X");
 
-    EnvironmentModel.subscribe(this);
+    Context.subscribe(this);
 
 
     JPanel jp = this.smartModulesPanel;
@@ -252,7 +253,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
   }
 
   private void setSHCVisibility() {
-    if (EnvironmentModel.getCurrentUser().getProfileType() == ProfileType.STRANGER) {
+    if (Context.getCurrentUser().getProfileType() == ProfileType.STRANGER) {
       tabbedPane1.setEnabledAt(0, false);
       coreView.getWrapper().setVisible(false);
     } else {
@@ -262,7 +263,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
   }
 
   private void setSHPVisibility() {
-    if (EnvironmentModel.getCurrentUser().getProfileType() != ProfileType.ADULT) {
+    if (Context.getCurrentUser().getProfileType() != ProfileType.ADULT) {
       tabbedPane1.setEnabledAt(1, false);
       shp.getWrapper().setVisible(false);
     } else
