@@ -97,7 +97,7 @@ public class EnvironmentModel {
    */
   public void setCurrentUser(UserProfileModel currentUser) {
     this.currentUser = new UserProfileModel(currentUser);
-    notifyCurrentUserObservers(new UserProfileModel(currentUser));
+    notifyCurrentUserObservers(currentUser);
     CustomConsole.print(
         "Current user has been set to "
             + this.currentUser.getName()
@@ -153,7 +153,7 @@ public class EnvironmentModel {
    */
   public static void notifyCurrentUserObservers(UserProfileModel newCurrentUser) {
     for (CurrentUserObserver o : currentUserObservers) {
-      o.update(newCurrentUser);
+      o.update(new UserProfileModel(newCurrentUser));
     }
   }
 
@@ -201,10 +201,13 @@ public class EnvironmentModel {
 
     int oldRoomID = profile.getRoomID();
     int newRoomID = room.getId();
+    UserProfileModel updatedProfile = profile.modifyLocation(room.getId());
 
     try {
-      updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
       notifyRoomChangeObservers(oldRoomID, newRoomID);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()
@@ -228,8 +231,11 @@ public class EnvironmentModel {
    */
   public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
 
+    UserProfileModel updatedProfile = profile.modifyPrivilege(newPrivilegeLevel);
     try {
-      updateProfileEntry(profile.modifyPrivilege(newPrivilegeLevel), new File("UserProfiles.xml"));
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
       CustomConsole.print(
           "Updated privilege of user '"
               + profile.getName()
@@ -252,8 +258,11 @@ public class EnvironmentModel {
    */
   public void editProfileName(UserProfileModel profile, String newName, File file) {
 
+    UserProfileModel updatedProfile = profile.modifyName(newName);
     try {
-      updateProfileEntry(profile.modifyName(newName), file);
+      updateProfileEntry(updatedProfile, file);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage());
     }
