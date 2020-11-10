@@ -128,11 +128,11 @@ public class House {
    *
    * @return the boolean
    */
-  public Boolean hasObstruction() {
+  public Boolean hasOpenObstruction() {
     for (Room r : rooms) {
       for (Wall w : r.getAllWalls()) {
         if (w.getType() == WallType.WINDOWS) {
-          if (((WindowWall) w).isWindowObstructed()) {
+          if (((WindowWall) w).isWindowObstructed() && ((WindowWall) w).isWindowOpen()) {
             return true;
           }
         }

@@ -107,8 +107,8 @@ public class SecurityController implements RoomChangeObserver {
               "Simulation is not running, Away Mode will not be enabled. Please start the simulation");
           exceptionFound = true;
         }
-        if (Context.getHouse().hasObstruction()) {
-          CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
+        if (Context.getHouse().hasOpenObstruction()) {
+          CustomConsole.print("An open window is obstructed! Please correct this to enable Away Mode");
           exceptionFound = true;
         }
         if (!Context.houseIsEmpty()) {
