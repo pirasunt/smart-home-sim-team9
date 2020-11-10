@@ -1,8 +1,10 @@
 package Controllers;
 
+import Models.Context;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.SecurityModel;
+import Observers.RoomChangeObserver;
 import Views.CustomConsole;
 import Views.SecurityView;
 
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /** The type Security controller. */
-public class SecurityController implements Observer {
+public class SecurityController implements RoomChangeObserver {
   private final SecurityModel secModel;
   private final SecurityView secView;
 
@@ -32,7 +34,7 @@ public class SecurityController implements Observer {
 
   private void createLightsSection() {
 
-    ArrayList allRooms = EnvironmentModel.getHouse().getRooms();
+    ArrayList allRooms = Context.getHouse().getRooms();
 
     ArrayList<JLabel> lightLabels = new ArrayList<>();
     ArrayList<JRadioButton> onButtons = new ArrayList<>();
@@ -105,11 +107,11 @@ public class SecurityController implements Observer {
               "Simulation is not running, Away Mode will not be enabled. Please start the simulation");
           exceptionFound = true;
         }
-        if (EnvironmentModel.getHouse().hasObstruction()) {
-          CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
+        if (Context.getHouse().hasOpenObstruction()) {
+          CustomConsole.print("An open window is obstructed! Please correct this to enable Away Mode");
           exceptionFound = true;
         }
-        if (!EnvironmentModel.houseIsEmpty()) {
+        if (!Context.houseIsEmpty()) {
           CustomConsole.print(
               "Someone is in the house, please remove them before enabling Away Mode.");
           exceptionFound = true;

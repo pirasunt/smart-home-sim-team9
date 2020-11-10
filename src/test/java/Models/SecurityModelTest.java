@@ -34,7 +34,7 @@ public class SecurityModelTest {
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
 
     EnvironmentController enc = new EnvironmentController(new EnvironmentView(), env);
-    EnvironmentModel.setTime(new Date());
+    Context.setTime(new Date());
     SecurityModel sm = new SecurityModel();
 
     sm.setAwayOn(true);
@@ -52,11 +52,11 @@ public class SecurityModelTest {
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
 
     EnvironmentController enc = new EnvironmentController(new EnvironmentView(), env);
-    EnvironmentModel.setTime(new Date());
+    Context.setTime(new Date());
     SecurityModel sm = new SecurityModel();
     sm.setAwayOn(true);
 
-    for (Room r : EnvironmentModel.getHouse().getRooms()) {
+    for (Room r : Context.getHouse().getRooms()) {
       for (Wall w : r.getAllWalls()) {
         if (w.getType() == WallType.OUTSIDE) {
           OutsideWall tmp = (OutsideWall) w;
@@ -91,7 +91,7 @@ public class SecurityModelTest {
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
 
     EnvironmentController enc = new EnvironmentController(new EnvironmentView(), env);
-    EnvironmentModel.setTime(new Date());
+    Context.setTime(new Date());
     SecurityModel sm = new SecurityModel();
     sm.getIntervalModel().setValue(1);
     sm.notifyAuthorities();

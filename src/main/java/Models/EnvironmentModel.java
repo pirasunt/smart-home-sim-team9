@@ -1,6 +1,7 @@
 package Models;
 
-import Controllers.Observer;
+import Observers.CurrentUserObserver;
+import Observers.RoomChangeObserver;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
@@ -12,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -21,17 +21,18 @@ import java.util.*;
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
-  private static House house;
-  private static HouseGraphic houseGraphic;
-  private static Calendar currentCalObj;
-  private static ArrayList<UserProfileModel> userProfileModelList;
-  private static UserProfileModel currentUser;
+  private final House house;
+  private final HouseGraphic houseGraphic;
+  private final ArrayList<UserProfileModel> userProfileModelList;
+  private UserProfileModel currentUser;
   private static boolean simulationRunning = false;
   private static Timer timer;
-  private static ArrayList<Observer> observers;
-  private final boolean windowsObstructed = false;
+  private static ArrayList<RoomChangeObserver> roomChangeObservers;
+  private static ArrayList<CurrentUserObserver> currentUserObservers;
+  private boolean windowsObstructed = false;
   private int outsideTemperature;
   private boolean automaticLights;
+  private final Context c;
 
   private EnvironmentModel(
       House h,
@@ -42,24 +43,18 @@ public class EnvironmentModel {
     house = h;
     houseGraphic = hg;
     this.outsideTemperature = temperature;
-    currentCalObj = cal;
     userProfileModelList = profileList;
     currentUser = null;
     automaticLights = false;
-    observers = new ArrayList<>();
+    roomChangeObservers = new ArrayList<>();
+    currentUserObservers = new ArrayList<>();
+    timer = new Timer(1000, null);
+
+    c = new Context(h, hg, timer, cal, profileList);
   }
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
     this(h, hg, 21, new GregorianCalendar(), profileList);
-  }
-
-  /**
-   * Get timer timer.
-   *
-   * @return the timer
-   */
-  public static Timer getTimer() {
-    return timer;
   }
 
   /**
@@ -96,98 +91,19 @@ public class EnvironmentModel {
   }
 
   /**
-   * Returns the HouseGraphic displayed to the user
-   *
-   * @return the house graphic
-   */
-  public static HouseGraphic getHouseGraphic() {
-    return houseGraphic;
-  }
-
-  /**
-   * Gets house.
-   *
-   * @return the house
-   */
-  public static House getHouse() {
-    return house;
-  }
-
-  /**
-   * Returns a deep copy of the currently selected user on the simulation
-   *
-   * @return Deep copy of currently selected user.
-   */
-  public static UserProfileModel getCurrentUser() {
-    return new UserProfileModel(currentUser);
-  }
-
-  /**
    * Sets current user.
    *
    * @param currentUser the current user
    */
   public void setCurrentUser(UserProfileModel currentUser) {
-    EnvironmentModel.currentUser = new UserProfileModel(currentUser);
+    this.currentUser = new UserProfileModel(currentUser);
+    notifyCurrentUserObservers(currentUser);
     CustomConsole.print(
         "Current user has been set to "
-            + EnvironmentModel.currentUser.getName()
+            + this.currentUser.getName()
             + "/"
-            + EnvironmentModel.currentUser.getProfileType());
+            + this.currentUser.getProfileType());
   }
-
-  /**
-   * Gets the currently set date in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public static String getDateString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
-    return dateFormatter.format(currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set time in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public static String getTimeString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
-    return dateFormatter.format(currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set date and time in the simulator in a pre-determined format
-   *
-   * @return Date object representing currently set date and time
-   */
-  public static Date getDateObject() {
-    return currentCalObj.getTime();
-  }
-
-  /**
-   * Sets the Date of the Simulator
-   *
-   * @param newDate {@link Date} object representing the desired date
-   */
-  public static void setDate(Calendar newDate) {
-    currentCalObj.set(
-        newDate.get(Calendar.YEAR),
-        newDate.get(Calendar.MONTH),
-        newDate.get(Calendar.DAY_OF_MONTH));
-  }
-
-  /**
-   * Sets the Time of the Simulator
-   *
-   * @param newTime {@link Date} object representing the desired time
-   */
-  public static void setTime(Date newTime) {
-    currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
-    currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
-    currentCalObj.set(Calendar.SECOND, newTime.getSeconds());
-  }
-
   /**
    * Gets simulation object.
    *
@@ -197,48 +113,57 @@ public class EnvironmentModel {
     return simulationRunning;
   }
 
-  /**
-   * House is empty boolean.
-   *
-   * @return the boolean
-   */
-  public static boolean houseIsEmpty() {
-    for (UserProfileModel u : userProfileModelList) {
-      if (u.getRoomID() != 0) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   /**
-   * Subscribe.
+   * Method that subscribes a RoomChangeObserver. Fires anytime a user is successfully moved to a new room.
    *
-   * @param ob the ob
+   * @param ob the observer
    */
-  public static void subscribe(Observer ob) {
-    observers.add(ob);
+  public static void subscribe(RoomChangeObserver ob) {
+    roomChangeObservers.add(ob);
   }
 
-  public static void unsubscribe(Observer ob) {
-    observers.remove(ob);
+  public static void unsubscribe(RoomChangeObserver ob) {
+    roomChangeObservers.remove(ob);
   }
 
-  /** Notify observers. */
-  public static void notifyObservers(int oldRoomID, int newRoomID) {
-    for (Observer o : observers) {
+  public static void subscribe(CurrentUserObserver ob) {
+    currentUserObservers.add(ob);
+  }
+
+  public static void unsubscribe(CurrentUserObserver ob) {
+    currentUserObservers.remove(ob);
+  }
+
+
+  /**
+   * Notifies all Observers whenever a user changes rooms in the simulation
+   * @param oldRoomID ID of the old room
+   * @param newRoomID ID of the new room
+   */
+  public static void notifyRoomChangeObservers(int oldRoomID, int newRoomID) {
+    for (RoomChangeObserver o : roomChangeObservers) {
       o.update(oldRoomID, newRoomID);
+    }
+  }
+
+  /**
+   * Notifies all Observers whenever the current user is changed
+   * @param newCurrentUser the "New" current user
+   */
+  public static void notifyCurrentUserObservers(UserProfileModel newCurrentUser) {
+    for (CurrentUserObserver o : currentUserObservers) {
+      o.update(new UserProfileModel(newCurrentUser));
     }
   }
 
   /**
    * Initialize timer.
    *
-   * @param delay the delay
    * @param listenForTimer the listen for timer
    */
-  public void initializeTimer(int delay, ActionListener listenForTimer) {
-    timer = new Timer(delay, listenForTimer);
+  public void initializeTimer(ActionListener listenForTimer) {
+    timer.addActionListener(listenForTimer);
   }
 
   /**
@@ -276,10 +201,13 @@ public class EnvironmentModel {
 
     int oldRoomID = profile.getRoomID();
     int newRoomID = room.getId();
+    UserProfileModel updatedProfile = profile.modifyLocation(room.getId());
 
     try {
-      updateProfileEntry(profile.modifyLocation(room.getId()), new File("UserProfiles.xml"));
-      notifyObservers(oldRoomID, newRoomID);
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
+      notifyRoomChangeObservers(oldRoomID, newRoomID);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
       CustomConsole.print(
           "Set Room to: '"
               + room.getName()
@@ -303,8 +231,11 @@ public class EnvironmentModel {
    */
   public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
 
+    UserProfileModel updatedProfile = profile.modifyPrivilege(newPrivilegeLevel);
     try {
-      updateProfileEntry(profile.modifyPrivilege(newPrivilegeLevel), new File("UserProfiles.xml"));
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
       CustomConsole.print(
           "Updated privilege of user '"
               + profile.getName()
@@ -327,8 +258,11 @@ public class EnvironmentModel {
    */
   public void editProfileName(UserProfileModel profile, String newName, File file) {
 
+    UserProfileModel updatedProfile = profile.modifyName(newName);
     try {
-      updateProfileEntry(profile.modifyName(newName), file);
+      updateProfileEntry(updatedProfile, file);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage());
     }

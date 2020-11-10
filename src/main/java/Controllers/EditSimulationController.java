@@ -1,6 +1,7 @@
 package Controllers;
 
 import Enums.ProfileType;
+import Models.Context;
 import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
@@ -21,13 +22,11 @@ public class EditSimulationController {
 
   private final EditSimulationView theView;
   private final EnvironmentModel theModel;
-  private final EnvironmentView envView;
   private boolean isSimRunning;
 
-  public EditSimulationController(EditSimulationView v, EnvironmentModel m, EnvironmentView v2, boolean simulatorStatus) {
+  public EditSimulationController(EditSimulationView v, EnvironmentModel m, boolean simulatorStatus) {
     this.theModel = m;
     this.theView = v;
-    this.envView = v2;
     this.isSimRunning = simulatorStatus;
 
     //Only add Temp, Date and Time listeners if the simulation is NOT running
@@ -93,11 +92,10 @@ public class EditSimulationController {
     theView.setupEditScreen(
         userLabels,
         roomDropdowns,
-        profileTypes,
-        theModel.getDateString(),
-        theModel.getTimeString(), this.isSimRunning);
+        profileTypes, Context.getDateString(),
+            Context.getTimeString(), this.isSimRunning);
 
-    envView.refreshDash();
+    //envView.refreshDash();
   }
 
   private class ChangeDateListener implements ActionListener {
@@ -135,7 +133,7 @@ public class EditSimulationController {
         if (value != null) {
           Calendar cal = (Calendar) value;
           theView.setDateField(dateFormatter.format(cal.getTime()));
-          theModel.setDate(cal); // Update Environment date
+          Context.setDate(cal); // Update Environment date
           theView.removeDateComponentPicker();
           return dateFormatter.format(cal.getTime());
         }
@@ -152,7 +150,7 @@ public class EditSimulationController {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-      theView.changeTime(theModel.getDateObject());
+      theView.changeTime(Context.getDateObject());
       theView.addTimeConfirmListener(new TimeConfirmListener());
     }
 
@@ -170,7 +168,7 @@ public class EditSimulationController {
           SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
           String time = formatter.format(date);
           theView.setTimeField(time);
-          theModel.setTime(date); // Update Environment time
+          Context.setTime(date); // Update Environment time
           theView.removeTimeComponentPicker();
         }
       }
@@ -201,13 +199,13 @@ public class EditSimulationController {
 
       switch (selectedButton) {
         case "1 X":
-          theModel.getTimer().setDelay(1000);
+          Context.setDelay(1000);
           break;
         case "10 X":
-          theModel.getTimer().setDelay(100);
+          Context.setDelay(100);
           break;
         case "100 X":
-          theModel.getTimer().setDelay(10);
+          Context.setDelay(10);
           break;
       }
     }

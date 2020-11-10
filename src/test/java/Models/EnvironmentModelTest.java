@@ -7,6 +7,8 @@ import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Date;
 
@@ -39,7 +41,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    assert EnvironmentModel.getCurrentUser().getRoomID() == 2;
+    assert Context.getCurrentUser().getRoomID() == 2;
   }
 
   //use case 3.12
@@ -52,7 +54,7 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    UserProfileModel tmp = EnvironmentModel.getCurrentUser().modifyLocation(3);
+    UserProfileModel tmp = Context.getCurrentUser().modifyLocation(3);
     assert tmp.getRoomID() == 3;
   }
 
@@ -67,8 +69,8 @@ public class EnvironmentModelTest {
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     Date d = new Date();
-    env.setTime(d);
-    assert env.getDateObject().equals(d);
+    Context.setTime(d);
+    assert Context.getDateObject().equals(d);
   }
 
   // unit test 3.1
@@ -84,5 +86,23 @@ public class EnvironmentModelTest {
     assert env.getSimulationRunning() == false;
     env.startSimulation();
     assert env.getSimulationRunning() == true;
+  }
+
+  // use case 3 delivery 2
+  @Test
+  void testTimer() {
+    UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", -1);
+    House house = new House();
+    HouseGraphic hg = new HouseGraphic(house);
+    EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
+    ActionListener a = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    };
+    env.initializeTimer(a);
+    Context.setDelay(10);
+    assert Context.getDelay() == 10;
   }
 }

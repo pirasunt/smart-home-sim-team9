@@ -44,7 +44,7 @@ public class SecurityModel {
   public static void startAwayTimer() {
     cancelAllTimers();
 
-    int timerDel = EnvironmentModel.getTimer().getDelay();
+    int timerDel = Context.getDelay();
     int multiplier = 1;
     if (timerDel == 1000) {
       multiplier = 1;
@@ -54,7 +54,7 @@ public class SecurityModel {
       multiplier = 100;
     }
 
-    Date _envTime = EnvironmentModel.getDateObject();
+    Date _envTime = Context.getDateObject();
     Calendar envTime = new GregorianCalendar();
     envTime.setTime(_envTime);
     Date start = startModel.getDate();
@@ -128,8 +128,8 @@ public class SecurityModel {
    */
   public void setAwayOn(boolean shouldTurnAwayOn) {
     if (shouldTurnAwayOn) {
-      EnvironmentModel.getHouse().lockAndClose(true);
-      EnvironmentModel.getHouseGraphic().repaint();
+      Context.getHouse().lockAndClose(true);
+      Context.repaintHouseGraphic();
       startAwayTimer();
     } else {
       cancelAllTimers();
@@ -222,7 +222,7 @@ public class SecurityModel {
       authTimers.add(temp);
       authTasks.add(tempTask);
 
-      int timerDel = EnvironmentModel.getTimer().getDelay();
+      int timerDel = Context.getDelay();;
       int multiplier = 1;
       if (timerDel == 1000) {
         multiplier = 1;
@@ -232,7 +232,7 @@ public class SecurityModel {
         multiplier = 100;
       }
 
-      Date envTime = EnvironmentModel.getDateObject();
+      Date envTime = Context.getDateObject();
       Calendar sCal = new GregorianCalendar();
       sCal.setTime(envTime);
       sCal.set(Calendar.YEAR, 1900 + envTime.getYear());
@@ -240,7 +240,7 @@ public class SecurityModel {
       sCal.set(Calendar.MONTH, envTime.getMonth());
       sCal.add(Calendar.MINUTE, waitFor);
       long deltaStart =
-          (sCal.getTimeInMillis() - (EnvironmentModel.getDateObject().getTime())) / multiplier;
+          (sCal.getTimeInMillis() - (Context.getDateObject().getTime())) / multiplier;
       temp.schedule(tempTask, deltaStart);
     }
   }
@@ -260,7 +260,7 @@ public class SecurityModel {
       for (Room room : roomsToLight) {
         room.turnOnLights();
       }
-      for (Room r : EnvironmentModel.getHouse().getRooms()) {
+      for (Room r : Context.getHouse().getRooms()) {
         for (Wall w : r.getAllWalls()) {
           if (w.getType() == WallType.OUTSIDE) {
             OutsideWall tmp = (OutsideWall) w;
@@ -268,7 +268,7 @@ public class SecurityModel {
           }
         }
       }
-      EnvironmentModel.getHouseGraphic().repaint();
+      Context.repaintHouseGraphic();
     }
   }
 
@@ -287,7 +287,7 @@ public class SecurityModel {
       for (Room room : roomsToLight) {
         room.turnOffLights();
       }
-      for (Room r : EnvironmentModel.getHouse().getRooms()) {
+      for (Room r : Context.getHouse().getRooms()) {
         for (Wall w : r.getAllWalls()) {
           if (w.getType() == WallType.OUTSIDE) {
             OutsideWall tmp = (OutsideWall) w;
@@ -295,7 +295,7 @@ public class SecurityModel {
           }
         }
       }
-      EnvironmentModel.getHouseGraphic().repaint();
+      Context.repaintHouseGraphic();
     }
   }
 

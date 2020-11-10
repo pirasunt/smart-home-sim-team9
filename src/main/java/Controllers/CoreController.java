@@ -6,18 +6,17 @@ import Models.Room;
 import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
 import Models.Walls.WindowWall;
+import Observers.RoomChangeObserver;
 import Views.CoreView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class CoreController implements Observer{
+public class CoreController implements RoomChangeObserver {
 
     private CoreView theView;
     private EnvironmentModel theModel;
