@@ -5,12 +5,20 @@ import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
 import Models.Walls.Wall;
 import Views.CoreView;
+import Views.CustomConsole;
 import Views.HouseGraphic;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 public class HouseTest {
+  @BeforeEach
+  public void initEach() {
+    CustomConsole.init();
+    EnvironmentModel.resetInstance();
+  }
+
   @Test
   void shouldAddRoomsCorrectly() {
     House h = new House();

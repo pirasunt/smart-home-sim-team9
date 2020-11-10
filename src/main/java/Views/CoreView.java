@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class CoreView extends JFrame {
+public class CoreView {
     private JPanel windowPanels;
     private JPanel topLevelPane; //Needs to be bound to a field for the Form Builder to build CoreView JFrame
     private JScrollPane scrollPane;
@@ -19,7 +19,7 @@ public class CoreView extends JFrame {
     private final ArrayList<JRadioButton> lightsRadioButtons = new ArrayList<>();
 
     public CoreView() {
-        this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
+//        this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
     }
 
     public void displayWindowSection(ArrayList<JLabel> labels, ArrayList<JRadioButton> openBtns, ArrayList<JRadioButton> closeBtns, ArrayList<JCheckBox> obstructBtns) {
