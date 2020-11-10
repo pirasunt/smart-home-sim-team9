@@ -9,7 +9,7 @@
     <profileID>6dbe504b-09ac-456d-8429-16c7ec63dc11</profileID>
     <type>ADULT</type>
     <name>Timmy</name>
-    <roomID>1</roomID>
+    <roomID>0</roomID>
   </UserProfileModel>
   <UserProfileModel>
     <profileID>30cfc455-e126-4ba0-a2db-809b26b2966f</profileID>
@@ -43,7 +43,7 @@
   </UserProfileModel>
   <UserProfileModel>
     <profileID>5d2dab73-8d25-42c1-bb06-66cd64d50baa</profileID>
-    <type>ADULT</type>
+    <type>CHILD</type>
     <name>President</name>
     <roomID>0</roomID>
   </UserProfileModel>
