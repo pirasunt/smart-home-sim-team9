@@ -38,7 +38,7 @@ public class OutsideDoorDrawingHelper {
     if (direction.equals("top")) {
       g.drawLine(xCoord, yCoord, xCoord + 100, yCoord);
       g.setColor(Color.yellow);
-      g.fillRect(xCoord + 35, yCoord, 30, 10);
+      g.fillRect(xCoord + 35, yCoord - 10, 30, 10);
     } else if (direction.equals("bottom")) {
       g.drawLine(xCoord, yCoord + 100, xCoord + 100, yCoord + 100);
       g.setColor(Color.yellow);
@@ -46,7 +46,7 @@ public class OutsideDoorDrawingHelper {
     } else if (direction.equals("left")) {
       g.drawLine(xCoord, yCoord, xCoord, yCoord + 100);
       g.setColor(Color.yellow);
-      g.fillRect(xCoord, yCoord + 35, 10, 30);
+      g.fillRect(xCoord - 10, yCoord + 35, 10, 30);
     } else if (direction.equals("right")) {
       g.drawLine(xCoord + 100, yCoord, xCoord + 100, yCoord + 100);
       g.setColor(Color.yellow);
