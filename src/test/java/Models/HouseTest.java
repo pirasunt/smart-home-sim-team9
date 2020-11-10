@@ -21,11 +21,10 @@ public class HouseTest {
 
   @Test
   void autoLightsTests(){
-    CustomHouseXStream cxs = new CustomHouseXStream();
-    House testHouse = (House) cxs.fromXML(new File("House.xml"));
+    House testHouse = new House();
+    testHouse.addRoom(new Room("test", new Wall(), new Wall(), new Wall(), new Wall(), 1));
     HouseGraphic hg = new HouseGraphic(testHouse);
     UserProfileModel testUser = new UserProfileModel(ProfileType.ADULT, "test", 1);
-    EnvironmentModel.resetInstance();
     CoreController SHC = new CoreController(new CoreView(), EnvironmentModel.createSimulation(testHouse,hg, testUser));
 
     Room testRoom = testHouse.getRooms().get(0);
