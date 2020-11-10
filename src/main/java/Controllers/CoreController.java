@@ -18,304 +18,316 @@ import java.util.ArrayList;
 
 public class CoreController implements RoomChangeObserver {
 
-    private CoreView theView;
-    private EnvironmentModel theModel;
-    private ArrayList<Room> previousLightConfiguration;
-    private final CoreController selfReference; //For inner classes
+  private final CoreController selfReference; // For inner classes
+  private CoreView theView;
+  private EnvironmentModel theModel;
+  private ArrayList<Room> previousLightConfiguration;
+  private static ArrayList<JLabel> windowLabels = new ArrayList<>();
+  private static ArrayList<JRadioButton> openButtons = new ArrayList<>();
+  private static ArrayList<JRadioButton> closeButtons = new ArrayList<>();
+  private static ArrayList<JCheckBox> obstructButtons = new ArrayList<>();
 
+  public CoreController(CoreView v, EnvironmentModel m) {
+    this.theModel = m;
+    this.theView = v;
+    this.selfReference = this;
+    this.createWindowSectionComponents();
+    this.createOutsideDoorComponents();
+    this.createLightsSection();
 
-    public CoreController(CoreView v, EnvironmentModel m) {
-        this.theModel = m;
-        this.theView =v;
-        this.selfReference= this;
-        this.createWindowSectionComponents();
-        this.createOutsideDoorComponents();
-        this.createLightsSection();
+    theView.addTurnOnAutoLightsListener(new AutoLightTurnOnListener());
+    theView.addTurnOffAutoLightsListener(new AutoLightTurnOffListener());
+  }
 
-        theView.addTurnOnAutoLightsListener(new AutoLightTurnOnListener());
-        theView.addTurnOffAutoLightsListener(new AutoLightTurnOffListener());
-
+  public static void updateWindowSection() {
+    for (int i = 0; i < windowLabels.size(); i++) {
+      if (EnvironmentModel.getSimulationRunning() && obstructButtons.get(i).isSelected()) {
+        closeButtons.get(i).setEnabled(false);
+        openButtons.get(i).setEnabled(false);
+      }
+      else if (!EnvironmentModel.getSimulationRunning() && obstructButtons.get(i).isSelected()) {
+        closeButtons.get(i).setEnabled(true);
+        openButtons.get(i).setEnabled(true);
+      }
     }
+  }
 
-    //Creates the Window Section buttons and adds functionality to each button
-    private void createWindowSectionComponents(){
+  // Creates the Window Section buttons and adds functionality to each button
+  private void createWindowSectionComponents() {
 
-        Room[] allRooms = theModel.getRooms();
+    Room[] allRooms = theModel.getRooms();
 
-        ArrayList<JLabel> windowLabels = new ArrayList<>();
-        ArrayList<JRadioButton>  openButtons = new ArrayList<>();
-        ArrayList<JRadioButton> closeButtons = new ArrayList<>();
-        ArrayList<JCheckBox> obstructButtons = new ArrayList<>();
+    for (int i = 0; i < allRooms.length; i++) {
+      String labelString = allRooms[i].getName();
+      Wall[] allWalls = allRooms[i].getAllWalls();
 
+      int windowNumber = 0;
+      for (int j = 0; j < allWalls.length; j++) {
+        if (allWalls[j] != null) {
+          if (allWalls[j].getType() == WallType.WINDOWS) {
+            windowNumber++;
+            WindowWall window = (WindowWall) allWalls[j];
+            windowLabels.add(new JLabel(labelString + " (#" + windowNumber + ")"));
 
-        for(int i =0; i < allRooms.length; i++) {
-            String labelString = allRooms[i].getName();
-            Wall[] allWalls = allRooms[i].getAllWalls();
+            JRadioButton openButton = new JRadioButton("Open");
+            JRadioButton closeButton = new JRadioButton("Close");
+            JCheckBox obstructButton = new JCheckBox("Obstruct");
+            ButtonGroup windowButtonGroup = new ButtonGroup();
+            windowButtonGroup.add(openButton);
+            windowButtonGroup.add(closeButton);
 
-            int windowNumber = 0;
-            for (int j = 0; j < allWalls.length; j++) {
-                if(allWalls[j] != null){
-                if (allWalls[j].getType() == WallType.WINDOWS) {
-                    windowNumber++;
-                    WindowWall window = (WindowWall) allWalls[j];
-                    windowLabels.add(new JLabel(labelString + " (#" + windowNumber + ")"));
-
-                    JRadioButton openButton = new JRadioButton("Open");
-                    JRadioButton closeButton = new JRadioButton("Close");
-                    JCheckBox obstructButton = new JCheckBox("Obstruct");
-                    ButtonGroup windowButtonGroup = new ButtonGroup();
-                    windowButtonGroup.add(openButton);
-                    windowButtonGroup.add(closeButton);
-
-                    if (window.isWindowOpen()) {
-                        openButton.setSelected(true);
-                    } else {
-                        closeButton.setSelected(true);
-                    }
-
-                    if (window.isWindowObstructed()) {
-                        obstructButton.setSelected(true);
-                    } else {
-                        obstructButton.setSelected(false);
-                    }
-
-
-                    openButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if(!window.isWindowOpen()) {
-                                window.setWindowOpen(true);
-                            }
-                        }
-                    });
-
-                    closeButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if(window.isWindowOpen()) {
-                                window.setWindowOpen(false);
-                            }
-                        }
-                    });
-
-                    obstructButton.addItemListener(new ItemListener() {
-                        @Override
-                        public void itemStateChanged(ItemEvent e) {
-
-                            if (e.getStateChange() == ItemEvent.SELECTED) {
-                                window.setWindowObstructed(true);
-                            } else {
-                                window.setWindowObstructed(false);
-                            }
-                        }
-                    });
-                    openButtons.add(openButton);
-                    closeButtons.add(closeButton);
-                    obstructButtons.add(obstructButton);
-                }
-
-            }
-            }
-        theView.displayWindowSection(windowLabels, openButtons, closeButtons, obstructButtons);
-        }
-
-    }
-
-
-    private void createOutsideDoorComponents(){
-
-        Room[] allRooms = theModel.getRooms();
-
-        ArrayList<JLabel> doorLabels = new ArrayList<>();
-        ArrayList<JRadioButton>  lockButtons = new ArrayList<>();
-        ArrayList<JRadioButton> unlockButtons = new ArrayList<>();
-
-        for(int i = 0; i < allRooms.length; i++){
-            Wall[] allWalls = allRooms[i].getAllWalls();
-
-            for(int j=0; j < allWalls.length; j++){
-                if(allWalls[j] != null){
-                    if(allWalls[j].getType() == WallType.OUTSIDE){
-                        OutsideWall door =  (OutsideWall) allWalls[j];
-
-                        doorLabels.add(new JLabel(allRooms[i].getName() + " door"));
-                        JRadioButton lockButton = new JRadioButton("Lock");
-                        JRadioButton unlockButton = new JRadioButton("Unlock");
-                        ButtonGroup doorButtonGroup = new ButtonGroup();
-                        doorButtonGroup.add(lockButton);
-                        doorButtonGroup.add(unlockButton);
-
-                        if(door.getDoorLocked()) {
-                            lockButton.setSelected(true);
-                        } else {
-                            unlockButton.setSelected(true);
-                        }
-
-                        lockButton.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if(!door.getDoorLocked()) {
-                                    door.setDoorLocked(true);
-                                }
-                            }
-                        });
-
-                        unlockButton.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if(door.getDoorLocked()) {
-                                    door.setDoorLocked(false);
-                                }
-                            }
-                        });
-
-                        lockButtons.add(lockButton);
-                        unlockButtons.add(unlockButton);
-
-                    }
-                }
-            }
-        }
-
-        theView.displayOutsideDoorsSection(doorLabels, lockButtons, unlockButtons);
-    }
-
-
-    private void createLightsSection(){
-
-        Room[] allRooms = theModel.getRooms();
-
-        ArrayList<JLabel> lightLabels = new ArrayList<>();
-        ArrayList<JRadioButton>  onButtons = new ArrayList<>();
-        ArrayList<JRadioButton> offButtons = new ArrayList<>();
-
-        for(int i =0; i < allRooms.length; i++){
-
-            lightLabels.add(new JLabel(allRooms[i].getName()));
-
-            JRadioButton onButton = new JRadioButton("On");
-            JRadioButton offButton = new JRadioButton("Off");
-            ButtonGroup lightsBtnGroup = new ButtonGroup();
-            lightsBtnGroup.add(onButton);
-            lightsBtnGroup.add(offButton);
-
-            if(allRooms[i].getLightsOn()){
-                onButton.setSelected(true);
+            if (window.isWindowOpen()) {
+              openButton.setSelected(true);
             } else {
-                offButton.setSelected(true);
+              closeButton.setSelected(true);
             }
 
-            int currentRoomIndex = i;
-            onButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(!allRooms[currentRoomIndex].getLightsOn()) {
-                        allRooms[currentRoomIndex].turnOnLights();
+            if (window.isWindowObstructed()) {
+              obstructButton.setSelected(true);
+            } else {
+              obstructButton.setSelected(false);
+            }
+
+            openButton.addActionListener(
+                new ActionListener() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    if (EnvironmentModel.getSimulationRunning() && !window.isWindowOpen()) {
+                      window.openWindow();
+                    } else if (!window.isWindowOpen()) {
+                      window.setWindowOpen(true);
                     }
-                }
-            });
+                  }
+                });
 
-            offButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(allRooms[currentRoomIndex].getLightsOn()) {
-                        allRooms[currentRoomIndex].turnOffLights();
+            closeButton.addActionListener(
+                new ActionListener() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    if (EnvironmentModel.getSimulationRunning() && window.isWindowOpen()) {
+                      window.closeWindow();
                     }
-                }
-            });
+                    if (window.isWindowOpen()) {
+                      window.setWindowOpen(false);
+                    }
+                  }
+                });
 
-            onButtons.add(onButton);
-            offButtons.add(offButton);
+            obstructButton.addItemListener(
+                new ItemListener() {
+                  @Override
+                  public void itemStateChanged(ItemEvent e) {
 
-        }
-
-        theView.displayLightsSection(lightLabels, onButtons, offButtons, theModel.getAutomaticLights());
-    }
-
-
-    private class AutoLightTurnOnListener implements ActionListener {
-        /**
-         * Invoked when an action occurs.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            if(!theModel.getAutomaticLights()){
-                theModel.setAutomaticLights(true);
-                theView.setLightButtonStatus(false); //Disables manual radio buttons for each room
-
-                //Save Previous Config
-                previousLightConfiguration = new ArrayList<>();
-                Room[] allRooms = theModel.getRooms();
-
-                for(Room r: allRooms){
-                    if(r.getLightsOn())
-                        previousLightConfiguration.add(r);
-                }
-
-                //Initial Setup for Auto-Lighting
-                for(Room r:allRooms){
-                    if(r.getAllUsersInRoom(theModel).size() == 0){
-                        r.setLightsOn(false);
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                      window.setWindowObstructed(true);
+                      if (EnvironmentModel.getSimulationRunning()) {
+                        openButton.setEnabled(false);
+                        closeButton.setEnabled(false);
+                      }
                     } else {
-                        r.setLightsOn(true);
+                      window.setWindowObstructed(false);
+                      openButton.setEnabled(true);
+                      closeButton.setEnabled(true);
                     }
-                }
-
-                EnvironmentModel.subscribe(selfReference);
-
-
-            }
+                  }
+                });
+            openButtons.add(openButton);
+            closeButtons.add(closeButton);
+            obstructButtons.add(obstructButton);
+          }
         }
+      }
+      theView.displayWindowSection(windowLabels, openButtons, closeButtons, obstructButtons);
+    }
+  }
+
+  private void createOutsideDoorComponents() {
+
+    Room[] allRooms = theModel.getRooms();
+
+    ArrayList<JLabel> doorLabels = new ArrayList<>();
+    ArrayList<JRadioButton> lockButtons = new ArrayList<>();
+    ArrayList<JRadioButton> unlockButtons = new ArrayList<>();
+
+    for (int i = 0; i < allRooms.length; i++) {
+      Wall[] allWalls = allRooms[i].getAllWalls();
+
+      for (int j = 0; j < allWalls.length; j++) {
+        if (allWalls[j] != null) {
+          if (allWalls[j].getType() == WallType.OUTSIDE) {
+            OutsideWall door = (OutsideWall) allWalls[j];
+
+            doorLabels.add(new JLabel(allRooms[i].getName() + " door"));
+            JRadioButton lockButton = new JRadioButton("Lock");
+            JRadioButton unlockButton = new JRadioButton("Unlock");
+            ButtonGroup doorButtonGroup = new ButtonGroup();
+            doorButtonGroup.add(lockButton);
+            doorButtonGroup.add(unlockButton);
+
+            if (door.getDoorLocked()) {
+              lockButton.setSelected(true);
+            } else {
+              unlockButton.setSelected(true);
+            }
+
+            lockButton.addActionListener(
+                new ActionListener() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    if (!door.getDoorLocked()) {
+                      door.setDoorLocked(true);
+                    }
+                  }
+                });
+
+            unlockButton.addActionListener(
+                new ActionListener() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                    if (door.getDoorLocked()) {
+                      door.setDoorLocked(false);
+                    }
+                  }
+                });
+
+            lockButtons.add(lockButton);
+            unlockButtons.add(unlockButton);
+          }
+        }
+      }
     }
 
-    private class AutoLightTurnOffListener implements ActionListener {
-        /**
-         * Invoked when an action occurs.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    theView.displayOutsideDoorsSection(doorLabels, lockButtons, unlockButtons);
+  }
 
-            if(theModel.getAutomaticLights()){
-                theModel.setAutomaticLights(false);
-                theView.setLightButtonStatus(true); //Enables manual radio buttons for each room
+  private void createLightsSection() {
 
-                Room[] allRooms = theModel.getRooms();
+    Room[] allRooms = theModel.getRooms();
 
-                for(Room r: allRooms){
-                    r.setLightsOn(false);
-                }
-                if(previousLightConfiguration != null) {
-                    for (Room r : previousLightConfiguration) {
-                        r.setLightsOn(true);
-                    }
-                }
-                previousLightConfiguration = null;
+    ArrayList<JLabel> lightLabels = new ArrayList<>();
+    ArrayList<JRadioButton> onButtons = new ArrayList<>();
+    ArrayList<JRadioButton> offButtons = new ArrayList<>();
 
-                EnvironmentModel.unsubscribe(selfReference);
+    for (int i = 0; i < allRooms.length; i++) {
 
+      lightLabels.add(new JLabel(allRooms[i].getName()));
+
+      JRadioButton onButton = new JRadioButton("On");
+      JRadioButton offButton = new JRadioButton("Off");
+      ButtonGroup lightsBtnGroup = new ButtonGroup();
+      lightsBtnGroup.add(onButton);
+      lightsBtnGroup.add(offButton);
+
+      if (allRooms[i].getLightsOn()) {
+        onButton.setSelected(true);
+      } else {
+        offButton.setSelected(true);
+      }
+
+      int currentRoomIndex = i;
+      onButton.addActionListener(
+          new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              if (!allRooms[currentRoomIndex].getLightsOn()) {
+                allRooms[currentRoomIndex].turnOnLights();
+              }
             }
+          });
 
-        }
+      offButton.addActionListener(
+          new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              if (allRooms[currentRoomIndex].getLightsOn()) {
+                allRooms[currentRoomIndex].turnOffLights();
+              }
+            }
+          });
+
+      onButtons.add(onButton);
+      offButtons.add(offButton);
     }
 
+    theView.displayLightsSection(lightLabels, onButtons, offButtons, theModel.getAutomaticLights());
+  }
+
+  @Override
+  public void update(int oldRoomID, int newRoomID) {
+    Room oldRoom = theModel.getRoomByID(oldRoomID);
+    Room newRoom = theModel.getRoomByID(newRoomID);
+
+    // Turn off light if there is no one remaining in the room
+    if (oldRoomID != 0 && oldRoom.getAllUsersInRoom(theModel).size() == 0) {
+      oldRoom.setLightsOn(false);
+    }
+
+    // Ignore case when user is moved to/from Outside
+    if (newRoomID != 0) newRoom.setLightsOn(true);
+  }
+
+  private class AutoLightTurnOnListener implements ActionListener {
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
     @Override
-    public void update(int oldRoomID, int newRoomID) {
-        Room oldRoom = theModel.getRoomByID(oldRoomID);
-        Room newRoom = theModel.getRoomByID(newRoomID);
+    public void actionPerformed(ActionEvent e) {
 
-        //Turn off light if there is no one remaining in the room
-        if(oldRoomID != 0 && oldRoom.getAllUsersInRoom(theModel).size() == 0){
-            oldRoom.setLightsOn(false);
+      if (!theModel.getAutomaticLights()) {
+        theModel.setAutomaticLights(true);
+        theView.setLightButtonStatus(false); // Disables manual radio buttons for each room
+
+        // Save Previous Config
+        previousLightConfiguration = new ArrayList<>();
+        Room[] allRooms = theModel.getRooms();
+
+        for (Room r : allRooms) {
+          if (r.getLightsOn()) previousLightConfiguration.add(r);
         }
 
-        //Ignore case when user is moved to/from Outside
-        if(newRoomID != 0)
-            newRoom.setLightsOn(true);
+        // Initial Setup for Auto-Lighting
+        for (Room r : allRooms) {
+          if (r.getAllUsersInRoom(theModel).size() == 0) {
+            r.setLightsOn(false);
+          } else {
+            r.setLightsOn(true);
+          }
+        }
 
+        EnvironmentModel.subscribe(selfReference);
+      }
     }
+  }
+
+  private class AutoLightTurnOffListener implements ActionListener {
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+      if (theModel.getAutomaticLights()) {
+        theModel.setAutomaticLights(false);
+        theView.setLightButtonStatus(true); // Enables manual radio buttons for each room
+
+        Room[] allRooms = theModel.getRooms();
+
+        for (Room r : allRooms) {
+          r.setLightsOn(false);
+        }
+        if (previousLightConfiguration != null) {
+          for (Room r : previousLightConfiguration) {
+            r.setLightsOn(true);
+          }
+        }
+        previousLightConfiguration = null;
+
+        EnvironmentModel.unsubscribe(selfReference);
+      }
+    }
+  }
 }
