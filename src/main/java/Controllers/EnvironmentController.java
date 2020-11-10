@@ -261,7 +261,7 @@ public class EnvironmentController {
                   Context.getDateString(),
                   Context.getTimeString(),
                   Context.getDelay());
-          new DashController(theModel, dashView);
+        new DashController(theModel, dashView);
 
           new CoreController(dashView.getSHC(), theModel);
 

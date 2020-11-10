@@ -73,7 +73,7 @@ public class WindowWall extends Wall {
 
   /** Method called when window has to be opened by the system automatically. */
   public void openWindow() {
-    if (windowObstructed && windowOpen) {
+    if (windowObstructed && !windowOpen) {
       CustomConsole.print("Window " + windowId + " is obstructed and cannot be opened.");
     } else if (!windowOpen) {
       windowOpen = true;
@@ -84,7 +84,7 @@ public class WindowWall extends Wall {
 
   /** Method called when the window has to be closed by the system automatically */
   public void closeWindow() {
-    if (windowObstructed && !windowOpen) {
+    if (windowObstructed && windowOpen) {
       CustomConsole.print("Window " + windowId + " is obstructed and cannot be closed.");
     } else if (windowOpen){
       windowOpen = false;

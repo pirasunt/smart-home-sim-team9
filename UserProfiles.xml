@@ -3,60 +3,12 @@
     <profileID>165d65e7-2183-4759-a0d5-5671cd66591d</profileID>
     <type>ADULT</type>
     <name>Admin</name>
-    <roomID>0</roomID>
+    <roomID>4</roomID>
   </UserProfileModel>
   <UserProfileModel>
-    <profileID>6dbe504b-09ac-456d-8429-16c7ec63dc11</profileID>
-    <type>ADULT</type>
-    <name>Timmy</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>30cfc455-e126-4ba0-a2db-809b26b2966f</profileID>
-    <type>CHILD</type>
-    <name>Thief</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>f1b31665-e37f-484b-9492-260a1399a6b9</profileID>
+    <profileID>bea77054-051a-4200-89a9-e92dcec32201</profileID>
     <type>STRANGER</type>
-    <name>Robber</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>0335f794-adb7-4d69-b2ab-6bbd119776fb</profileID>
-    <type>CHILD</type>
-    <name>Sam</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>0b73e74c-e770-43d8-8ab6-3ca0ec1783db</profileID>
-    <type>CHILD</type>
-    <name>Jay</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>71c1ce14-3370-4c3d-bcaa-de28d17be331</profileID>
-    <type>GUEST</type>
-    <name>Liam</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>5d2dab73-8d25-42c1-bb06-66cd64d50baa</profileID>
-    <type>CHILD</type>
-    <name>President</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>613b1a80-212a-41bf-8469-d35d73ac8a25</profileID>
-    <type>GUEST</type>
-    <name>Obama</name>
-    <roomID>0</roomID>
-  </UserProfileModel>
-  <UserProfileModel>
-    <profileID>dd087549-5c8a-4dd8-a3f1-a041683930ce</profileID>
-    <type>ADULT</type>
-    <name>Pops</name>
+    <name>Stranger</name>
     <roomID>0</roomID>
   </UserProfileModel>
 </UserProfileModel-array>
