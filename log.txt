@@ -1,0 +1,25 @@
+Tue Nov 10 15:04:44 EST 2020 : Welcome to the simulator!
+Tue Nov 10 15:04:44 EST 2020 : Selecting user profile...
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Admin/ADULT
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Thief/CHILD
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Jay/CHILD
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Thief/CHILD
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Kitchen' for user Thief/CHILD
+
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Thief/CHILD
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Outside' for user Thief/CHILD
+
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Bedroom' for user Thief/CHILD
+
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Thief/CHILD
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Admin/ADULT
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Kitchen' for user Admin/ADULT
+
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Admin/ADULT
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Outside' for user Thief/CHILD
+
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Hall' for user Admin/ADULT
+
+Tue Nov 10 15:04:44 EST 2020 : Current user has been set to Admin/ADULT
+Tue Nov 10 15:04:44 EST 2020 : Set Room to: 'Outside' for user Admin/ADULT
+

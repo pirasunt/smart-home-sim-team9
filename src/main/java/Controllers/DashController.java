@@ -43,7 +43,7 @@ public class DashController {
         }
 
         allRooms = theModel.getRooms();
-        for (int i = 0; i < allRooms.length; i++) {
+    for (int i = allRooms.length - 1; i >= 0; i--) {
             boolean isCurrentRoom = false;
             if (Context.getCurrentUser().getRoomID() == allRooms[i].getId()) isCurrentRoom = true;
 

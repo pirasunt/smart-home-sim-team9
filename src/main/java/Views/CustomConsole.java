@@ -1,11 +1,10 @@
 package Views;
 
+import Models.Context;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.sql.Timestamp;
+import java.io.*;
 
 /** The type Console. */
 public class CustomConsole {
@@ -13,6 +12,8 @@ public class CustomConsole {
   static final JFrame frame = new JFrame();
   /** The PrintStream. */
   static PrintStream ps;
+  /** The FileWriter */
+  static BufferedWriter log;
 
   /**
    * Prints on the console.
@@ -20,8 +21,14 @@ public class CustomConsole {
    * @param s the string to append.
    */
   public static void print(String s) {
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    ps.println(timestamp + " : " + s);
+    ps.println(Context.getDateObject() + " : " + s);
+    try {
+      log.write(Context.getDateObject() + " : " + s);
+      log.newLine();
+      log.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /** Init the console. */
@@ -43,6 +50,10 @@ public class CustomConsole {
             textArea,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+    try {
+      log = new BufferedWriter(new FileWriter(new File("log.txt"), false));
+    } catch (IOException e) { }
 
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
