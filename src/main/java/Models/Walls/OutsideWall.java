@@ -1,6 +1,8 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Models.Context;
+import Models.EnvironmentModel;
 import Views.CustomConsole;
 
 /** The type Outside wall. */
@@ -42,6 +44,7 @@ public class OutsideWall extends Wall {
    */
   public void setDoorLocked(boolean doorLocked) {
     this.doorLocked = doorLocked;
+    Context.repaintHouseGraphic();
   }
 
   /**
@@ -60,33 +63,42 @@ public class OutsideWall extends Wall {
    */
   public void setLightsOn(boolean lightsOn) {
     this.lightsOn = lightsOn;
+    Context.repaintHouseGraphic();
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void lockDoor() {
-
-    this.doorLocked = true;
-    CustomConsole.print("Door with outside access " + doorId + " has been locked.");
+    if (!doorLocked) {
+      this.doorLocked = true;
+      Context.repaintHouseGraphic();
+      CustomConsole.print("Door with outside access " + doorId + " has been locked.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void unlockDoor() {
-
-    this.doorLocked = false;
-    CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+    if (doorLocked) {
+      this.doorLocked = false;
+      Context.repaintHouseGraphic();
+      CustomConsole.print("Door with outside access " + doorId + " has been unlocked.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void turnLightsOn() {
-
-    this.lightsOn = true;
-    CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
+    if (!lightsOn) {
+      this.lightsOn = true;
+      Context.repaintHouseGraphic();
+      CustomConsole.print("Door with outside access " + doorId + " lights have been turned on.");
+    }
   }
 
   /** Method to be used when a door is being locked automatically be the system. */
   public void turnLightsOff() {
-
-    this.lightsOn = false;
-    CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
+    if (lightsOn) {
+      this.lightsOn = false;
+      Context.repaintHouseGraphic();
+      CustomConsole.print("Door with outside access " + doorId + " lights have been turned off.");
+    }
   }
 }

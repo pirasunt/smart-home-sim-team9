@@ -1,15 +1,20 @@
 package Controllers;
 
+import Models.Context;
 import Models.EnvironmentModel;
+import Models.Room;
 import Models.SecurityModel;
+import Observers.RoomChangeObserver;
 import Views.CustomConsole;
 import Views.SecurityView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /** The type Security controller. */
-public class SecurityController implements Observer {
+public class SecurityController implements RoomChangeObserver {
   private final SecurityModel secModel;
   private final SecurityView secView;
 
@@ -24,10 +29,60 @@ public class SecurityController implements Observer {
     this.secView = secView;
     secView.addAwayListener(new AwayModeListener());
     EnvironmentModel.subscribe(this);
+    this.createLightsSection();
+  }
+
+  private void createLightsSection() {
+
+    ArrayList allRooms = Context.getHouse().getRooms();
+
+    ArrayList<JLabel> lightLabels = new ArrayList<>();
+    ArrayList<JRadioButton> onButtons = new ArrayList<>();
+    ArrayList<JRadioButton> offButtons = new ArrayList<>();
+
+    for (int i = 0; i < allRooms.size(); i++) {
+      Room r = (Room) allRooms.get(i);
+
+      lightLabels.add(new JLabel(r.getName()));
+
+      JRadioButton onButton = new JRadioButton("On");
+      JRadioButton offButton = new JRadioButton("Off");
+      ButtonGroup lightsBtnGroup = new ButtonGroup();
+      lightsBtnGroup.add(onButton);
+      lightsBtnGroup.add(offButton);
+
+      if (r.getLightsOn()) {
+        onButton.setSelected(true);
+      } else {
+        offButton.setSelected(true);
+      }
+
+      int currentRoomIndex = i;
+      onButton.addActionListener(
+          new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              secModel.addToLightList(r);
+            }
+          });
+
+      offButton.addActionListener(
+          new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              secModel.removeFromLightList(r);
+            }
+          });
+
+      onButtons.add(onButton);
+      offButtons.add(offButton);
+    }
+
+    secView.displayLightsSection(lightLabels, onButtons, offButtons);
   }
 
   @Override
-  public void update() {
+  public void update(int oldRoomID, int newRoomID) {
     if (SecurityModel.isAwayOn()) {
       secModel.notifyAuthorities();
     }
@@ -43,6 +98,7 @@ public class SecurityController implements Observer {
         secModel.setAwayOn(false);
         secView.changeAwayModeText("Turn on Away Mode");
         secView.toggleSpinners(true);
+        secView.toggleRadios(true);
         // logic to turn off away mode
       } else {
         boolean exceptionFound = false;
@@ -51,11 +107,11 @@ public class SecurityController implements Observer {
               "Simulation is not running, Away Mode will not be enabled. Please start the simulation");
           exceptionFound = true;
         }
-        if (EnvironmentModel.getHouse().hasObstruction()) {
-          CustomConsole.print("A window is obstructed! Please correct this to enable Away Mode");
+        if (Context.getHouse().hasOpenObstruction()) {
+          CustomConsole.print("An open window is obstructed! Please correct this to enable Away Mode");
           exceptionFound = true;
         }
-        if (!EnvironmentModel.houseIsEmpty()) {
+        if (!Context.houseIsEmpty()) {
           CustomConsole.print(
               "Someone is in the house, please remove them before enabling Away Mode.");
           exceptionFound = true;
@@ -63,6 +119,7 @@ public class SecurityController implements Observer {
         if (!exceptionFound) {
           secModel.setAwayOn(true);
           secView.toggleSpinners(false);
+          secView.toggleRadios(false);
           secView.changeAwayModeText("Turn Away Mode off");
         }
         // logic to turn on away mode

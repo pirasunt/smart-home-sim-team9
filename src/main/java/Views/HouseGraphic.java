@@ -45,9 +45,15 @@ public class HouseGraphic extends JPanel {
     JFrame frame = new JFrame("House Layout");
     frame.getContentPane().add(scrollPane);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
-    frame.setLocationRelativeTo(null);
     frame.setVisible(true);
+
+
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
+    Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
+
+    frame.setSize((int) rect.getWidth()/2, (int) rect.getHeight()/2);
+    frame.setLocation((int) rect.getWidth()/2, 0);
   }
 
   public void paintComponent(Graphics g) {
@@ -202,7 +208,7 @@ public class HouseGraphic extends JPanel {
     int newX = xCoord + 2;
     int newY = yCoord + 45;
     for (UserProfileModel user : room.getAllUsersInRoom(environment)) {
-      g.drawString("\u263A " + user.getName(), newX, newY);
+      g.drawString("\uD83D\uDE00 " + user.getName(), newX, newY);
       newY += 15;
     }
   }

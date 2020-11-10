@@ -15,34 +15,36 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 
 public class EditSimulationView extends JFrame {
 
+    private final JButton timeConfirm;
     private JLabel dateField;
     private JButton changeDate;
     private JLabel timeField;
     private JButton changeTime;
-
     private JSpinner tempSpinner;
-
     private JFrame datePickerWindow;
-
     private JFrame timePickerWindow;
     private JSpinner timeSpinner;
-    private final JButton timeConfirm;
-    private JPanel userRoomPrivPanel; //This is dynamically generated, so can not use GUI Designer
+    private JPanel userRoomPrivPanel; // This is dynamically generated, so can not use GUI Designer
     private JPanel mainPanel;
     private JRadioButton oneTimeSpeed;
     private JRadioButton tenTimeSpeed;
     private JRadioButton hundredTimeSpeed;
-    private JPanel jp0;
-    private JPanel jp1;
-    private JPanel jp2;
+    private JPanel changeTempPanel;
+    private JPanel changeDatePanel;
+    private JPanel changeTimePanel;
     private JPanel jp3;
     private JPanel jp4;
-    private JPanel jp5;
-
+    private JPanel timeSpeedPanel;
+    private JLabel privilegeDef;
+    private JSeparator changeTempSeparator;
+    private JSeparator changeDateSeparator;
+    private JSeparator changeTimeSeparator;
 
     public EditSimulationView(int temp, int delay) {
         this.timeConfirm = new JButton("Confirm");
@@ -88,18 +90,39 @@ public class EditSimulationView extends JFrame {
         return (Integer) this.tempSpinner.getValue();
     }
 
+    public void setupEditScreen(
+            JLabel[] userLabels,
+            JComboBox<Room>[] userDropdowns,
+            JComboBox<ProfileType>[] profileTypes,
+            String currentDate,
+            String currentTime,
+            boolean isSimRunning) {
 
-    public void setupEditScreen(JLabel[] userLabels, JComboBox<Room>[] userDropdowns, JComboBox<ProfileType>[] profileTypes, String currentDate, String currentTime) {
+        //If simulator is running, remove panels that changes temperature, date and time
+        if(isSimRunning){
+            this.changeTempPanel.setVisible(false);
+            this.changeDatePanel.setVisible(false);
+            this.changeTimePanel.setVisible(false);
+            this.timeSpeedPanel.setVisible(false);
+            this.changeTempSeparator.setVisible(false);
+            this.changeDateSeparator.setVisible(false);
+            this.changeTimeSeparator.setVisible(false);
+            CustomConsole.print("WARNING: The Simulation is turned on. Unable to Change Temperature, Date, Time and Time Speed");
+        }
+
         GridLayout userSelectionGrid = new GridLayout(0, 3, 20, 20);
 
         this.userRoomPrivPanel.setLayout(userSelectionGrid);
-        this.userRoomPrivPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        this.userRoomPrivPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 5));
         this.dateField.setText(currentDate);
         this.timeField.setText(currentTime);
 
         this.userRoomPrivPanel.add(new JSeparator());
         this.userRoomPrivPanel.add(new JLabel());
         this.userRoomPrivPanel.add(new JLabel());
+
+        this.privilegeDef.setText(
+                "ADULT: Access to ALL modules \nCHILD: Access to SHC module \nGUEST: Access to SHC module \nSTRANGER: Access to no modules");
 
         JLabel userLabel = new JLabel("Users", SwingConstants.CENTER);
         JLabel roomLabel = new JLabel("Current Room");
@@ -111,13 +134,12 @@ public class EditSimulationView extends JFrame {
             this.userRoomPrivPanel.add(label);
         }
 
-        //userLabels, userDropdowns & profileTypes arrays are the same length
+        // userLabels, userDropdowns & profileTypes arrays are the same length
         for (int i = 0; i < userLabels.length; i++) {
             this.userRoomPrivPanel.add(userLabels[i]);
             this.userRoomPrivPanel.add(userDropdowns[i]);
             this.userRoomPrivPanel.add(profileTypes[i]);
         }
-
 
         this.add(this.mainPanel);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -130,9 +152,8 @@ public class EditSimulationView extends JFrame {
      * Provides an interface that allows the Simulator user to change the Date
      *
      * @param formatter Object that performs the conversion between the user selecting a date on the
-     *                  UI via a DatePicker to a usable String format to be stored in the {@link
-     *                  EnvironmentModel}. The core logic of formatter is found in {@link
-     *                  EnvironmentController}
+     *                  UI via a DatePicker to a usable String format to be stored in the {@link EnvironmentModel}.
+     *                  The core logic of formatter is found in {@link EnvironmentController}
      */
     public void changeDate(JFormattedTextField.AbstractFormatter formatter) {
         SqlDateModel model = new SqlDateModel();
@@ -143,7 +164,6 @@ public class EditSimulationView extends JFrame {
         JDatePanelImpl panel = new JDatePanelImpl(model, p);
         JDatePickerImpl datePicker = new JDatePickerImpl(panel, formatter);
         datePickerWindow = new JFrame("Pick Date");
-
 
         datePickerWindow.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         datePickerWindow.add(datePicker);
@@ -159,7 +179,6 @@ public class EditSimulationView extends JFrame {
     public void removeDateComponentPicker() {
         this.datePickerWindow.dispose();
     }
-
 
     /**
      * Changes the time passed.
@@ -186,7 +205,6 @@ public class EditSimulationView extends JFrame {
         this.timePickerWindow.setVisible(true);
     }
 
-
     /**
      * Gets the value from the {@link JSpinner} module used to change the Time of the simulated
      * environment
@@ -205,7 +223,6 @@ public class EditSimulationView extends JFrame {
     public void setTimeField(String time) {
         this.timeField.setText(time);
     }
-
 
     public void removeTimeComponentPicker() {
         this.timePickerWindow.dispose();

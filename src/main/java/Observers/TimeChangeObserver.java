@@ -1,0 +1,10 @@
+package Observers;
+
+public interface TimeChangeObserver {
+
+    /**
+     * Updates the time of the observer
+     * @param newTime String representation of the new Time Value
+     */
+    void update(String newTime);
+}
