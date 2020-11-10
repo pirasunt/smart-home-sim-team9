@@ -134,4 +134,8 @@ public class SecurityView {
       jr.setEnabled(shouldEnable);
     }
   }
+
+  private void createUIComponents() {
+    awayModeButton = new JButton();
+  }
 }
