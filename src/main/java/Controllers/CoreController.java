@@ -16,6 +16,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+/**
+ * The type Core controller.
+ */
 public class CoreController implements RoomChangeObserver {
 
     private CoreView theView;
@@ -24,6 +27,12 @@ public class CoreController implements RoomChangeObserver {
     private final CoreController selfReference; //For inner classes
 
 
+    /**
+     * Instantiates a new Core controller.
+     *
+     * @param v the v
+     * @param m the m
+     */
     public CoreController(CoreView v, EnvironmentModel m) {
         this.theModel = m;
         this.theView =v;
@@ -302,7 +311,12 @@ public class CoreController implements RoomChangeObserver {
 
         }
     }
-
+    /**
+     * Updates observers any time a user changes room location
+     *
+     * @param oldRoomID the old room id
+     * @param newRoomID the new room id
+     */
     @Override
     public void update(int oldRoomID, int newRoomID) {
         Room oldRoom = theModel.getRoomByID(oldRoomID);

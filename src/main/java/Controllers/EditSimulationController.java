@@ -18,12 +18,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * The type Edit simulation controller.
+ */
 public class EditSimulationController {
 
   private final EditSimulationView theView;
   private final EnvironmentModel theModel;
   private boolean isSimRunning;
 
+  /**
+   * Instantiates a new Edit simulation controller.
+   *
+   * @param v               An instance of the view associated with this controller
+   * @param m               the EnvironmentModel
+   * @param simulatorStatus True if the simulator is running; false otherwise
+   */
   public EditSimulationController(EditSimulationView v, EnvironmentModel m, boolean simulatorStatus) {
     this.theModel = m;
     this.theView = v;
@@ -95,7 +105,6 @@ public class EditSimulationController {
         profileTypes, Context.getDateString(),
             Context.getTimeString(), this.isSimRunning);
 
-    //envView.refreshDash();
   }
 
   private class ChangeDateListener implements ActionListener {

@@ -17,11 +17,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
+/**
+ * The type Dash controller. Dashboard controller
+ */
 public class DashController {
 
     private EnvironmentModel theModel;
     private Dash theView;
 
+    /**
+     * Instantiates a new Dash controller.
+     *
+     * @param m the m
+     * @param v the v
+     */
     public DashController(EnvironmentModel m, Dash v){
         this.theModel = m;
         this.theView = v;
