@@ -2,7 +2,6 @@ package Controllers;
 
 import Custom.NonExistantUserProfileException;
 import Models.*;
-import Views.CoreView;
 import Views.CustomConsole;
 import Views.Dash;
 import Views.EditSimulationView;
@@ -13,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 /**
@@ -22,8 +19,8 @@ import java.util.UUID;
  */
 public class DashController {
 
-    private EnvironmentModel theModel;
-    private Dash theView;
+    private final EnvironmentModel theModel;
+    private final Dash theView;
 
     /**
      * Instantiates a new Dash controller.
@@ -31,14 +28,14 @@ public class DashController {
      * @param m the m
      * @param v the v
      */
-    public DashController(EnvironmentModel m, Dash v){
+    public DashController(EnvironmentModel m, Dash v) {
         this.theModel = m;
         this.theView = v;
 
         initDash();
     }
 
-    private void initDash(){
+    private void initDash() {
         UserProfileModel[] allProfiles = theModel.getAllUserProfiles();
         Room[] allRooms;
 
@@ -52,7 +49,7 @@ public class DashController {
         }
 
         allRooms = theModel.getRooms();
-    for (int i = allRooms.length - 1; i >= 0; i--) {
+        for (int i = allRooms.length - 1; i >= 0; i--) {
             boolean isCurrentRoom = false;
             if (Context.getCurrentUser().getRoomID() == allRooms[i].getId()) isCurrentRoom = true;
 
@@ -170,7 +167,8 @@ public class DashController {
              * @param e the event to be processed
              */
             @Override
-            public void windowOpened(WindowEvent e) {}
+            public void windowOpened(WindowEvent e) {
+            }
 
             /**
              * Invoked when the user attempts to close the window from the window's system menu.
@@ -178,7 +176,8 @@ public class DashController {
              * @param e the event to be processed
              */
             @Override
-            public void windowClosing(WindowEvent e) {}
+            public void windowClosing(WindowEvent e) {
+            }
 
             /**
              * Invoked when a window has been closed as the result of calling dispose on the window.
@@ -202,7 +201,8 @@ public class DashController {
              * @see Frame#setIconImage
              */
             @Override
-            public void windowIconified(WindowEvent e) {}
+            public void windowIconified(WindowEvent e) {
+            }
 
             /**
              * Invoked when a window is changed from a minimized to a normal state.
@@ -210,7 +210,8 @@ public class DashController {
              * @param e the event to be processed
              */
             @Override
-            public void windowDeiconified(WindowEvent e) {}
+            public void windowDeiconified(WindowEvent e) {
+            }
 
             /**
              * Invoked when the Window is set to be the active Window. Only a Frame or a Dialog can be the
@@ -222,7 +223,8 @@ public class DashController {
              * @param e the event to be processed
              */
             @Override
-            public void windowActivated(WindowEvent e) {}
+            public void windowActivated(WindowEvent e) {
+            }
 
             /**
              * Invoked when a Window is no longer the active Window. Only a Frame or a Dialog can be the
@@ -234,7 +236,8 @@ public class DashController {
              * @param e the event to be processed
              */
             @Override
-            public void windowDeactivated(WindowEvent e) {}
+            public void windowDeactivated(WindowEvent e) {
+            }
         }
     }
 

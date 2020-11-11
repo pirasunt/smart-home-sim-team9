@@ -1,7 +1,5 @@
 package Observers;
 
-import Models.Room;
-
 /**
  * The interface Room change observer.
  */
