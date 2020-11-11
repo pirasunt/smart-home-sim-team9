@@ -1,17 +1,36 @@
 package Models.Walls;
 
 import Enums.WallType;
+import Models.Context;
+import Models.EnvironmentModel;
+import Views.CustomConsole;
 
 /** The type Window wall. */
 public class WindowWall extends Wall {
   /** This attribute is a boolean value to know if the windows on this wall are open. */
-  boolean windowOpen = false;
+  private boolean windowOpen = false;
   /** This attribute is a boolean value to know if the windows are obstructed on this wall. */
-  boolean windowObstructed = false;
+  private boolean windowObstructed = false;
+  /**
+   * This attribute is an integer to represent the id of the window so it can be referenced outside
+   * of the class.
+   */
+  private int windowId;
 
   /** Instantiates a new Window wall. */
   public WindowWall() {
     super(WallType.WINDOWS);
+  }
+
+  /**
+   * Instantiates a new Window wall with a set id.
+   *
+   * @param id the id
+   */
+  public WindowWall(int id) {
+    super(WallType.WINDOWS);
+
+    this.windowId = id;
   }
 
   /**
@@ -30,6 +49,7 @@ public class WindowWall extends Wall {
    */
   public void setWindowObstructed(boolean windowObstructed) {
     this.windowObstructed = windowObstructed;
+    Context.repaintHouseGraphic();
   }
 
   /**
@@ -48,5 +68,46 @@ public class WindowWall extends Wall {
    */
   public void setWindowOpen(boolean windowOpen) {
     this.windowOpen = windowOpen;
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method called when window has to be opened by the system automatically. */
+  public void openWindow() {
+    if (windowObstructed && !windowOpen) {
+      CustomConsole.print("Window " + windowId + " is obstructed and cannot be opened.");
+    } else if (!windowOpen) {
+      windowOpen = true;
+      CustomConsole.print("Window " + windowId + " has been opened.");
+    }
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method called when the window has to be closed by the system automatically */
+  public void closeWindow() {
+    if (windowObstructed && windowOpen) {
+      CustomConsole.print("Window " + windowId + " is obstructed and cannot be closed.");
+    } else if (windowOpen){
+      windowOpen = false;
+      CustomConsole.print("Window " + windowId + " has been closed.");
+    }
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method called when the window has to be obstructed by the system automatically */
+  public void obstructWindow() {
+    if (!windowObstructed) {
+      windowObstructed = true;
+      CustomConsole.print("Window " + windowId + " has been obstructed.");
+    }
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method called when the window has to be unobstructed by the system automatically */
+  public void unobstructWindow() {
+    if (windowObstructed) {
+      windowObstructed = false;
+      CustomConsole.print("Window " + windowId + " has been unobstructed.");
+    }
+    Context.repaintHouseGraphic();
   }
 }

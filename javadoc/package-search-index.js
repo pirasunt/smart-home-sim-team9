@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"Controllers"},{"l":"Custom"},{"l":"Enums"},{"l":"Models"},{"l":"Models.Walls"},{"l":"Views"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"Controllers"},{"l":"Custom"},{"l":"Custom.CustomXStream"},{"l":"Enums"},{"l":"Helpers"},{"l":"Helpers.DrawingHelpers"},{"l":"Models"},{"l":"Models.Walls"},{"l":"Tools"},{"l":"Views"}]

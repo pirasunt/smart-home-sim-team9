@@ -1,11 +1,12 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
+import Enums.WallType;
 import Models.Walls.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
 
 /** The type House. */
 public class House {
@@ -14,7 +15,7 @@ public class House {
 
   /**
    * Gets rooms in the house.
-   *
+   * 
    * @return the rooms in the house
    */
   public ArrayList<Room> getRooms() {
@@ -23,14 +24,13 @@ public class House {
 
   /**
    * Gets a single room in the house.
-   *
-   * @param room the room to be returned
+   * @param id the room to be returned
    * @return the room requested
    */
-  public Room getRoom(Room room) {
+  public Room getRoomById(int id) {
     for (Room r : rooms) {
-      if (r.getId() == room.getId() && r.getName().equals(room.getName())) {
-        return room;
+      if (r.getId() == id) {
+        return r;
       }
     }
     return null;
@@ -58,9 +58,51 @@ public class House {
     return this;
   }
 
+  /**
+   * Lock and close doors and windows.
+   *
+   * @param shouldLock the shouldLock
+   */
+  public void lockAndClose(Boolean shouldLock) {
+    for (Room r : rooms) {
+
+      for (Wall w : r.getAllWalls()) {
+
+        if (w.getType() == WallType.OUTSIDE) {
+          ((OutsideWall) w).setDoorLocked(shouldLock);
+
+        } else if (w.getType() == WallType.WINDOWS) {
+          if (shouldLock) {
+            ((WindowWall) w).closeWindow();
+          } else {
+            ((WindowWall) w).openWindow();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Has obstruction boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean hasOpenObstruction() {
+    for (Room r : rooms) {
+      for (Wall w : r.getAllWalls()) {
+        if (w.getType() == WallType.WINDOWS) {
+          if (((WindowWall) w).isWindowObstructed() && ((WindowWall) w).isWindowOpen()) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   /** Retrieves XML of the current house and saves to file. */
   public void getXML() {
-    CustomXStream stream = new CustomXStream();
+    CustomHouseXStream stream = new CustomHouseXStream();
     try {
       stream.toXML(this, new FileOutputStream("House.xml"));
     } catch (FileNotFoundException e) {

@@ -1,18 +1,18 @@
 package Views;
 
 import Controllers.EnvironmentController;
+import Custom.CustomXStream.CustomHouseXStream;
+import Custom.CustomXStream.CustomUserXStream;
+import Helpers.HouseValidationHelper;
 import Models.EnvironmentModel;
-import Models.UserProfileModel;
-import Custom.CustomXStream;
 import Models.House;
-import Enums.ProfileType;
+import Models.UserProfileModel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
-import javax.swing.*;
 
 /** The type File picker start. */
 public class FilePickerStart extends JFrame {
@@ -33,30 +33,35 @@ public class FilePickerStart extends JFrame {
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
 
-            // Sample users. The 3rd parameter is roomID (-1 to indicate that no room has been set)
-            UserProfileModel p1 = new UserProfileModel(ProfileType.ADULT, "James", 0);
-            UserProfileModel p2 = new UserProfileModel(ProfileType.STRANGER, "Janice", 0);
-            UserProfileModel p3 = new UserProfileModel(ProfileType.CHILD, "Morty", 0);
-            UserProfileModel p4 = new UserProfileModel(ProfileType.GUEST, "Astley", 0);
-            UserProfileModel p5 = new UserProfileModel(ProfileType.GUEST, "Penny", 0);
-            UserProfileModel p6 = new UserProfileModel(ProfileType.STRANGER, "Cool Guy", 0);
-            UserProfileModel p7 = new UserProfileModel(ProfileType.CHILD, "Rick", 0);
+            CustomUserXStream uStream = new CustomUserXStream();
+            UserProfileModel[] users =
+                ((UserProfileModel[]) uStream.fromXML(new File("UserProfiles.xml")));
 
-            CustomXStream stream = new CustomXStream();
-            House house = (House) stream.fromXML(pathTo);
+            CustomHouseXStream hStream = new CustomHouseXStream();
+            House house = (House) hStream.fromXML(pathTo);
+            boolean validHouse = HouseValidationHelper.ValidateHouse(house);
             HouseGraphic hg = new HouseGraphic(house);
-            hg.init();
 
             // Init singleton Environment object with HOUSE and USERS. Pass this instance to objects
             // that need it.
-            EnvironmentModel theModel =
-                EnvironmentModel.createSimulation(house, hg, p1, p2, p3, p4, p5, p6, p7);
+            EnvironmentModel theModel = EnvironmentModel.createSimulation(house, hg, users);
+
+            // Initialize the house graphic with the environment
+            hg.init(theModel);
 
             // Init console, can now call static method Console.print()
-            Console c = new Console();
-            Console.init();
+            CustomConsole.init();
 
-            Console.print("Welcome to the simulator!");
+            CustomConsole.print("Welcome to the simulator!");
+            if (!validHouse) {
+              CustomConsole.print(
+                  "The XML inputted was invalid. This means the room generated in the House Layout will not make sense.");
+              CustomConsole.print(
+                  "Make sure each room has a unique id and that connected rooms reference each other by id.");
+              CustomConsole.print(
+                  "That is: if room 1 is to the right of room 2, then room 2 must be to the left of room 1.");
+              CustomConsole.print("Fix the XML file and restart the program with a valid input.");
+            }
 
             EnvironmentView theView = new EnvironmentView();
             EnvironmentController theController = new EnvironmentController(theView, theModel);
@@ -84,6 +89,8 @@ public class FilePickerStart extends JFrame {
    */
   public static void main(String[] args) {
     run(new FilePickerStart(), 250, 110);
+    //    House house = new House();
+    //    house.getXML();
   }
 
   /**
@@ -94,6 +101,17 @@ public class FilePickerStart extends JFrame {
    * @param height the height
    */
   public static void run(JFrame frame, int width, int height) {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(width, height);
     frame.setVisible(true);
@@ -104,6 +122,7 @@ public class FilePickerStart extends JFrame {
   class OpenL implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       JFileChooser c = new JFileChooser();
+      c.setCurrentDirectory(new File(System.getProperty("user.dir")));
       // Demonstrate "Open" dialog:
       int rVal = c.showOpenDialog(FilePickerStart.this);
       if (rVal == JFileChooser.APPROVE_OPTION) {

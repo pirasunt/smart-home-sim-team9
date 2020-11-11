@@ -1,27 +1,41 @@
 package Models;
 
+import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
-import Views.Console;
+import Observers.CurrentUserObserver;
+import Observers.RoomChangeObserver;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
- * Controllers.EnvironmentController}** manipulates the data within this class.
+ * Controllers.EnvironmentController}****** manipulates the data within this class.
  */
 public class EnvironmentModel {
   private static EnvironmentModel instance = null;
-  private final Calendar currentCalObj;
-  private final ArrayList<UserProfileModel> userProfileModelList;
   private final House house;
   private final HouseGraphic houseGraphic;
-  private int outsideTemperature;
+  private final ArrayList<UserProfileModel> userProfileModelList;
   private UserProfileModel currentUser;
-  private boolean simulationRunning = false;
+  private static boolean simulationRunning = false;
+  private static Timer timer;
+  private static ArrayList<RoomChangeObserver> roomChangeObservers;
+  private static ArrayList<CurrentUserObserver> currentUserObservers;
   private boolean windowsObstructed = false;
+  private int outsideTemperature;
+  private boolean automaticLights;
+  private final Context c;
 
   private EnvironmentModel(
       House h,
@@ -29,12 +43,17 @@ public class EnvironmentModel {
       int temperature,
       Calendar cal,
       ArrayList<UserProfileModel> profileList) {
-    this.house = h;
-    this.houseGraphic = hg;
+    house = h;
+    houseGraphic = hg;
     this.outsideTemperature = temperature;
-    this.currentCalObj = cal;
-    this.userProfileModelList = profileList;
-    this.currentUser = null;
+    userProfileModelList = profileList;
+    currentUser = null;
+    automaticLights = false;
+    roomChangeObservers = new ArrayList<>();
+    currentUserObservers = new ArrayList<>();
+    timer = new Timer(1000, null);
+
+    c = new Context(h, hg, timer, cal, profileList);
   }
 
   private EnvironmentModel(House h, HouseGraphic hg, ArrayList<UserProfileModel> profileList) {
@@ -75,6 +94,82 @@ public class EnvironmentModel {
   }
 
   /**
+   * Sets current user.
+   *
+   * @param currentUser the current user
+   */
+  public void setCurrentUser(UserProfileModel currentUser) {
+    this.currentUser = new UserProfileModel(currentUser);
+    notifyCurrentUserObservers(currentUser);
+    CustomConsole.print(
+        "Current user has been set to "
+            + this.currentUser.getName()
+            + "/"
+            + this.currentUser.getProfileType());
+  }
+  /**
+   * Gets simulation object.
+   *
+   * @return the simulation running
+   */
+  public static boolean getSimulationRunning() {
+    return simulationRunning;
+  }
+
+
+  /**
+   * Method that subscribes a RoomChangeObserver. Fires anytime a user is successfully moved to a new room.
+   *
+   * @param ob the observer
+   */
+  public static void subscribe(RoomChangeObserver ob) {
+    roomChangeObservers.add(ob);
+  }
+
+  public static void unsubscribe(RoomChangeObserver ob) {
+    roomChangeObservers.remove(ob);
+  }
+
+  public static void subscribe(CurrentUserObserver ob) {
+    currentUserObservers.add(ob);
+  }
+
+  public static void unsubscribe(CurrentUserObserver ob) {
+    currentUserObservers.remove(ob);
+  }
+
+
+  /**
+   * Notifies all Observers whenever a user changes rooms in the simulation
+   * @param oldRoomID ID of the old room
+   * @param newRoomID ID of the new room
+   */
+  public static void notifyRoomChangeObservers(int oldRoomID, int newRoomID) {
+    for (RoomChangeObserver o : roomChangeObservers) {
+      o.update(oldRoomID, newRoomID);
+    }
+  }
+
+  /**
+   * Notifies all Observers whenever the current user is changed
+   * @param newCurrentUser the "New" current user
+   */
+  public static void notifyCurrentUserObservers(UserProfileModel newCurrentUser) {
+    for (CurrentUserObserver o : currentUserObservers) {
+      o.update(new UserProfileModel(newCurrentUser));
+    }
+  }
+
+  /**
+   * Initialize timer.
+   *
+   * @param listenForTimer the listen for timer
+   */
+  public void initializeTimer(ActionListener listenForTimer) {
+    timer.addActionListener(listenForTimer);
+  }
+
+  /**
    * Used to set the outside temperature in the simulation
    *
    * @param newTemp is the new temperature
@@ -89,10 +184,10 @@ public class EnvironmentModel {
    * @return UserProfile Array of all registered user profile in the environment
    */
   public UserProfileModel[] getAllUserProfiles() {
-    UserProfileModel[] up = new UserProfileModel[this.userProfileModelList.size()];
+    UserProfileModel[] up = new UserProfileModel[userProfileModelList.size()];
 
     for (int i = 0; i < up.length; i++) {
-      up[i] = new UserProfileModel(this.userProfileModelList.get(i));
+      up[i] = new UserProfileModel(userProfileModelList.get(i));
     }
     return up;
   }
@@ -107,9 +202,16 @@ public class EnvironmentModel {
    */
   public void modifyProfileLocation(UserProfileModel profile, Room room) {
 
+    int oldRoomID = profile.getRoomID();
+    int newRoomID = room.getId();
+    UserProfileModel updatedProfile = profile.modifyLocation(room.getId());
+
     try {
-      updateProfileEntry(profile.modifyLocation(room.getId()));
-      Console.print(
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
+      notifyRoomChangeObservers(oldRoomID, newRoomID);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
+      CustomConsole.print(
           "Set Room to: '"
               + room.getName()
               + "' for user "
@@ -117,6 +219,32 @@ public class EnvironmentModel {
               + "/"
               + profile.getProfileType()
               + "\n");
+    } catch (NonExistantUserProfileException e) {
+      System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
+    }
+
+    houseGraphic.repaint();
+  }
+
+  /**
+   * Modify user privilege.
+   *
+   * @param profile the profile
+   * @param newPrivilegeLevel the new privilege level
+   */
+  public void modifyUserPrivilege(UserProfileModel profile, ProfileType newPrivilegeLevel) {
+
+    UserProfileModel updatedProfile = profile.modifyPrivilege(newPrivilegeLevel);
+    try {
+      updateProfileEntry(updatedProfile, new File("UserProfiles.xml"));
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
+      CustomConsole.print(
+          "Updated privilege of user '"
+              + profile.getName()
+              + "' to '"
+              + newPrivilegeLevel.toString()
+              + "'.");
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage()); // TODO: Return some sort of error window in the future
     }
@@ -129,37 +257,20 @@ public class EnvironmentModel {
    *
    * @param profile The {@link UserProfileModel} object that needs its name modified
    * @param newName The new name of the user profile
+   * @param file the file
    */
-  public void editProfileName(UserProfileModel profile, String newName) {
+  public void editProfileName(UserProfileModel profile, String newName, File file) {
 
+    UserProfileModel updatedProfile = profile.modifyName(newName);
     try {
-      updateProfileEntry(profile.modifyName(newName));
+      updateProfileEntry(updatedProfile, file);
+      if(currentUser.getProfileID() == updatedProfile.getProfileID())
+        notifyCurrentUserObservers(updatedProfile);
     } catch (NonExistantUserProfileException e) {
       System.err.println(e.getMessage());
     }
-  }
 
-  /**
-   * Returns a deep copy of the currently selected user on the simulation
-   *
-   * @return Deep copy of currently selected user.
-   */
-  public UserProfileModel getCurrentUser() {
-    return new UserProfileModel(this.currentUser);
-  }
-
-  /**
-   * Sets current user.
-   *
-   * @param currentUser the current user
-   */
-  public void setCurrentUser(UserProfileModel currentUser) {
-    this.currentUser = new UserProfileModel(currentUser);
-    Console.print(
-        "Current user has been set to "
-            + this.currentUser.getName()
-            + "/"
-            + this.currentUser.getProfileType());
+    houseGraphic.repaint();
   }
 
   /**
@@ -172,9 +283,9 @@ public class EnvironmentModel {
    */
   public UserProfileModel getUserByID(UUID id) throws NonExistantUserProfileException {
     UserProfileModel temp = null;
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (id == this.userProfileModelList.get(i).getProfileID()) {
-        temp = new UserProfileModel(this.userProfileModelList.get(i));
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (id == userProfileModelList.get(i).getProfileID()) {
+        temp = new UserProfileModel(userProfileModelList.get(i));
         break;
       }
     }
@@ -186,20 +297,32 @@ public class EnvironmentModel {
     return temp;
   }
 
-  private void updateProfileEntry(UserProfileModel updatedProfile)
+  private void updateProfileEntry(UserProfileModel updatedProfile, File userProfilesFile)
       throws NonExistantUserProfileException {
 
     boolean existingProfile = false;
     int index = -1;
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (this.userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileID() == updatedProfile.getProfileID()) {
         existingProfile = true;
         index = i;
       }
     }
 
     if (existingProfile && index >= 0) {
-      this.userProfileModelList.set(index, updatedProfile);
+
+      userProfileModelList.set(index, updatedProfile);
+
+      try {
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
+
+        CustomUserXStream uStream = new CustomUserXStream();
+        uStream.toXML(
+            userProfileModelList.toArray(profileListAsArray),
+            new FileOutputStream(userProfilesFile));
+      } catch (Exception e) {
+      }
+
     } else {
       throw new NonExistantUserProfileException(
           "UserProfile "
@@ -210,9 +333,11 @@ public class EnvironmentModel {
     }
 
     // Update currentUser entry if needed
-    if (this.currentUser.getProfileID() == updatedProfile.getProfileID()) {
-      this.currentUser = updatedProfile;
+    if (currentUser.getProfileID() == updatedProfile.getProfileID()) {
+      currentUser = updatedProfile;
     }
+
+    houseGraphic.repaint();
   }
 
   /**
@@ -224,9 +349,9 @@ public class EnvironmentModel {
   public UserProfileModel[] getProfilesByCategory(ProfileType desiredProfileType) {
     ArrayList<UserProfileModel> temp = new ArrayList<UserProfileModel>();
 
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if (this.userProfileModelList.get(i).getProfileType() == desiredProfileType)
-        temp.add(new UserProfileModel(this.userProfileModelList.get(i))); // Deep copy
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileType() == desiredProfileType)
+        temp.add(new UserProfileModel(userProfileModelList.get(i))); // Deep copy
     }
     UserProfileModel[] temp2 = new UserProfileModel[temp.size()];
     for (int i = 0; i < temp.size(); i++) {
@@ -242,7 +367,7 @@ public class EnvironmentModel {
    * @return true if currentUser is set and false otherwise.
    */
   public boolean isCurrentUserSet() {
-    return !(this.currentUser == null);
+    return !(currentUser == null);
   }
 
   /**
@@ -255,60 +380,12 @@ public class EnvironmentModel {
   }
 
   /**
-   * Gets the currently set date in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public String getDateString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
-    return dateFormatter.format(this.currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set time in the simulator in a pre-determined format
-   *
-   * @return String representation of a {@link Date} object
-   */
-  public String getTimeString() {
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm:ss a");
-    return dateFormatter.format(this.currentCalObj.getTime());
-  }
-
-  /**
-   * Gets the currently set date and time in the simulator in a pre-determined format
-   *
-   * @return Date object representing currently set date and time
-   */
-  public Date getDateObject() {
-    return this.currentCalObj.getTime();
-  }
-
-  /**
-   * Sets the Date of the Simulator
-   *
-   * @param newDate {@link Date} object representing the desired date
-   */
-  public void setDate(Date newDate) {
-    this.currentCalObj.set(newDate.getYear(), newDate.getMonth(), newDate.getDate());
-  }
-
-  /**
-   * Sets the Time of the Simulator
-   *
-   * @param newTime {@link Date} object representing the desired time
-   */
-  public void setTime(Date newTime) {
-    this.currentCalObj.set(Calendar.HOUR_OF_DAY, newTime.getHours());
-    this.currentCalObj.set(Calendar.MINUTE, newTime.getMinutes());
-  }
-
-  /**
    * Gets all the existing rooms that are in the {@link House}
    *
    * @return An array of {@link Room} objects
    */
   public Room[] getRooms() {
-    ArrayList<Room> temp = this.house.getRooms();
+    ArrayList<Room> temp = house.getRooms();
     Room[] roomArray = new Room[temp.size() + 1];
     Room r = new Room("Outside", null, null, null, null, 0);
 
@@ -324,46 +401,79 @@ public class EnvironmentModel {
   }
 
   /**
+   * Returns a Room with the matching roomID
+   * @param roomID Integer that uniquely represents a room
+   * @return Room
+   */
+  public Room getRoomByID(int roomID){
+    return house.getRoomById(roomID);
+  }
+
+  /**
    * Adds a new {@link UserProfileModel} to the internal List of this class
    *
    * @param newUser The new {@link UserProfileModel} to be added
+   * @param userProfilesFile the user profiles file
    * @throws Exception if the specified {@link UserProfileModel} contains invalid attributes. This
    *     includes an empty profile name or non-set {@link ProfileType}
    */
-  public void addUserProfile(UserProfileModel newUser) throws Exception {
+  public void addUserProfile(UserProfileModel newUser, File userProfilesFile) throws Exception {
 
     if (newUser.getName().equals("")
         || newUser.getName() == null
         || newUser.getProfileType() == null) {
       throw new Exception("Can Not Create User: Invalid User Attributes");
     } else {
-      this.userProfileModelList.add(new UserProfileModel(newUser));
-      Console.print(
-          "New user '" + newUser.getName() + "'/" + newUser.getProfileType() + " has been created");
+
+      UserProfileModel userToAdd = new UserProfileModel(newUser);
+
+      try {
+        userProfileModelList.add(userToAdd);
+        UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
+        CustomConsole.print(
+            "New user '"
+                + newUser.getName()
+                + "'/"
+                + newUser.getProfileType()
+                + " has been created");
+
+        CustomUserXStream uStream = new CustomUserXStream();
+        uStream.toXML(
+            userProfileModelList.toArray(profileListAsArray),
+            new FileOutputStream(userProfilesFile));
+      } catch (FileNotFoundException e) {
+        userProfileModelList.remove(userToAdd);
+        CustomConsole.print("Error writing to UserProfiles.xml; user was not created.");
+      }
     }
+
+    houseGraphic.repaint();
   }
 
   /**
    * Remove the inputted user profile from the list.
    *
    * @param u the user to be removed.
+   * @param userProfilesFile the user profiles file
    */
-  public void removeUserProfile(UserProfileModel u)  {
-    for (int i = 0; i < this.userProfileModelList.size(); i++) {
-      if(this.userProfileModelList.get(i).getProfileID() == u.getProfileID()){
-        this.userProfileModelList.remove(i);
+  public void removeUserProfile(UserProfileModel u, File userProfilesFile) {
+    for (int i = 0; i < userProfileModelList.size(); i++) {
+      if (userProfileModelList.get(i).getProfileID() == u.getProfileID()) {
+        userProfileModelList.remove(i);
+        try {
+          UserProfileModel[] profileListAsArray = new UserProfileModel[userProfileModelList.size()];
+
+          CustomUserXStream uStream = new CustomUserXStream();
+          uStream.toXML(
+              userProfileModelList.toArray(profileListAsArray),
+              new FileOutputStream(userProfilesFile));
+        } catch (FileNotFoundException e) {
+          userProfileModelList.add(u);
+          CustomConsole.print("Error removing user from UserProfiles.xml; user was not deleted.");
+        }
         break;
       }
     }
-  }
-
-  /**
-   * Gets simulation object.
-   *
-   * @return the simulation running
-   */
-  public boolean getSimulationRunning() {
-    return this.simulationRunning;
   }
 
   /**
@@ -377,34 +487,25 @@ public class EnvironmentModel {
 
   /** Turns on the simulation */
   public void startSimulation() {
-    this.simulationRunning = true;
-    Console.print("The simulation has been started.");
+    simulationRunning = true;
+    CustomConsole.print("The simulation has been started.");
+  }
+
+  /**
+   * Sets the status of the automatic lighting system. True turns on the auto-lighting system whereas false turns it off
+   * @param newStatus
+   */
+  public void setAutomaticLights(boolean newStatus){
+    this.automaticLights = newStatus;
+  }
+
+  public boolean getAutomaticLights(){
+    return this.automaticLights;
   }
 
   /** Turns off the simulation */
   public void stopSimulation() {
-    this.simulationRunning = false;
-    Console.print("The simulation has been stopped.");
-  }
-
-  /** Obstructs all windows */
-  public void obstructWindows() {
-    Console.print("Obstructing all windows!");
-    this.windowsObstructed = true;
-  }
-
-  /** Removes obstruction from all windows */
-  public void clearWindows() {
-    Console.print("Clearing all windows!");
-    this.windowsObstructed = false;
-  }
-
-  /**
-   * Returns the HouseGraphic displayed to the user
-   *
-   * @return the house graphic
-   */
-  public HouseGraphic getHouseGraphic() {
-    return this.houseGraphic;
+    simulationRunning = false;
+    CustomConsole.print("The simulation has been stopped.");
   }
 }

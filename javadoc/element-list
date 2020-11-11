@@ -1,6 +1,10 @@
 Controllers
 Custom
+Custom.CustomXStream
 Enums
+Helpers
+Helpers.DrawingHelpers
 Models
 Models.Walls
+Tools
 Views

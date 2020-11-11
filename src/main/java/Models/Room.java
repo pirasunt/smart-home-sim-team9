@@ -1,6 +1,9 @@
 package Models;
 
 import Models.Walls.*;
+import Views.CustomConsole;
+
+import java.util.ArrayList;
 
 /** The type Room. */
 public class Room {
@@ -117,6 +120,49 @@ public class Room {
    */
   public void setLightsOn(boolean value) {
     this.lightsOn = value;
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method to be used when lights are turned off while the simulator is running */
+  public void turnOffLights() {
+    if (lightsOn) {
+      lightsOn = false;
+      CustomConsole.print("Lights in room: " + name + " have been turned off.");
+    }
+    Context.repaintHouseGraphic();
+  }
+
+  /** Method to be used when lights are turned on while the simulator is running */
+  public void turnOnLights() {
+    if (!lightsOn) {
+      lightsOn = true;
+      CustomConsole.print("Lights in room: " + name + " have been turned on.");
+    }
+    Context.repaintHouseGraphic();
+  }
+
+  /**
+   * Returns which users are located in the room represented by this instance of Room.
+   *
+   * @param environment The EnvironmentModel singleton which stores all user profiles that exist in
+   *     the simulation.
+   * @return an array containing all the UserProfileModel objects with a room id equal to the one of
+   *     this Room instance.
+   */
+  public ArrayList<UserProfileModel> getAllUsersInRoom(EnvironmentModel environment) {
+    ArrayList<UserProfileModel> users = new ArrayList<UserProfileModel>();
+
+    for (UserProfileModel user : environment.getAllUserProfiles()) {
+      if (user.getRoomID() == this.id) {
+        users.add(user);
+      }
+    }
+
+    return users;
+  }
+
+  public Wall[] getAllWalls(){
+    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
   }
 
   @Override

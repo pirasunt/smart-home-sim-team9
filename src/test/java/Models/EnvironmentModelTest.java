@@ -1,12 +1,14 @@
 package Models;
 
-import Custom.CustomXStream;
+import Custom.CustomXStream.CustomHouseXStream;
 import Enums.ProfileType;
-import Views.Console;
+import Views.CustomConsole;
 import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Date;
 
@@ -14,7 +16,7 @@ public class EnvironmentModelTest {
 
   @BeforeEach
   public void initEach() {
-    Console c = new Console();
+    CustomConsole.init();
     EnvironmentModel.resetInstance();
   }
 
@@ -32,27 +34,27 @@ public class EnvironmentModelTest {
   //use case 3.12
   @Test
   void setHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    assert env.getCurrentUser().getRoomID() == 2;
+    assert Context.getCurrentUser().getRoomID() == 2;
   }
 
   //use case 3.12
   @Test
   void updateHouseLocation() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     env.setCurrentUser(u);
-    UserProfileModel tmp = env.getCurrentUser().modifyLocation(3);
+    UserProfileModel tmp = Context.getCurrentUser().modifyLocation(3);
     assert tmp.getRoomID() == 3;
   }
 
@@ -60,21 +62,21 @@ public class EnvironmentModelTest {
   //use case 3.5
   @Test
   void setDateTime() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
     EnvironmentModel env =
         EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
     Date d = new Date();
-    env.setTime(d);
-    assert env.getDateObject().equals(d);
+    Context.setTime(d);
+    assert Context.getDateObject().equals(d);
   }
 
   // unit test 3.1
   @Test
   void startStopSim() {
-    CustomXStream cxs = new CustomXStream();
+    CustomHouseXStream cxs = new CustomHouseXStream();
     House testHouse;
     testHouse = (House) cxs.fromXML(new File("House.xml"));
     UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
@@ -84,5 +86,23 @@ public class EnvironmentModelTest {
     assert env.getSimulationRunning() == false;
     env.startSimulation();
     assert env.getSimulationRunning() == true;
+  }
+
+  // use case 3 delivery 2
+  @Test
+  void testTimer() {
+    UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", -1);
+    House house = new House();
+    HouseGraphic hg = new HouseGraphic(house);
+    EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
+    ActionListener a = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+      }
+    };
+    env.initializeTimer(a);
+    Context.setDelay(10);
+    assert Context.getDelay() == 10;
   }
 }
