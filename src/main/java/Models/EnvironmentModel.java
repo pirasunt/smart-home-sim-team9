@@ -1,19 +1,22 @@
 package Models;
 
-import Observers.CurrentUserObserver;
-import Observers.RoomChangeObserver;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
+import Observers.CurrentUserObserver;
+import Observers.RoomChangeObserver;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link

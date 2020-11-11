@@ -15,7 +15,7 @@ public class House {
 
   /**
    * Gets rooms in the house.
-   *
+   * 
    * @return the rooms in the house
    */
   public ArrayList<Room> getRooms() {
