@@ -22,7 +22,7 @@ public class CoreView {
   private JPanel wrapPan;
 
   public CoreView() {
-    //        this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
+            this.scrollPane.getVerticalScrollBar().setUnitIncrement(18); //Helps scroll faster
   }
 
   public void displayWindowSection(
