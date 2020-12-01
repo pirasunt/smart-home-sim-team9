@@ -8,8 +8,6 @@ public class HeatingModel {
     private ArrayList<HeatingZone> heatingZones;
     private Calendar summerStart;
     private Calendar winterStart;
-    private boolean acOn;
-    private boolean heaterOn;
     private int topThreshold;
     private int bottomThreshhold;
 
