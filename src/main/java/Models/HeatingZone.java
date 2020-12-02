@@ -65,38 +65,6 @@ public class HeatingZone {
         });
 
         timer.start();
-
-        //Summer + cold out -> open windows
-        if (isSummer() && !hotOutside() && hotInside(newTemp)) {
-            openAllWindowsInZone();
-            this.acOn = false;
-            this.heaterOn= false;
-            CustomConsole.print("Heating zone: " + name + " is being cooled off by opening the windows.");
-        }
-
-        //Summer + warm out -> turn on ac
-        else if (isSummer() && hotOutside() && hotInside(newTemp)) {
-            closeAllWindowsInZone();
-            this.acOn = true;
-            this.heaterOn = false;
-            CustomConsole.print("Heating zone: " + name + " is being cooled off by turning off the AC.");
-        }
-
-        //Winter + cold in -> turn on heating
-        else if (!isSummer() && !hotInside(newTemp)) {
-            closeAllWindowsInZone();
-            this.acOn = false;
-            this.heaterOn = true;
-            CustomConsole.print("Heating zone: " + name + " is being heated by the heaters.");
-        }
-
-        //Winter + cold in -> turn on heating
-        else if (!isSummer() && !hotInside(newTemp)) {
-            closeAllWindowsInZone();
-            this.acOn = false;
-            this.heaterOn = true;
-            CustomConsole.print("It is already hotter than desired in heating zone: " + name + ", heating is turned off until the proper temperature is achieved.");
-        }
     }
 
     /**

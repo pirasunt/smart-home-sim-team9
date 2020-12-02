@@ -6,8 +6,6 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Observers.TimeChangeObserver;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +68,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
     /**
      * The Temp spinner.
      */
-    private JLabel tempLabel; // temperature spinner
+    private JLabel teampLabel; // temperature spinner
 
     /**
      * The Time speed.
@@ -79,11 +77,12 @@ public class Dash extends JFrame implements TimeChangeObserver {
     private SecurityView shp;
     private CoreView coreView;
     private JPanel shpTab;
-    private JPanel SHH;
+    private JPanel SHHTab;
+    private HeatingModule SHH;
 
 
     /**
-     * Instantiates a new Dashboard frame.
+     * Instantiates teampLabel new Dashboard frame.
      *
      * @param temp  the temp
      * @param date  the date
@@ -91,7 +90,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
      * @param delay the delay
      */
     public Dash(int temp, String date, String time, int delay) {
-        tempLabel.setText(temp + "°C");
+        teampLabel.setText(temp + "°C");
         dateField.setText(date);
         timeField.setText(time);
         timeSpeed.setText(1000 / delay + " X");
@@ -144,7 +143,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
      * Adds the specified {@link UserProfileModel} to the Dashboard User Dropdown Menu
      *
      * @param profile       The {@link UserProfileModel} to add to the User Dropdown
-     * @param isCurrentUser boolean indicating whether a current user is set in the {@link
+     * @param isCurrentUser boolean indicating whether teampLabel current user is set in the {@link
      *                      EnvironmentModel}
      */
     public void addProfileToDropDown(UserProfileModel profile, boolean isCurrentUser) {
@@ -230,7 +229,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public void refreshDash(String dateString, String timeString, int temp, int timerDelay) {
         this.dateField.setText(dateString);
         this.timeField.setText(timeString);
-        this.tempLabel.setText(temp + "°C");
+        this.teampLabel.setText(temp + "°C");
         this.timeSpeed.setText(1000 / timerDelay + " X");
 
         // This will trigger the userProfileDropDown ActionListener and will update the room of the
@@ -280,5 +279,4 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public void update(String newTime) {
         this.timeField.setText(newTime);
     }
-
 }
