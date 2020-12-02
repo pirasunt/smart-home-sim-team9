@@ -75,7 +75,7 @@ public class HeatingZone {
         }
 
         //Summer + warm out -> turn on ac
-        if (isSummer() && hotOutside() && hotInside(newTemp)) {
+        else if (isSummer() && hotOutside() && hotInside(newTemp)) {
             closeAllWindowsInZone();
             this.acOn = true;
             this.heaterOn = false;
@@ -83,7 +83,7 @@ public class HeatingZone {
         }
 
         //Winter + cold in -> turn on heating
-        if (!isSummer() && !hotInside(newTemp)) {
+        else if (!isSummer() && !hotInside(newTemp)) {
             closeAllWindowsInZone();
             this.acOn = false;
             this.heaterOn = true;
@@ -91,7 +91,7 @@ public class HeatingZone {
         }
 
         //Winter + cold in -> turn on heating
-        if (!isSummer() && !hotInside(newTemp)) {
+        else if (!isSummer() && !hotInside(newTemp)) {
             closeAllWindowsInZone();
             this.acOn = false;
             this.heaterOn = true;
@@ -149,10 +149,11 @@ public class HeatingZone {
     private void closeAllWindowsInZone() {
         for (Room room : rooms) {
             for (Wall wall : room.getAllWalls()) {
-                if (EnvironmentModel.getSimulationRunning())
-                    ((WindowWall)wall).closeWindow();
-                else
-                    ((WindowWall)wall).setWindowOpen(false);
+                if (wall.getType() == WallType.WINDOWS) {
+                    if (EnvironmentModel.getSimulationRunning())
+                        ((WindowWall) wall).closeWindow();
+                    else ((WindowWall) wall).setWindowOpen(false);
+                }
             }
         }
     }

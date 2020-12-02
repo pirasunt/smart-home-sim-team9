@@ -12,8 +12,8 @@ public class HeatingModel {
     private int topThreshold;
     private int bottomThreshhold;
 
-    public void createHeatingZone(Room[] rooms) {
-        heatingZones.add(new HeatingZone(rooms, summerStart, winterStart));
+    public void createHeatingZone(Room[] rooms, String name) {
+        heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name));
     }
 
 }

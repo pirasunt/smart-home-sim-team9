@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 
 /** The type File picker start. */
 public class FilePickerStart extends JFrame {
@@ -72,6 +73,17 @@ public class FilePickerStart extends JFrame {
               room.setTemperature(EnvironmentModel.getOutsideTemp());
             }
 
+            Room[] test = {house.getRooms().get(1), house.getRooms().get(2)};
+            HeatingZone zone = new HeatingZone(test, new Date(), new Date(), "asas");
+            zone.setTemperature(123123123);
+
+            Timer houseRefresher = new Timer(100, new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                hg.repaint();
+              }
+            });
+            houseRefresher.start();
           }
         });
     p.add(choseFile);
