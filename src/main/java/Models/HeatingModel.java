@@ -2,12 +2,13 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class HeatingModel {
 
     private ArrayList<HeatingZone> heatingZones;
-    private Calendar summerStart;
-    private Calendar winterStart;
+    private Date summerStart;
+    private Date winterStart;
     private int topThreshold;
     private int bottomThreshhold;
 

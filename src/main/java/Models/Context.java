@@ -98,7 +98,7 @@ public class Context implements CurrentUserObserver {
      * @return String representation of a {@link Date} object
      */
     public static String getDateString() {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM dd, yyyy");
         return dateFormatter.format(calendar.getTime());
     }
 

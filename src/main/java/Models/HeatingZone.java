@@ -10,18 +10,20 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 
 public class HeatingZone {
 
     private int temperature;
     private ArrayList<Room> rooms = new ArrayList<Room>();
-    private Calendar summerStart;
-    private Calendar winterStart;
+    private Date summerStart;
+    private Date winterStart;
     private boolean acOn;
     private boolean heaterOn;
+    private String name;
 
-    public HeatingZone(Room[] rooms, Calendar summerStart, Calendar winterStart) {
+    public HeatingZone(Room[] rooms, Date summerStart, Date winterStart, String name) {
         int total = 0;
         int count = 0;
         for (Room room : rooms) {
@@ -34,6 +36,7 @@ public class HeatingZone {
         this.winterStart = winterStart;
         this.acOn = false;
         this.heaterOn = false;
+        this.name = name;
 
         setTemperature(EnvironmentModel.getOutsideTemp());
     }
@@ -55,7 +58,6 @@ public class HeatingZone {
                 else if (zone.getTemperature() < newTemp) {
                     while (zone.getTemperature() < newTemp) {
                         zone.incrementTemperature();
-                        CustomConsole.print(((Integer)zone.getTemperature()).toString());
                     }
                     ((Timer)e.getSource()).stop();
                 }
@@ -65,16 +67,70 @@ public class HeatingZone {
         timer.start();
 
         //Summer + cold out -> open windows
+        if (isSummer() && !hotOutside() && hotInside(newTemp)) {
+            openAllWindowsInZone();
+            this.acOn = false;
+            this.heaterOn= false;
+            CustomConsole.print("Heating zone: " + name + " is being cooled off by opening the windows.");
+        }
 
         //Summer + warm out -> turn on ac
+        if (isSummer() && hotOutside() && hotInside(newTemp)) {
+            closeAllWindowsInZone();
+            this.acOn = true;
+            this.heaterOn = false;
+            CustomConsole.print("Heating zone: " + name + " is being cooled off by turning off the AC.");
+        }
 
         //Winter + cold in -> turn on heating
+        if (!isSummer() && !hotInside(newTemp)) {
+            closeAllWindowsInZone();
+            this.acOn = false;
+            this.heaterOn = true;
+            CustomConsole.print("Heating zone: " + name + " is being heated by the heaters.");
+        }
 
-        //Winter + hot in -> turn off heating
+        //Winter + cold in -> turn on heating
+        if (!isSummer() && !hotInside(newTemp)) {
+            closeAllWindowsInZone();
+            this.acOn = false;
+            this.heaterOn = true;
+            CustomConsole.print("It is already hotter than desired in heating zone: " + name + ", heating is turned off until the proper temperature is achieved.");
+        }
+    }
 
-        //Temp high
+    /**
+     * Verify if the context time is currently in the summer
+     * @return true if it is summer, false if it is winter.
+     */
+    private boolean isSummer() {
+        if (Context.getDateObject().after(summerStart) && Context.getDateObject().before(winterStart)) {
+            return true;
+        }
+        return false;
+    }
 
-        //Temp low
+    /**
+     * Verify if the temperature outside is hotter than the temperature inside
+     * @return true if it is hotter outside, false if it is colder outside.
+     */
+    private boolean hotOutside() {
+        if (EnvironmentModel.getOutsideTemp() > this.temperature) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verify if we want to increase of decrease the temperature in the house.
+     * @param desiredTemp the temperature desired.
+     * @return true if the current temperature is higher than desired, false if not.
+     */
+    private boolean hotInside(int desiredTemp) {
+        if (this.temperature > desiredTemp) {
+            return true;
+        }
+        return false;
     }
 
     private void openAllWindowsInZone() {
