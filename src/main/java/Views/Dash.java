@@ -6,6 +6,9 @@ import Models.EnvironmentModel;
 import Models.Room;
 import Models.UserProfileModel;
 import Observers.TimeChangeObserver;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -279,4 +282,5 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public void update(String newTime) {
         this.timeField.setText(newTime);
     }
+
 }
