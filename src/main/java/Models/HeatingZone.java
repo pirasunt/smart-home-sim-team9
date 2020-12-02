@@ -7,6 +7,7 @@ import Models.Walls.WindowWall;
 import Views.CustomConsole;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

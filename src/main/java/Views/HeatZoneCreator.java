@@ -14,11 +14,14 @@ public class HeatZoneCreator extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JTextField zoneName;
+    private JLabel zoneNameLabel;
 
     private HeatingController controller;
     private static HeatingController sController;
 
     public HeatZoneCreator(HeatingController controller) {
+
         this.controller = controller;
         sController = controller;
 
@@ -58,8 +61,12 @@ public class HeatZoneCreator extends JDialog {
 
     private void onOK() {
         controller.createZoneList();
-        System.out.println("asdasdasdasdasd");
-        dispose();
+        if (!zoneName.getText().equals("")) {
+            //if we have selected rooms, make the zone
+            dispose();
+        }
+        else
+            CustomConsole.print("Make sure to name the heating zone you are creating, as well as select at least 1 room.");
     }
 
     private void onCancel() {

@@ -1,15 +1,12 @@
 package Controllers;
 
-import Models.EnvironmentModel;
-import Models.HeatingModel;
-import Models.HeatingZone;
+import Models.*;
 import Views.HeatZoneCreator;
 import Views.HeatingModule;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 
 public class HeatingController {
 
@@ -24,11 +21,19 @@ public class HeatingController {
     }
 
     public void createZoneList() {
+        Room[] test = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
+        heatingModel.createHeatingZone(test, "test");
+
+        if (heatingModel.getHeatingZones() == null) {
+            return;
+        }
+
         HeatingZone[] zones = new HeatingZone[heatingModel.getHeatingZones().size()];
         zones = heatingModel.getHeatingZones().toArray(zones);
 
         for (HeatingZone zone : zones) {
             heatingView.getList().add(new JLabel(zone.getName()));
+            heatingView.getList().repaint();
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class HeatingModel {
 
-    private ArrayList<HeatingZone> heatingZones;
+    private ArrayList<HeatingZone> heatingZones = new ArrayList<HeatingZone>();
     private Date summerStart;
     private Date winterStart;
     private int topThreshold;

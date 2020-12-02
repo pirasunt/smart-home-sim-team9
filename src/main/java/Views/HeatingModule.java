@@ -16,19 +16,22 @@ public class HeatingModule extends JPanel {
     private JButton createNewHeatingZoneButton;
     private JPanel panel;
     private JLabel heatingZonesLabel;
-    private JList heatingZones;
+    private JList<String> heatingZones;
 
     public HeatingModule() {
         HeatingModel model = new HeatingModel();
         hc = new HeatingController(model, this);
         roomsInHouse = Context.getHouse().getRooms().toArray(roomsInHouse);
+
+        DefaultListModel<String> lm = new DefaultListModel<>();
+        heatingZones = new JList<String>(lm);
     }
 
     public void createHeatingZoneListener(ActionListener createHeatingZoneListener) {
         this.createNewHeatingZoneButton.addActionListener(createHeatingZoneListener);
     }
 
-    public JList getList() {
+    public JList<String> getList() {
         return this.heatingZones;
     }
 
