@@ -16,4 +16,8 @@ public class HeatingModel {
         heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name));
     }
 
+    public ArrayList<HeatingZone> getHeatingZones() {
+        return this.heatingZones;
+    }
+
 }

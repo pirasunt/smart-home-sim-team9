@@ -159,4 +159,8 @@ public class HeatingZone {
             room.setTemperature(room.getTemperature() - 1);
         }
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
