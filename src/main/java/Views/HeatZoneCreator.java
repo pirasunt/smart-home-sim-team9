@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.HeatingController;
+import Models.Context;
 import Models.HeatingModel;
 import Models.Room;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -20,7 +21,7 @@ public class HeatZoneCreator extends JDialog {
 
     private HeatingController controller;
     private static HeatingController sController;
-    private Room[] availableRooms; //The rooms available to be selected from (not already in a heating zone)
+    private Room[] availableRooms; //The rooms available to be selected from (not already in a heating zone) Only display these as options
 
     public HeatZoneCreator(HeatingController controller) {
 
@@ -66,12 +67,17 @@ public class HeatZoneCreator extends JDialog {
     private void onOK() {
         if (!zoneName.getText().equals("") /*&& some rooms are selected*/) {
 
-            //call controller.createZone(zoneName.getText(), rooms);
+            //call controller.createHeatingZone(zoneName.getText(), rooms);
 
             //refresh the SHH to display a list of all existing zones
             //can maybe use an observer (?), not necessary though
+            //controller.getHeatingZones() should return all existing zones
 
-            //can get them from controller.getHeatingZones
+            //code to test without UI, dont forget to remove
+            Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
+            controller.createHeatingZone(zoneName.getText(), testRooms);
+
+            System.out.println(controller.getHeatingZones().get(0).getName());
 
             dispose();
         }
