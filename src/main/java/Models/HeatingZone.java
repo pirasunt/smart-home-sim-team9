@@ -164,4 +164,8 @@ public class HeatingZone {
     public String getName() {
         return this.name;
     }
+
+    public ArrayList<Room> getRooms() {
+        return this.rooms;
+    }
 }

@@ -2,6 +2,7 @@ package Views;
 
 import Controllers.HeatingController;
 import Models.HeatingModel;
+import Models.Room;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -19,11 +20,14 @@ public class HeatZoneCreator extends JDialog {
 
     private HeatingController controller;
     private static HeatingController sController;
+    private Room[] availableRooms; //The rooms available to be selected from (not already in a heating zone)
 
     public HeatZoneCreator(HeatingController controller) {
 
         this.controller = controller;
         sController = controller;
+
+        availableRooms = controller.getAvailableRooms();
 
         setContentPane(contentPane);
         setModal(true);
@@ -60,9 +64,15 @@ public class HeatZoneCreator extends JDialog {
     }
 
     private void onOK() {
-        controller.createZoneList();
-        if (!zoneName.getText().equals("")) {
-            //if we have selected rooms, make the zone
+        if (!zoneName.getText().equals("") /*&& some rooms are selected*/) {
+
+            //call controller.createZone(zoneName.getText(), rooms);
+
+            //refresh the SHH to display a list of all existing zones
+            //can maybe use an observer (?), not necessary though
+
+            //can get them from controller.getHeatingZones
+
             dispose();
         }
         else

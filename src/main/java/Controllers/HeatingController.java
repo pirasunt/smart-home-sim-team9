@@ -4,9 +4,9 @@ import Models.*;
 import Views.HeatZoneCreator;
 import Views.HeatingModule;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class HeatingController {
 
@@ -20,22 +20,38 @@ public class HeatingController {
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
     }
 
-    public void createZoneList() {
-        Room[] test = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
-        heatingModel.createHeatingZone(test, "test");
-
-        if (heatingModel.getHeatingZones() == null) {
-            return;
-        }
-
-        HeatingZone[] zones = new HeatingZone[heatingModel.getHeatingZones().size()];
-        zones = heatingModel.getHeatingZones().toArray(zones);
-
-        for (HeatingZone zone : zones) {
-            heatingView.getList().add(new JLabel(zone.getName()));
-            heatingView.getList().repaint();
-        }
+    public void createHeatingZone(String zoneName, Room[] rooms) {
+        heatingModel.createHeatingZone(rooms, zoneName);
     }
+
+    public ArrayList<HeatingZone> getHeatingZones() {
+        return this.heatingModel.getHeatingZones();
+    }
+
+    public Room[] getAvailableRooms() {
+        ArrayList<Room> allRooms = Context.getHouse().getRooms();
+        ArrayList<Room> result = new ArrayList<>();
+
+        for (Room room : allRooms) {
+            if (isRoomAvailable(room)) {
+                result.add(room);
+            }
+        }
+
+        Room[] resultArr = new Room[result.size()];
+        return resultArr;
+    }
+
+    private boolean isRoomAvailable(Room room) {
+        for (HeatingZone zone : getHeatingZones()) {
+            if (zone.getRooms().contains(room)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     private class HeatingZoneCreationListener implements ActionListener {
 
