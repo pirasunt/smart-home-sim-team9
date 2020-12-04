@@ -1,5 +1,7 @@
 package Models;
 
+import Views.CustomConsole;
+
 import javax.swing.*;
 import java.time.MonthDay;
 import java.util.ArrayList;
@@ -49,9 +51,11 @@ public class HeatingModel {
   }
   public void updateSummerStart(Date date){
     this.summerStart = MonthDay.of(date.getMonth()+1, date.getDate());
+    CustomConsole.print("Summer start date has been set to: " + this.summerStart.toString());
   }
   public void updateWinterStart(Date date){
     this.winterStart = MonthDay.of(date.getMonth()+1, date.getDate());
+    CustomConsole.print("Winter start date has been set to: " + this.winterStart.toString());
   }
 
   public Date getWinterStart() {
@@ -61,5 +65,6 @@ public class HeatingModel {
 
     return cal.getTime();
   }
+
 }
 

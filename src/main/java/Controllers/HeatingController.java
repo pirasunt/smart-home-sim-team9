@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.*;
+import Views.CustomConsole;
 import Views.HeatZoneCreator;
 import Views.HeatingModule;
 
@@ -139,11 +140,20 @@ public class HeatingController {
             if (value != null) {
                 Calendar cal = (Calendar) value;
                 if(seasonType == Season.SUMMER) {
-                    heatingView.updateSummerStartLabel(dateFormatter.format(cal.getTime()));
-                    heatingModel.updateSummerStart(cal.getTime());
+                    if(heatingModel.getWinterStart().getMonth() == cal.get(Calendar.MONTH) && heatingModel.getWinterStart().getDate() == cal.get(Calendar.DAY_OF_MONTH))
+                        CustomConsole.print("ERROR: Winter and Summer Start Dates can not be the same. Please choose a different Date");
+                    else {
+                        heatingView.updateSummerStartLabel(dateFormatter.format(cal.getTime()));
+                        heatingModel.updateSummerStart(cal.getTime());
+                    }
+
                 } else if(seasonType == Season.WINTER){
-                    heatingView.updateWinterStartLabel(dateFormatter.format(cal.getTime()));
-                    heatingModel.updateWinterStart(cal.getTime());
+                    if(heatingModel.getSummerStart().getMonth() == cal.get(Calendar.MONTH) && heatingModel.getSummerStart().getDate() == cal.get(Calendar.DAY_OF_MONTH))
+                        CustomConsole.print("ERROR: Winter and Summer Start Dates can not be the same. Please choose a different Date");
+                    else {
+                        heatingView.updateWinterStartLabel(dateFormatter.format(cal.getTime()));
+                        heatingModel.updateWinterStart(cal.getTime());
+                    }
                 }
                 heatingView.disposeDatePicker();
 
