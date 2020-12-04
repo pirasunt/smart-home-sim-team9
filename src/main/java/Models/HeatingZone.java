@@ -9,20 +9,23 @@ import Views.CustomConsole;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Month;
+import java.time.MonthDay;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class HeatingZone {
 
   private int temperature;
   private final ArrayList<Room> rooms = new ArrayList<Room>();
-  private final Date summerStart;
-  private final Date winterStart;
+  private final MonthDay summerStart;
+  private final MonthDay winterStart;
   private boolean acOn;
   private boolean heaterOn;
   private final String name;
 
-  public HeatingZone(Room[] rooms, Date summerStart, Date winterStart, String name) {
+  public HeatingZone(Room[] rooms, MonthDay summerStart, MonthDay winterStart, String name) {
     int total = 0;
     int count = 0;
     for (Room room : rooms) {
@@ -46,7 +49,16 @@ public class HeatingZone {
    * @return true if it is summer, false if it is winter.
    */
   private boolean isSummer() {
-      return Context.getDateObject().after(summerStart) && Context.getDateObject().before(winterStart);
+    MonthDay currentMonthDay = MonthDay.of(Context.getDateObject().getMonth()+1, Context.getDateObject().getDate());
+
+    //If summer start date is before winter date
+    if(summerStart.isBefore(winterStart)){
+      return currentMonthDay.isAfter(summerStart) && currentMonthDay.isBefore(winterStart);
+    } else {
+      //If summer start date is after winter date
+      return currentMonthDay.isAfter(summerStart);
+    }
+
   }
 
   /**
