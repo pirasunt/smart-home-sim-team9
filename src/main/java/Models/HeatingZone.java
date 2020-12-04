@@ -133,16 +133,10 @@ public class HeatingZone {
 
               @Override
               public void actionPerformed(ActionEvent e) {
-                if (zone.getTemperature() > newTemp) {
-                  while (zone.getTemperature() > newTemp) {
+                if (zone.getTemperature() > newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.decrementTemperature();
-                  }
-                  ((Timer) e.getSource()).stop();
-                } else if (zone.getTemperature() < newTemp) {
-                  while (zone.getTemperature() < newTemp) {
+                } else if (zone.getTemperature() < newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.incrementTemperature();
-                  }
-                  ((Timer) e.getSource()).stop();
                 }
 
                 // This handles opening and closing of windows/ac in summer
@@ -159,7 +153,19 @@ public class HeatingZone {
                     CustomConsole.print(
                         "The outside temperature is hotter and so the AC has been turned on, and windows closed.");
                   }
-                } else if (isSummer() && !hotOutside()) {
+                  switch (Context.getDelay()) {
+                    case 1000:
+                      ((Timer) e.getSource()).setDelay(10000);
+                      break;
+                    case 100:
+                      ((Timer) e.getSource()).setDelay(1000);
+                      break;
+                    case 10:
+                      ((Timer) e.getSource()).setDelay(100);
+                      break;
+                  }
+                }
+                else if (isSummer() && !hotOutside()) {
                   if (acOn) {
                     acOn = false;
                     heaterOn = false;
@@ -172,8 +178,18 @@ public class HeatingZone {
                     CustomConsole.print(
                         "The outside temperature is colder and so the AC has been turned off, and windows opened.");
                   }
+                  switch (Context.getDelay()) {
+                    case 1000:
+                      ((Timer) e.getSource()).setDelay(20000);
+                      break;
+                    case 100:
+                      ((Timer) e.getSource()).setDelay(2000);
+                      break;
+                    case 10:
+                      ((Timer) e.getSource()).setDelay(200);
+                      break;
+                  }
                 }
-
                 // This handles heater in winter
                 if (!isSummer() && hotInside(newTemp)) {
                     if (heaterOn) {
@@ -187,6 +203,17 @@ public class HeatingZone {
                                         + zone.getTemperature());
                         CustomConsole.print(
                                 "It is winter but it is already hotter than desired inside, nothing will change and the temperature will drop naturally.");
+                    }
+                  switch (Context.getDelay()) {
+                    case 1000:
+                      ((Timer) e.getSource()).setDelay(20000);
+                      break;
+                    case 100:
+                      ((Timer) e.getSource()).setDelay(2000);
+                      break;
+                    case 10:
+                      ((Timer) e.getSource()).setDelay(200);
+                      break;
                     }
                 }
                 else if (!isSummer() && !hotInside(newTemp)) {
@@ -202,6 +229,17 @@ public class HeatingZone {
                         CustomConsole.print(
                                 "It is winter and the temperature in the zone is too cold, the heater has been turned on.");
                     }
+                  switch (Context.getDelay()) {
+                    case 1000:
+                      ((Timer) e.getSource()).setDelay(10000);
+                      break;
+                    case 100:
+                      ((Timer) e.getSource()).setDelay(1000);
+                      break;
+                    case 10:
+                      ((Timer) e.getSource()).setDelay(100);
+                      break;
+                  }
                 }
               }
             });
