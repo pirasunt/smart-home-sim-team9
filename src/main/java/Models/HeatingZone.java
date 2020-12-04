@@ -139,17 +139,57 @@ public class HeatingZone {
                     acOn = true;
                     heaterOn = false;
                     closeAllWindowsInZone();
-                    CustomConsole.print("The current temperature in zone :" + zone.getName() + " is " + zone.getTemperature());
-                    CustomConsole.print("The outside temperature is hotter and so the AC has been turned on, and windows closed.");
+                    CustomConsole.print(
+                        "The current temperature in zone :"
+                            + zone.getName()
+                            + " is "
+                            + zone.getTemperature());
+                    CustomConsole.print(
+                        "The outside temperature is hotter and so the AC has been turned on, and windows closed.");
                   }
                 } else if (isSummer() && !hotOutside()) {
                   if (acOn) {
                     acOn = false;
                     heaterOn = false;
                     openAllWindowsInZone();
-                    CustomConsole.print("The current temperature in zone :" + zone.getName() + " is " + zone.getTemperature());
-                    CustomConsole.print("The outside temperature is colder and so the AC has been turned off, and windows opened.");
+                    CustomConsole.print(
+                        "The current temperature in zone :"
+                            + zone.getName()
+                            + " is "
+                            + zone.getTemperature());
+                    CustomConsole.print(
+                        "The outside temperature is colder and so the AC has been turned off, and windows opened.");
                   }
+                }
+
+                // This handles heater in winter
+                if (!isSummer() && hotInside(newTemp)) {
+                    if (heaterOn) {
+                        acOn = false;
+                        heaterOn = false;
+                        closeAllWindowsInZone();
+                        CustomConsole.print(
+                                "The current temperature in zone :"
+                                        + zone.getName()
+                                        + " is "
+                                        + zone.getTemperature());
+                        CustomConsole.print(
+                                "It is winter but it is already hotter than desired inside, nothing will change and the temperature will drop naturally.");
+                    }
+                }
+                else if (!isSummer() && !hotInside(newTemp)) {
+                    if (!heaterOn) {
+                        acOn = false;
+                        heaterOn = true;
+                        closeAllWindowsInZone();
+                        CustomConsole.print(
+                                "The current temperature in zone :"
+                                        + zone.getName()
+                                        + " is "
+                                        + zone.getTemperature());
+                        CustomConsole.print(
+                                "It is winter and the temperature in the zone is too cold, the heater has been turned on.");
+                    }
                 }
               }
             });
