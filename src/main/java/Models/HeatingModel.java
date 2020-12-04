@@ -2,7 +2,9 @@ package Models;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class HeatingModel {
 
@@ -17,6 +19,8 @@ public class HeatingModel {
   public HeatingModel() {
     awayTempSpinner = new SpinnerNumberModel();
     dangerTempSpinner = new SpinnerNumberModel();
+    this.winterStart = new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime();
+    this.summerStart = new GregorianCalendar(2020, Calendar.JULY, 1).getTime();
   }
 
   public SpinnerNumberModel getDangerTempSpinner() {
@@ -34,4 +38,19 @@ public class HeatingModel {
   public ArrayList<HeatingZone> getHeatingZones() {
     return this.heatingZones;
   }
+
+  public Date getSummerStart() {
+    return summerStart;
+  }
+  public void updateSummerStart(Date date){
+    this.summerStart = date;
+  }
+  public void updateWinterStart(Date date){
+    this.winterStart = date;
+  }
+
+  public Date getWinterStart() {
+    return winterStart;
+  }
 }
+
