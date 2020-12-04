@@ -58,10 +58,11 @@ public class HeatingModule extends JPanel {
         this.createNewHeatingZoneButton.addActionListener(createHeatingZoneListener);
     }
 
-    public void createSummerChangeListener(ActionListener summerChangeListener){
+    public void createSummerChangeListener(ActionListener summerChangeListener) {
         this.summerChangeBtn.addActionListener(summerChangeListener);
     }
-    public void createWinterChangeListener(ActionListener winterChangeListener){
+
+    public void createWinterChangeListener(ActionListener winterChangeListener) {
         this.winterChangeBtn.addActionListener(winterChangeListener);
     }
 
@@ -91,7 +92,7 @@ public class HeatingModule extends JPanel {
         datePickerWindow.setVisible(true);
     }
 
-    public void disposeDatePicker(){
+    public void disposeDatePicker() {
         this.datePickerWindow.dispose();
     }
 
@@ -105,10 +106,13 @@ public class HeatingModule extends JPanel {
         this.summerStartLabel.setText(dateFormatter.format(summerStart));
         this.winterStartLabel.setText(dateFormatter.format(winterStart));
     }
-    public void updateSummerStartLabel(String date){
+
+    public void updateSummerStartLabel(String date) {
         this.summerStartLabel.setText(date);
     }
-    public void updateWinterStartLabel(String date){
+
+    public void updateWinterStartLabel(String date) {
         this.winterStartLabel.setText(date);
     }
+
 }
