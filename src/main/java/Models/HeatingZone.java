@@ -26,6 +26,7 @@ public class HeatingZone {
     for (Room room : rooms) {
       this.rooms.add(room);
       room.setIsInHeatingZone(true);
+      room.setTemperature(EnvironmentModel.getOutsideTemp());
     }
     this.summerStart = summerStart;
     this.winterStart = winterStart;
