@@ -70,7 +70,7 @@ public class FilePickerStart extends JFrame {
 
             //Set the temperature of all the rooms to the outside temperature by default
             for (Room room : house.getRooms()) {
-              room.setTemperature(1);
+              room.setTemperature(EnvironmentModel.getOutsideTemp());
             }
 
             Timer houseRefresher = new Timer(100, new ActionListener() {
