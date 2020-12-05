@@ -40,7 +40,7 @@ public class HeatingZone {
     this.heaterOn = false;
     this.name = name;
 
-    setTemperature(EnvironmentModel.getOutsideTemp());
+    this.temperature = EnvironmentModel.getOutsideTemp();
   }
 
   /**
