@@ -116,6 +116,10 @@ public class HeatingZone {
   }
 
   public void setTemperature(int newTemp) {
+    if (!EnvironmentModel.getSimulationRunning()) {
+      this.temperature = newTemp;
+      return;
+    }
 
     HeatingZone zone = this;
 
@@ -130,6 +134,9 @@ public class HeatingZone {
                     zone.decrementTemperature();
                 } else if (zone.getTemperature() < newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.incrementTemperature();
+                }
+                else if (zone.getTemperature() == newTemp) {
+                  ((Timer)e.getSource()).stop();
                 }
 
                 // This handles opening and closing of windows/ac in summer
