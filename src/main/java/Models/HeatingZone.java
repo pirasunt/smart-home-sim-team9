@@ -118,6 +118,9 @@ public class HeatingZone {
   public void setTemperature(int newTemp) {
     if (!EnvironmentModel.getSimulationRunning()) {
       this.temperature = newTemp;
+      for (Room r: rooms) {
+        r.setTemperature(newTemp);
+      }
       return;
     }
 
