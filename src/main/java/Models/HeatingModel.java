@@ -7,15 +7,12 @@ import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class HeatingModel {
 
   private final ArrayList<HeatingZone> heatingZones = new ArrayList<HeatingZone>();
   private MonthDay summerStart;
   private MonthDay winterStart;
-  private int topThreshold;
-  private int bottomThreshhold;
   private final SpinnerNumberModel awayTempSpinner;
   private final SpinnerNumberModel dangerTempSpinner;
 
@@ -31,7 +28,7 @@ public class HeatingModel {
   }
 
   public void createHeatingZone(Room[] rooms, String name) {
-    heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name));
+    heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name, dangerTempSpinner));
   }
 
   public SpinnerNumberModel getAwayTempSpinner() {

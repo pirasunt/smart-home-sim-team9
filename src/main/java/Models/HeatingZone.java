@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.time.MonthDay;
 import java.util.ArrayList;
 
+/** The type Heating zone. */
 public class HeatingZone {
 
   private int temperature;
@@ -21,11 +22,27 @@ public class HeatingZone {
   private boolean acOn;
   private boolean heaterOn;
   private final String name;
+  private SpinnerNumberModel dangerTemp;
 
-  public HeatingZone(Room[] rooms, MonthDay summerStart, MonthDay winterStart, String name) {
+  /**
+   * Instantiates a new Heating zone.
+   *
+   * @param rooms the rooms
+   * @param summerStart the summer start
+   * @param winterStart the winter start
+   * @param name the name
+   * @param dangerTempSpinner the danger temp spinner
+   */
+  public HeatingZone(
+      Room[] rooms,
+      MonthDay summerStart,
+      MonthDay winterStart,
+      String name,
+      SpinnerNumberModel dangerTempSpinner) {
     for (Room room : rooms) {
       this.rooms.add(room);
       room.setIsInHeatingZone(true);
+      room.setTemperature(EnvironmentModel.getOutsideTemp());
     }
     this.summerStart = summerStart;
     this.winterStart = winterStart;
@@ -34,6 +51,7 @@ public class HeatingZone {
     this.name = name;
 
     this.temperature = EnvironmentModel.getOutsideTemp();
+    this.dangerTemp = dangerTempSpinner;
   }
 
   /**
@@ -95,6 +113,11 @@ public class HeatingZone {
     }
   }
 
+  /**
+   * Add room.
+   *
+   * @param room the room
+   */
   public void addRoom(Room room) {
     try {
       if (rooms.contains(room)) {
@@ -106,16 +129,38 @@ public class HeatingZone {
     }
   }
 
+  /**
+   * Remove room.
+   *
+   * @param room the room
+   */
   public void removeRoom(Room room) {
     rooms.remove(room);
     room.setIsInHeatingZone(false);
   }
 
+  /**
+   * Gets temperature.
+   *
+   * @return the temperature
+   */
   public int getTemperature() {
     return this.temperature;
   }
 
+  /**
+   * Sets temperature.
+   *
+   * @param newTemp the new temp
+   */
   public void setTemperature(int newTemp) {
+    if (!EnvironmentModel.getSimulationRunning()) {
+      this.temperature = newTemp;
+      for (Room r: rooms) {
+        r.setTemperature(newTemp);
+      }
+      return;
+    }
 
     HeatingZone zone = this;
 
@@ -126,10 +171,14 @@ public class HeatingZone {
 
               @Override
               public void actionPerformed(ActionEvent e) {
+                alertDangerTemp();
                 if (zone.getTemperature() > newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.decrementTemperature();
                 } else if (zone.getTemperature() < newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.incrementTemperature();
+                }
+                else if (zone.getTemperature() == newTemp) {
+                  ((Timer)e.getSource()).stop();
                 }
 
                 // This handles opening and closing of windows/ac in summer
@@ -240,6 +289,7 @@ public class HeatingZone {
     timer.start();
   }
 
+  /** Increment temperature. */
   public void incrementTemperature() {
     this.temperature++;
     for (Room room : rooms) {
@@ -247,6 +297,7 @@ public class HeatingZone {
     }
   }
 
+  /** Decrement temperature. */
   public void decrementTemperature() {
     this.temperature--;
     for (Room room : rooms) {
@@ -254,10 +305,27 @@ public class HeatingZone {
     }
   }
 
+  /** Alert danger temp. */
+  public void alertDangerTemp() {
+    if(this.temperature <= (int)dangerTemp.getValue()){
+      CustomConsole.print("ALERT! The temperature in "+ this.name + " is below the threshold!");
+    }
+  }
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Gets rooms.
+   *
+   * @return the rooms
+   */
   public ArrayList<Room> getRooms() {
     return this.rooms;
   }

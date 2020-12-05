@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.MonthDay;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -72,6 +73,10 @@ public class FilePickerStart extends JFrame {
             for (Room room : house.getRooms()) {
               room.setTemperature(EnvironmentModel.getOutsideTemp());
             }
+
+//            Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
+//            HeatingZone test = new HeatingZone(testRooms, MonthDay.now(), MonthDay.of(11,11), "testing");
+//            test.setTemperature(3214234);
 
             Timer houseRefresher = new Timer(100, new ActionListener() {
               @Override
