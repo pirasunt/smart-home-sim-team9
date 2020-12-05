@@ -21,6 +21,7 @@ public class HeatingZone {
   private boolean acOn;
   private boolean heaterOn;
   private final String name;
+  private boolean timerRunning;
 
   public HeatingZone(Room[] rooms, MonthDay summerStart, MonthDay winterStart, String name) {
     for (Room room : rooms) {
@@ -116,6 +117,15 @@ public class HeatingZone {
   }
 
   public void setTemperature(int newTemp) {
+    CustomConsole.print(((Integer)newTemp).toString());
+    if (!EnvironmentModel.getSimulationRunning()) {
+      this.temperature = newTemp;
+      for (Room r: rooms) {
+        r.setTemperature(newTemp);
+      }
+      CustomConsole.print("force set");
+      return;
+    }
 
     HeatingZone zone = this;
 
@@ -128,8 +138,14 @@ public class HeatingZone {
               public void actionPerformed(ActionEvent e) {
                 if (zone.getTemperature() > newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.decrementTemperature();
+                    CustomConsole.print("decremented temperature");
                 } else if (zone.getTemperature() < newTemp && EnvironmentModel.getSimulationRunning()) {
                     zone.incrementTemperature();
+                  CustomConsole.print("incremented temperature");
+                }
+                else if (zone.getTemperature() == newTemp) {
+                  CustomConsole.print("stopped");
+                  ((Timer)e.getSource()).stop();
                 }
 
                 // This handles opening and closing of windows/ac in summer
