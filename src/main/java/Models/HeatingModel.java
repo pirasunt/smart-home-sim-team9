@@ -28,7 +28,7 @@ public class HeatingModel {
   }
 
   public void createHeatingZone(Room[] rooms, String name) {
-    heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name));
+    heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name, dangerTempSpinner));
   }
 
   public SpinnerNumberModel getAwayTempSpinner() {
