@@ -9,11 +9,8 @@ import Views.CustomConsole;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.Month;
 import java.time.MonthDay;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class HeatingZone {
 
@@ -26,13 +23,9 @@ public class HeatingZone {
   private final String name;
 
   public HeatingZone(Room[] rooms, MonthDay summerStart, MonthDay winterStart, String name) {
-    int total = 0;
-    int count = 0;
     for (Room room : rooms) {
       this.rooms.add(room);
       room.setIsInHeatingZone(true);
-      total += room.getTemperature();
-      total++;
     }
     this.summerStart = summerStart;
     this.winterStart = winterStart;
