@@ -4,15 +4,15 @@ import Controllers.EnvironmentController;
 import Custom.CustomXStream.CustomHouseXStream;
 import Custom.CustomXStream.CustomUserXStream;
 import Helpers.HouseValidationHelper;
-import Models.EnvironmentModel;
-import Models.House;
-import Models.UserProfileModel;
+import Models.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 /** The type File picker start. */
 public class FilePickerStart extends JFrame {
@@ -67,6 +67,19 @@ public class FilePickerStart extends JFrame {
             EnvironmentController theController = new EnvironmentController(theView, theModel);
 
             o.dispose();
+
+            //Set the temperature of all the rooms to the outside temperature by default
+            for (Room room : house.getRooms()) {
+              room.setTemperature(1);
+            }
+
+            Timer houseRefresher = new Timer(100, new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                hg.repaint();
+              }
+            });
+            houseRefresher.start();
           }
         });
     p.add(choseFile);

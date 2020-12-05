@@ -3,6 +3,8 @@
 /.idea/
 *.iml
 /target
+log.txt
+/src/test/UserProfileTests.xml
 
 # Eclipse
 .classpath

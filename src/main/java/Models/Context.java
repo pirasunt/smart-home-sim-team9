@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * The type Context.
+ */
 public class Context implements CurrentUserObserver {
 
     private static House house;
@@ -20,6 +23,15 @@ public class Context implements CurrentUserObserver {
     private static ArrayList<TimeChangeObserver> timeChangeObservers;
     private static UserProfileModel currentUser;
 
+    /**
+     * Instantiates a new Context. This is automatically instantiated in the EnvironmentModel
+     *
+     * @param h   Instance of House Object
+     * @param hg  Instance of HouseGraphic Object
+     * @param t   Instance of the Simulation Timer
+     * @param c   Instance of the Calendar object that is used to provide the date/time for the simulation
+     * @param upm Instance of the ArrayList that contains all of the registered user profiles in the simulation
+     */
     public Context(House h, HouseGraphic hg, Timer t, Calendar c, ArrayList<UserProfileModel> upm) {
         house = h;
         houseGraphic = hg;
@@ -31,26 +43,51 @@ public class Context implements CurrentUserObserver {
         EnvironmentModel.subscribe(this);
     }
 
+    /**
+     * Repaint house graphic.
+     */
     public static void repaintHouseGraphic(){
         houseGraphic.repaint();
     }
 
+    /**
+     * Gets house.
+     *
+     * @return the house
+     */
     public static House getHouse() {
         return house;
     }
 
+    /**
+     * Gets the current delay of the timer
+     *
+     * @return the int
+     */
     public static int getDelay(){
         return timer.getDelay();
     }
 
+    /**
+     * Set the delay of the timer.
+     *
+     * @param newDelay the new delay value. Represents the interval of time (in milliseconds) between each update of the timer
+     *                 A lower number will be reflected by a faster movement of the clock
+     */
     public static void setDelay(int newDelay){
         timer.setDelay(newDelay);
     }
 
+    /**
+     * Stop timer.
+     */
     public static void stopTimer(){
         timer.stop();
     }
 
+    /**
+     * Restart timer.
+     */
     public static void restartTimer(){
         timer.restart();
     }
@@ -109,22 +146,39 @@ public class Context implements CurrentUserObserver {
         notifyTimeChangeObservers(Context.getTimeString());
     }
 
+    /**
+     * Notify time change observers.
+     *
+     * @param newTime the new time in string format
+     */
     public static void notifyTimeChangeObservers(String newTime) {
         for (TimeChangeObserver o : timeChangeObservers) {
             o.update(newTime);
         }
     }
+
+    /**
+     * Unsubscribe from the Subject that emits an event each time the simulation time changes
+     *
+     * @param ob the ob
+     */
     public static void unsubscribe(TimeChangeObserver ob) {
         timeChangeObservers.remove(ob);
     }
+
+    /**
+     * Subscribe to the Subject that emits an event each time the simulation time changes
+     *
+     * @param ob the ob
+     */
     public static void subscribe(TimeChangeObserver ob) {
         timeChangeObservers.add(ob);
     }
 
     /**
-     * House is empty boolean.
+     *  Returns a boolean representing whether the or not the house has any occupants inside
      *
-     * @return the boolean
+     * @return True if house is empty; false otherwise
      */
     public static boolean houseIsEmpty() {
         for (UserProfileModel u : userList) {

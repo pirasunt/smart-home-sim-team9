@@ -10,8 +10,9 @@ public class Room {
   private final Wall leftWall, rightWall, topWall, bottomWall;
   private final String name;
   private final int id;
-  private int temperature = 20;
+  private int temperature = 0;
   private boolean lightsOn = false;
+  private boolean isInHeatingZone = false;
 
   /**
    * Instantiates a new Room.
@@ -163,6 +164,14 @@ public class Room {
 
   public Wall[] getAllWalls(){
     return new Wall[]{leftWall, rightWall, bottomWall, topWall};
+  }
+
+  public boolean isRoomInHeatingZone() {
+    return this.isInHeatingZone;
+  }
+
+  public void setIsInHeatingZone(boolean value) {
+    this.isInHeatingZone = value;
   }
 
   @Override

@@ -1,19 +1,22 @@
 package Models;
 
-import Observers.CurrentUserObserver;
-import Observers.RoomChangeObserver;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
+import Observers.CurrentUserObserver;
+import Observers.RoomChangeObserver;
 import Views.CustomConsole;
 import Views.HouseGraphic;
 
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  * EnvironmentModel represents the data structure of the system. The {@link
@@ -30,7 +33,7 @@ public class EnvironmentModel {
   private static ArrayList<RoomChangeObserver> roomChangeObservers;
   private static ArrayList<CurrentUserObserver> currentUserObservers;
   private boolean windowsObstructed = false;
-  private int outsideTemperature;
+  private static int outsideTemperature;
   private boolean automaticLights;
   private final Context c;
 
@@ -42,7 +45,7 @@ public class EnvironmentModel {
       ArrayList<UserProfileModel> profileList) {
     house = h;
     houseGraphic = hg;
-    this.outsideTemperature = temperature;
+    outsideTemperature = temperature;
     userProfileModelList = profileList;
     currentUser = null;
     automaticLights = false;
@@ -172,7 +175,7 @@ public class EnvironmentModel {
    * @param newTemp is the new temperature
    */
   public void setTemperature(int newTemp) {
-    this.outsideTemperature = newTemp;
+    outsideTemperature = newTemp;
   }
 
   /**
@@ -372,8 +375,8 @@ public class EnvironmentModel {
    *
    * @return temperature value
    */
-  public int getOutsideTemp() {
-    return this.outsideTemperature;
+  public static int getOutsideTemp() {
+    return outsideTemperature;
   }
 
   /**

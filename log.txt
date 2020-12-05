@@ -1,2 +1,0 @@
-Tue Nov 10 17:03:52 EST 2020 : Window 0 is obstructed and cannot be closed.
-Tue Nov 10 17:03:52 EST 2020 : Window 0 is obstructed and cannot be opened.
