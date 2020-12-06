@@ -22,17 +22,23 @@ enum Season {
 public class HeatingController {
 
     private HeatingModel heatingModel;
+    private static HeatingModel sHeatingModel;
     private HeatingModule heatingView;
     private HeatZoneCreator heatZoneDialog;
 
     public HeatingController(HeatingModel m, HeatingModule v) {
         this.heatingModel = m;
         this.heatingView = v;
+        sHeatingModel = m;
 
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
         heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner());
         heatingView.createSummerChangeListener(new SummerChangeListener());
         heatingView.createWinterChangeListener(new WinterChangeListener());
+    }
+
+    public static HeatingModel getStaticHeatingModel() {
+        return sHeatingModel;
     }
 
     public void createHeatingZone(String zoneName, Room[] rooms) {

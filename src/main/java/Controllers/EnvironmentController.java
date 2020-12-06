@@ -262,6 +262,7 @@ public class EnvironmentController {
                 new DashController(theModel, dashView);
 
                 new CoreController(dashView.getSHC(), theModel);
+
                 new HeatingController(new HeatingModel(), dashView.getSHH());
 
             } else {
