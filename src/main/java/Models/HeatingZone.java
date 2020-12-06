@@ -205,7 +205,7 @@ public class HeatingZone {
                   ((Timer)e.getSource()).stop();
                 }
 
-                if (EnvironmentModel.getSimulationRunning())
+                if (EnvironmentModel.getSimulationRunning() && !SecurityModel.isAwayOn())
                   HVACHandler(zone, newTemp);
                 }
             });
