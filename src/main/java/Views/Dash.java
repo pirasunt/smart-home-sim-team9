@@ -87,7 +87,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
 
 
     /**
-     * Instantiates teampLabel new Dashboard frame.
+     * Instantiates temp Label new Dashboard frame.
      *
      * @param temp  the temp
      * @param date  the date
@@ -125,6 +125,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
 
         setSHPVisibility();
         setSHCVisibility();
+        setSHHVisibility();
     }
 
     /**
@@ -144,6 +145,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public void repaint() {
         setSHPVisibility();
         setSHCVisibility();
+        setSHHVisibility();
 
         super.repaint();
     }
@@ -267,6 +269,17 @@ public class Dash extends JFrame implements TimeChangeObserver {
         } else {
             tabbedPane1.setEnabledAt(0, true);
             coreView.getWrapper().setVisible(true);
+        }
+    }
+
+    private void setSHHVisibility() {
+        if (Context.getCurrentUser().getProfileType() != ProfileType.ADULT) {
+            tabbedPane1.setEnabledAt(2, false);
+            SHH.getWrapper().setVisible(false);
+
+        } else {
+            tabbedPane1.setEnabledAt(2, true);
+            SHH.getWrapper().setVisible(true);
         }
     }
 

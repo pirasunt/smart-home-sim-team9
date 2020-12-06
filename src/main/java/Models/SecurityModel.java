@@ -3,6 +3,8 @@ package Models;
 import Enums.WallType;
 import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
+import Observers.AwayChangeObserver;
+import Observers.RoomChangeObserver;
 import Tools.CustomTimer;
 import Views.CustomConsole;
 
@@ -25,6 +27,8 @@ public class SecurityModel {
   private final Date endDate;
   private final ArrayList<CustomTimer> authTimers;
   private final ArrayList<NotifyAuthTask> authTasks;
+  private static ArrayList<AwayChangeObserver> awayChangeObservers;
+
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
   /** Instantiates a new Security model. */
@@ -38,6 +42,7 @@ public class SecurityModel {
     authTimers = new ArrayList<>();
     authTasks = new ArrayList<>();
     roomsToLight = new ArrayList<>();
+    awayChangeObservers = new ArrayList<>();
   }
 
   /** Start away timer. */
@@ -135,7 +140,13 @@ public class SecurityModel {
       cancelAllTimers();
     }
     awayOn = shouldTurnAwayOn;
+    notifyObservers();
   }
+
+  public static void subscribe(AwayChangeObserver aw){
+    awayChangeObservers.add(aw);
+  }
+
 
   /** Cancel all timers. */
   public static void cancelAllTimers() {
@@ -296,6 +307,12 @@ public class SecurityModel {
         }
       }
       Context.repaintHouseGraphic();
+    }
+  }
+
+  private void notifyObservers(){
+    for (AwayChangeObserver a : awayChangeObservers ) {
+        a.update(this.isAwayOn());
     }
   }
 

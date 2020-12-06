@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
-public class HeatingModule extends JPanel {
+public class HeatingModule {
     Room[] roomsInHouse = new Room[Context.getHouse().getRooms().size()];
 
     private JButton createNewHeatingZoneButton;
@@ -49,6 +49,10 @@ public class HeatingModule extends JPanel {
 
         DefaultListModel<String> lm = new DefaultListModel<>();
         heatingZones = new JList<String>(lm);
+    }
+
+    public JPanel getWrapper() {
+        return this.panel;
     }
 
     public void initializeView(Date summerStart, Date winterStart, SpinnerNumberModel awaySpinnerModel, SpinnerNumberModel dangerSpinnerModel) {

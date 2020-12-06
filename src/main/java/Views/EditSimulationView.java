@@ -383,4 +383,5 @@ public class EditSimulationView extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
 }

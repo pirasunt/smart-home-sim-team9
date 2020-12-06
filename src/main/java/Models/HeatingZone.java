@@ -15,12 +15,12 @@ import java.util.ArrayList;
 /** The type Heating zone. */
 public class HeatingZone {
 
-  private int temperature;
   private final ArrayList<Room> rooms = new ArrayList<Room>();
   private final HeatingModel model;
   private boolean acOn;
   private boolean heaterOn;
   private final String name;
+  private int temperature;
   private SpinnerNumberModel dangerTemp;
   private boolean isRoomZone = false;
 
@@ -46,8 +46,7 @@ public class HeatingZone {
     this.acOn = false;
     this.heaterOn = false;
     this.name = name;
-
-      this.temperature = EnvironmentModel.getOutsideTemp();
+    this.temperature = EnvironmentModel.getOutsideTemp();
     this.dangerTemp = dangerTempSpinner;
   }
 
@@ -85,7 +84,8 @@ public class HeatingZone {
    * @return true if it is summer, false if it is winter.
    */
   private boolean isSummer() {
-    MonthDay currentMonthDay = MonthDay.of(Context.getDateObject().getMonth()+1, Context.getDateObject().getDate());
+    MonthDay currentMonthDay =
+        MonthDay.of(Context.getDateObject().getMonth() + 1, Context.getDateObject().getDate());
 
     //If summer start date is before winter date
     if(model.getSummerStartAsMD().isBefore(model.getWinterStartAsMD())){
@@ -94,7 +94,6 @@ public class HeatingZone {
       //If summer start date is after winter date
       return currentMonthDay.isAfter(model.getSummerStartAsMD());
     }
-
   }
 
   /**
@@ -103,7 +102,7 @@ public class HeatingZone {
    * @return true if it is hotter outside, false if it is colder outside.
    */
   private boolean hotOutside() {
-      return EnvironmentModel.getOutsideTemp() > this.temperature;
+    return EnvironmentModel.getOutsideTemp() > this.temperature;
   }
 
   /**
@@ -113,7 +112,7 @@ public class HeatingZone {
    * @return true if the current temperature is higher than desired, false if not.
    */
   private boolean hotInside(int desiredTemp) {
-      return this.temperature > desiredTemp;
+    return this.temperature > desiredTemp;
   }
 
   private void openAllWindowsInZone() {
@@ -181,13 +180,11 @@ public class HeatingZone {
   public void setTemperature(int newTemp) {
     if (!EnvironmentModel.getSimulationRunning()) {
       this.temperature = newTemp;
-      for (Room r: rooms) {
+      for (Room r : rooms) {
         r.setTemperature(newTemp);
       }
       return;
     }
-
-    System.out.println(this.getRooms());
 
     HeatingZone zone = this;
 
@@ -208,7 +205,7 @@ public class HeatingZone {
                   ((Timer)e.getSource()).stop();
                 }
 
-                if (EnvironmentModel.getSimulationRunning())
+                if (EnvironmentModel.getSimulationRunning() && !SecurityModel.isAwayOn())
                   HVACHandler(zone, newTemp);
                 }
             });
@@ -291,8 +288,8 @@ public class HeatingZone {
 
   /** Alert danger temp. */
   public void alertDangerTemp() {
-    if(this.temperature <= (int)dangerTemp.getValue()){
-      CustomConsole.print("ALERT! The temperature in "+ this.name + " is below the threshold!");
+    if (this.temperature <= (int) dangerTemp.getValue()) {
+      CustomConsole.print("ALERT! The temperature in " + this.name + " is below the threshold!");
     }
   }
 
