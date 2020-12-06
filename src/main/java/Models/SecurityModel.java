@@ -86,34 +86,8 @@ public class SecurityModel {
     long deltaEnd = (endCal.getTimeInMillis() - (envTime.getTimeInMillis())) / multiplier;
     long dayLen = 1000 * 60 * 60 * 24 / multiplier;
 
-    if (deltaStart < 0 && deltaEnd < 0) {
-      // verify if both events are in the past, then we schedule them "tommorow"
-      startExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new StartAwayLights(), deltaStart + dayLen, dayLen, TimeUnit.MILLISECONDS);
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new EndAwayLights(), deltaEnd + dayLen, dayLen, TimeUnit.MILLISECONDS);
+    handleStartAwayTimerLogic(deltaStart, deltaEnd, dayLen);
 
-    } else if (deltaStart < 0) {
-      // if the end is in the future but lights should be on
-      new StartAwayLights().turnOnSelectedLights();
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
-      //      endExec.scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen,
-      // TimeUnit.MILLISECONDS);
-    } else {
-      startExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new StartAwayLights(), deltaStart, dayLen, TimeUnit.MILLISECONDS);
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
-    }
     CustomConsole.print("Away Mode lighting has been set!");
   }
 
@@ -141,6 +115,37 @@ public class SecurityModel {
     }
     awayOn = shouldTurnAwayOn;
     notifyObservers();
+  }
+
+  private static void handleStartAwayTimerLogic(long deltaStart, long deltaEnd, long dayLen) {
+    if (deltaStart < 0 && deltaEnd < 0) {
+      // verify if both events are in the past, then we schedule them "tommorow"
+      startExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new StartAwayLights(), deltaStart + dayLen, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new EndAwayLights(), deltaEnd + dayLen, dayLen, TimeUnit.MILLISECONDS);
+
+    } else if (deltaStart < 0) {
+      // if the end is in the future but lights should be on
+      new StartAwayLights().turnOnSelectedLights();
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
+      //      endExec.scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen,
+      // TimeUnit.MILLISECONDS);
+    } else {
+      startExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new StartAwayLights(), deltaStart, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
+    }
   }
 
   public static void subscribe(AwayChangeObserver aw){
