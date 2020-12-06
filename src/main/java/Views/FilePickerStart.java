@@ -11,9 +11,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.time.MonthDay;
-import java.util.Calendar;
-import java.util.Date;
 
 /** The type File picker start. */
 public class FilePickerStart extends JFrame {
@@ -69,21 +66,20 @@ public class FilePickerStart extends JFrame {
 
             o.dispose();
 
-            //Set the temperature of all the rooms to the outside temperature by default
+            // Set the temperature of all the rooms to the outside temperature by default
             for (Room room : house.getRooms()) {
               room.setTemperature(EnvironmentModel.getOutsideTemp());
             }
 
-//            Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
-//            HeatingZone test = new HeatingZone(testRooms, new HeatingModel(), "testing", new SpinnerNumberModel());
-//            test.setTemperature(-100);
-
-            Timer houseRefresher = new Timer(100, new ActionListener() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                hg.repaint();
-              }
-            });
+            Timer houseRefresher =
+                new Timer(
+                    100,
+                    new ActionListener() {
+                      @Override
+                      public void actionPerformed(ActionEvent e) {
+                        hg.repaint();
+                      }
+                    });
             houseRefresher.start();
           }
         });
