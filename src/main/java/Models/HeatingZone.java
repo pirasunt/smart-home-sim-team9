@@ -15,15 +15,15 @@ import java.util.ArrayList;
 /** The type Heating zone. */
 public class HeatingZone {
 
-  private int temperature;
   private final ArrayList<Room> rooms = new ArrayList<Room>();
   private final MonthDay summerStart;
   private final MonthDay winterStart;
+  private final String name;
+  private int temperature;
+  private int lastTemp;
   private boolean acOn;
   private boolean heaterOn;
-  private final String name;
-  private SpinnerNumberModel dangerTemp;
-
+  private final SpinnerNumberModel dangerTemp;
   /**
    * Instantiates a new Heating zone.
    *
@@ -48,9 +48,12 @@ public class HeatingZone {
     this.acOn = false;
     this.heaterOn = false;
     this.name = name;
-
     this.temperature = EnvironmentModel.getOutsideTemp();
     this.dangerTemp = dangerTempSpinner;
+  }
+
+  public int getLastTemp() {
+    return lastTemp;
   }
 
   /**
@@ -59,16 +62,16 @@ public class HeatingZone {
    * @return true if it is summer, false if it is winter.
    */
   private boolean isSummer() {
-    MonthDay currentMonthDay = MonthDay.of(Context.getDateObject().getMonth()+1, Context.getDateObject().getDate());
+    MonthDay currentMonthDay =
+        MonthDay.of(Context.getDateObject().getMonth() + 1, Context.getDateObject().getDate());
 
-    //If summer start date is before winter date
-    if(summerStart.isBefore(winterStart)){
+    // If summer start date is before winter date
+    if (summerStart.isBefore(winterStart)) {
       return currentMonthDay.isAfter(summerStart) && currentMonthDay.isBefore(winterStart);
     } else {
-      //If summer start date is after winter date
+      // If summer start date is after winter date
       return currentMonthDay.isAfter(summerStart);
     }
-
   }
 
   /**
@@ -77,7 +80,7 @@ public class HeatingZone {
    * @return true if it is hotter outside, false if it is colder outside.
    */
   private boolean hotOutside() {
-      return EnvironmentModel.getOutsideTemp() > this.temperature;
+    return EnvironmentModel.getOutsideTemp() > this.temperature;
   }
 
   /**
@@ -87,7 +90,7 @@ public class HeatingZone {
    * @return true if the current temperature is higher than desired, false if not.
    */
   private boolean hotInside(int desiredTemp) {
-      return this.temperature > desiredTemp;
+    return this.temperature > desiredTemp;
   }
 
   private void openAllWindowsInZone() {
@@ -155,11 +158,14 @@ public class HeatingZone {
   public void setTemperature(int newTemp) {
     if (!EnvironmentModel.getSimulationRunning()) {
       this.temperature = newTemp;
-      for (Room r: rooms) {
+      for (Room r : rooms) {
         r.setTemperature(newTemp);
       }
       return;
     }
+
+    lastTemp = temperature;
+    temperature = newTemp;
 
     HeatingZone zone = this;
 
@@ -172,12 +178,12 @@ public class HeatingZone {
               public void actionPerformed(ActionEvent e) {
                 alertDangerTemp();
                 if (zone.getTemperature() > newTemp && EnvironmentModel.getSimulationRunning()) {
-                    zone.decrementTemperature();
-                } else if (zone.getTemperature() < newTemp && EnvironmentModel.getSimulationRunning()) {
-                    zone.incrementTemperature();
-                }
-                else if (zone.getTemperature() == newTemp) {
-                  ((Timer)e.getSource()).stop();
+                  zone.decrementTemperature();
+                } else if (zone.getTemperature() < newTemp
+                    && EnvironmentModel.getSimulationRunning()) {
+                  zone.incrementTemperature();
+                } else if (zone.getTemperature() == newTemp) {
+                  ((Timer) e.getSource()).stop();
                 }
 
                 // This handles opening and closing of windows/ac in summer
@@ -205,8 +211,7 @@ public class HeatingZone {
                       ((Timer) e.getSource()).setDelay(100);
                       break;
                   }
-                }
-                else if (isSummer() && !hotOutside()) {
+                } else if (isSummer() && !hotOutside()) {
                   if (acOn) {
                     acOn = false;
                     heaterOn = false;
@@ -233,18 +238,18 @@ public class HeatingZone {
                 }
                 // This handles heater in winter
                 if (!isSummer() && hotInside(newTemp)) {
-                    if (heaterOn) {
-                        acOn = false;
-                        heaterOn = false;
-                        closeAllWindowsInZone();
-                        CustomConsole.print(
-                                "The current temperature in zone :"
-                                        + zone.getName()
-                                        + " is "
-                                        + zone.getTemperature());
-                        CustomConsole.print(
-                                "It is winter but it is already hotter than desired inside, nothing will change and the temperature will drop naturally.");
-                    }
+                  if (heaterOn) {
+                    acOn = false;
+                    heaterOn = false;
+                    closeAllWindowsInZone();
+                    CustomConsole.print(
+                        "The current temperature in zone :"
+                            + zone.getName()
+                            + " is "
+                            + zone.getTemperature());
+                    CustomConsole.print(
+                        "It is winter but it is already hotter than desired inside, nothing will change and the temperature will drop naturally.");
+                  }
                   switch (Context.getDelay()) {
                     case 1000:
                       ((Timer) e.getSource()).setDelay(20000);
@@ -255,21 +260,20 @@ public class HeatingZone {
                     case 10:
                       ((Timer) e.getSource()).setDelay(200);
                       break;
-                    }
-                }
-                else if (!isSummer() && !hotInside(newTemp)) {
-                    if (!heaterOn) {
-                        acOn = false;
-                        heaterOn = true;
-                        closeAllWindowsInZone();
-                        CustomConsole.print(
-                                "The current temperature in zone :"
-                                        + zone.getName()
-                                        + " is "
-                                        + zone.getTemperature());
-                        CustomConsole.print(
-                                "It is winter and the temperature in the zone is too cold, the heater has been turned on.");
-                    }
+                  }
+                } else if (!isSummer() && !hotInside(newTemp)) {
+                  if (!heaterOn) {
+                    acOn = false;
+                    heaterOn = true;
+                    closeAllWindowsInZone();
+                    CustomConsole.print(
+                        "The current temperature in zone :"
+                            + zone.getName()
+                            + " is "
+                            + zone.getTemperature());
+                    CustomConsole.print(
+                        "It is winter and the temperature in the zone is too cold, the heater has been turned on.");
+                  }
                   switch (Context.getDelay()) {
                     case 1000:
                       ((Timer) e.getSource()).setDelay(10000);
@@ -306,8 +310,8 @@ public class HeatingZone {
 
   /** Alert danger temp. */
   public void alertDangerTemp() {
-    if(this.temperature <= (int)dangerTemp.getValue()){
-      CustomConsole.print("ALERT! The temperature in "+ this.name + " is below the threshold!");
+    if (this.temperature <= (int) dangerTemp.getValue()) {
+      CustomConsole.print("ALERT! The temperature in " + this.name + " is below the threshold!");
     }
   }
 
@@ -327,5 +331,14 @@ public class HeatingZone {
    */
   public ArrayList<Room> getRooms() {
     return this.rooms;
+  }
+
+  public boolean containsRoom(Room r) {
+    for (Room room : rooms) {
+      if (room.equals(r)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
