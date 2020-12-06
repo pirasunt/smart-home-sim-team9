@@ -21,6 +21,9 @@ public class HeatingZone {
   private boolean heaterOn;
   private final String name;
   private int temperature;
+  private int morningTemp;
+  private int afternoonTemp;
+  private int nightTemp;
   private SpinnerNumberModel dangerTemp;
   private boolean isRoomZone = false;
 
@@ -36,7 +39,10 @@ public class HeatingZone {
       Room[] rooms,
       HeatingModel model,
       String name,
-      SpinnerNumberModel dangerTempSpinner) {
+      SpinnerNumberModel dangerTempSpinner,
+      int morningTemp,
+      int afternoonTemp,
+      int nightTemp) {
       for (Room room : rooms) {
         this.rooms.add(room);
         room.setIsInHeatingZone(true);
@@ -48,6 +54,10 @@ public class HeatingZone {
     this.name = name;
     this.temperature = EnvironmentModel.getOutsideTemp();
     this.dangerTemp = dangerTempSpinner;
+
+    this.morningTemp = morningTemp;
+    this.afternoonTemp = afternoonTemp;
+    this.nightTemp = nightTemp;
   }
 
   public HeatingZone(

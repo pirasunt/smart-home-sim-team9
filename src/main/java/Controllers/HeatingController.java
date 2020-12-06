@@ -44,9 +44,7 @@ public class HeatingController implements AwayChangeObserver {
     public static HeatingModel getStaticHeatingModel() {
         return sHeatingModel;
     }
-    private void createHeatingZone(String zoneName, Room[] rooms) {
-        heatingModel.createHeatingZone(rooms, zoneName);
-    }
+
 
     public ArrayList<HeatingZone> getHeatingZones() {
         return this.heatingModel.getHeatingZones();
@@ -183,12 +181,15 @@ public class HeatingController implements AwayChangeObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (heatZoneDialog.getZoneName().length()>0 && selectedRoomsMemory.size() > 0) {
-                    
+
                     Room[] selectedRooms = new Room[selectedRoomsMemory.size()];
                     for(int i =0; i < selectedRooms.length; i++)
                         selectedRooms[i] = selectedRoomsMemory.get(i);
 
-                    createHeatingZone(heatZoneDialog.getZoneName(), selectedRooms);
+                    heatingModel.createHeatingZone(selectedRooms,heatZoneDialog.getZoneName(),
+                            heatZoneDialog.getMorningTemp(),
+                            heatZoneDialog.getAfternoonTemp(),
+                            heatZoneDialog.getNightTemp());
 
                     refreshHeatZones();
 

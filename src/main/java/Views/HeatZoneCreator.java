@@ -56,4 +56,17 @@ public class HeatZoneCreator extends JDialog {
         return this.heatZoneNameField.getText();
     }
 
+    public int getMorningTemp(){
+        return (Integer)this.morningTemp.getValue();
+    }
+    public int getAfternoonTemp(){
+        return (Integer)this.afternoonTemp.getValue();
+    }
+    public int getNightTemp(){
+        return (Integer)this.nightTemp.getValue();
+    }
+
+
+
+
 }

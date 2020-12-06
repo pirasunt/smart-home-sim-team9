@@ -41,8 +41,8 @@ public class HeatingModel {
    * @param rooms the rooms
    * @param name the name
    */
-  public void createHeatingZone(Room[] rooms, String name) {
-    heatingZones.add(new HeatingZone(rooms, this, name, dangerTempSpinner));
+  public void createHeatingZone(Room[] rooms, String name, int morningTemp, int afternoonTemp, int nightTemp) {
+    heatingZones.add(new HeatingZone(rooms, this, name, dangerTempSpinner, morningTemp, afternoonTemp, nightTemp));
   }
 
   public MonthDay getSummerStartAsMD() {
