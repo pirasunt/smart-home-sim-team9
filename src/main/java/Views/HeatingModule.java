@@ -42,6 +42,7 @@ public class HeatingModule {
     private JLabel winterStartLabel;
     private JButton summerChangeBtn;
     private JButton winterChangeBtn;
+    private JPanel roomPanel;
     private JList<String> heatingZones;
     private JFrame datePickerWindow;
 
