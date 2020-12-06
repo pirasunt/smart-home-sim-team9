@@ -174,6 +174,8 @@ public class Room {
     this.isInHeatingZone = value;
   }
 
+  public boolean getIsInHeatingZone() { return this.isInHeatingZone; }
+
   @Override
   public String toString() {
     return this.getName();

@@ -262,7 +262,19 @@ public class EnvironmentController {
                 new DashController(theModel, dashView);
 
                 new CoreController(dashView.getSHC(), theModel);
+
                 new HeatingController(new HeatingModel(), dashView.getSHH());
+//                Room[] testRooms = {
+//                        Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)
+//                };
+//                HeatingZone test =
+//                        new HeatingZone(
+//                                testRooms,
+//                                HeatingController.getStaticHeatingModel(),
+//                                "testing",
+//                                new SpinnerNumberModel(),
+//                                false);
+//                test.setTemperature(-100);
 
             } else {
                 CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");

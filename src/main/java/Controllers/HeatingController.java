@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.*;
+import Observers.AwayChangeObserver;
 import Views.CustomConsole;
 import Views.HeatZoneCreator;
 import Views.HeatingModule;
@@ -19,20 +20,26 @@ enum Season {
     SUMMER,
 }
 
-public class HeatingController {
+public class HeatingController implements AwayChangeObserver {
 
     private HeatingModel heatingModel;
+    private static HeatingModel sHeatingModel;
     private HeatingModule heatingView;
     private HeatZoneCreator heatZoneDialog;
 
     public HeatingController(HeatingModel m, HeatingModule v) {
         this.heatingModel = m;
         this.heatingView = v;
-
+        sHeatingModel = m;
+        SecurityModel.subscribe(this);
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
         heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner());
         heatingView.createSummerChangeListener(new SummerChangeListener());
         heatingView.createWinterChangeListener(new WinterChangeListener());
+    }
+
+    public static HeatingModel getStaticHeatingModel() {
+        return sHeatingModel;
     }
 
     public void createHeatingZone(String zoneName, Room[] rooms) {
@@ -65,6 +72,20 @@ public class HeatingController {
         }
 
         return true;
+    }
+
+    @Override
+    public void update(boolean awayIsOn) {
+        // TODO remove prints
+        // triggered when heating mode changes
+        if (awayIsOn) {
+            System.out.println("HeatingController says awayIsOn");
+            heatingModel.setAwayModeTemp(true);
+        } else {
+            System.out.println("HeatingController says not awayIsOn");
+            heatingModel.setAwayModeTemp(false);
+
+        }
     }
 
 
