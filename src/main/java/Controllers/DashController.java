@@ -130,6 +130,7 @@ public class DashController {
                     SecurityModel.startAwayTimer();
                 }
                 theModel.startSimulation();
+                HeatingController.updateTimePeriodTemps(); //Updates zone temps if the Context Time has changed and Sim is now starting at a different time period (morning, afternoon, night)
                 theView.changeSimulationToggleText("Stop Simulation");
                 Context.restartTimer();
             }

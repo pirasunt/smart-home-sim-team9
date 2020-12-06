@@ -145,7 +145,7 @@
             </constraints>
             <properties>
               <font size="11" style="1"/>
-              <text value="Morning (6AM to 12PM)"/>
+              <text value="Morning (6AM to  11:59AM)"/>
             </properties>
           </component>
           <component id="a690" class="javax.swing.JSpinner" binding="morningTemp">
@@ -170,7 +170,7 @@
             </constraints>
             <properties>
               <font size="11" style="1"/>
-              <text value="Afternoon (12:01PM to 6PM)"/>
+              <text value="Afternoon (12:00PM to 5:59PM)"/>
             </properties>
           </component>
           <component id="f5e43" class="javax.swing.JSpinner" binding="afternoonTemp">
@@ -185,7 +185,7 @@
             </constraints>
             <properties>
               <font size="11" style="1"/>
-              <text value="Night (6:01PM to 5:59AM)"/>
+              <text value="Night (6:00PM to 5:59AM)"/>
             </properties>
           </component>
           <component id="2291a" class="javax.swing.JSpinner" binding="nightTemp">

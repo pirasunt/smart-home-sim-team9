@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.MonthDay;
 import java.util.ArrayList;
+import java.util.Date;
 
 /** The type Heating zone. */
 public class HeatingZone {
@@ -26,6 +27,7 @@ public class HeatingZone {
   private int nightTemp;
   private SpinnerNumberModel dangerTemp;
   private boolean isRoomZone = false;
+  private JLabel tempLabel;
 
   /**
    * Instantiates a new Heating zone.
@@ -43,21 +45,42 @@ public class HeatingZone {
       int morningTemp,
       int afternoonTemp,
       int nightTemp) {
-      for (Room room : rooms) {
-        this.rooms.add(room);
-        room.setIsInHeatingZone(true);
-        room.setTemperature(EnvironmentModel.getOutsideTemp());
-      }
-    this.model = model;
-    this.acOn = false;
-    this.heaterOn = false;
-    this.name = name;
-    this.temperature = EnvironmentModel.getOutsideTemp();
-    this.dangerTemp = dangerTempSpinner;
 
     this.morningTemp = morningTemp;
     this.afternoonTemp = afternoonTemp;
     this.nightTemp = nightTemp;
+    this.tempLabel = new JLabel();
+
+    updateTimePeriodTemp();
+
+      for (Room room : rooms) {
+        this.rooms.add(room);
+        room.setIsInHeatingZone(true);
+        room.setTemperature(this.temperature);
+      }
+
+
+    this.model = model;
+    this.acOn = false;
+    this.heaterOn = false;
+    this.name = name;
+    this.dangerTemp = dangerTempSpinner;
+  }
+
+  public void updateTimePeriodTemp(){
+    Date currentTime = Context.getDateObject();
+
+    if(currentTime.getHours()>= 6 && currentTime.getHours() < 12 ){
+      this.setTemperature(morningTemp);
+    } else if(currentTime.getHours() >= 12 && currentTime.getHours() < 18) {
+      this.setTemperature(afternoonTemp);
+    } else {
+      this.setTemperature(nightTemp);
+    }
+  }
+
+  public JLabel getTempLabel(){
+    return this.tempLabel;
   }
 
   public HeatingZone(
@@ -190,6 +213,7 @@ public class HeatingZone {
   public void setTemperature(int newTemp) {
     if (!EnvironmentModel.getSimulationRunning()) {
       this.temperature = newTemp;
+      this.tempLabel.setText(this.temperature + " °C");
       for (Room r : rooms) {
         r.setTemperature(newTemp);
       }
@@ -283,6 +307,7 @@ public class HeatingZone {
   /** Increment temperature. */
   public void incrementTemperature() {
     this.temperature++;
+    this.tempLabel.setText(this.temperature + " °C");
     for (Room room : rooms) {
       room.setTemperature(room.getTemperature() + 1);
     }
@@ -291,6 +316,7 @@ public class HeatingZone {
   /** Decrement temperature. */
   public void decrementTemperature() {
     this.temperature--;
+    this.tempLabel.setText(this.temperature + " °C");
     for (Room room : rooms) {
       room.setTemperature(room.getTemperature() - 1);
     }

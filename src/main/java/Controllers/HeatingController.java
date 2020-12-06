@@ -44,6 +44,11 @@ public class HeatingController implements AwayChangeObserver {
     public static HeatingModel getStaticHeatingModel() {
         return sHeatingModel;
     }
+    public static void updateTimePeriodTemps(){
+        for(HeatingZone hz: sHeatingModel.getHeatingZones()){
+            hz.updateTimePeriodTemp();
+        }
+    }
 
 
     public ArrayList<HeatingZone> getHeatingZones() {
@@ -59,7 +64,7 @@ public class HeatingController implements AwayChangeObserver {
 
         for(int i = 0; i < allZones.size(); i++){
             zoneNames.add(new JLabel(allZones.get(i).getName()));
-            zoneTemps.add(new JLabel(allZones.get(i).getTemperature() + " °C"));
+            zoneTemps.add(allZones.get(i).getTempLabel());
 
             JButton editBtn = new JButton("Edit");
 
