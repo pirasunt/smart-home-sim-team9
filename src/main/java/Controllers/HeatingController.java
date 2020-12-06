@@ -31,7 +31,7 @@ public class HeatingController implements AwayChangeObserver {
         this.heatingModel = m;
         this.heatingView = v;
         sHeatingModel = m;
-
+        SecurityModel.subscribe(this);
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
         heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner());
         heatingView.createSummerChangeListener(new SummerChangeListener());

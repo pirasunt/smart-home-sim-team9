@@ -160,40 +160,11 @@ public class HeatingModel {
   public void setAwayModeTemp(boolean awayIsOn) {
 
     CustomConsole.print("DEBUG! -> SET AWAY MODE TEMP");
-//    int tempToSet;
-//
-//
-//    ArrayList<Room> allRooms = Context.getHouse().getRooms();
-//
-//    ArrayList<Room> copyRooms = new ArrayList<>();
-//    for (Room rm : allRooms ) {
-//        copyRooms.add(rm);
-//    }
-//
-//
-//    for (int i = 0; i < heatingZones.size(); i++) {
-//      for (int j = 0; j < copyRooms.size(); j++) {
-//
-//        if (heatingZones.get(i).containsRoom(copyRooms.get(j))) {
-//          copyRooms.remove(j);
-//        }
-//      }
-//      if (awayIsOn) {
-//        tempToSet = (int) awayTempSpinner.getValue();
-//      } else {
-//        tempToSet = heatingZones.get(i).getLastTemp();
-//      }
-//      heatingZones.get(i).setTemperature(tempToSet);
-//    }
+
+    int tempToSet = (int) awayTempSpinner.getValue();
 
     for (HeatingZone h : heatingZones ) {
-      System.out.println("iter");
-      if(awayIsOn){
-        h.setTemperature(66);
-      }
-      else{
-        h.setTemperature(-66);
-      }
+      h.setTemperature(tempToSet);
     }
     // TODO: Change room temps here
 
