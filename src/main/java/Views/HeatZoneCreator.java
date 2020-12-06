@@ -16,84 +16,30 @@ public class HeatZoneCreator extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JPanel roomPanel;
+    private JTextField heatZoneNameField;
     private JTextField zoneName;
-    private JLabel zoneNameLabel;
 
-    private HeatingController controller;
-    private static HeatingController sController;
-    private Room[] availableRooms; //The rooms available to be selected from (not already in a heating zone) Only display these as options
 
-    public HeatZoneCreator(HeatingController controller) {
-
-        this.controller = controller;
-        sController = controller;
-
-        availableRooms = controller.getAvailableRooms();
+    public HeatZoneCreator() {
 
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
         setSize(400, 600);
     }
 
-    private void onOK() {
-        if (!zoneName.getText().equals("") /*&& some rooms are selected*/) {
-
-            //call controller.createHeatingZone(zoneName.getText(), rooms);
-
-            //refresh the SHH to display a list of all existing zones
-            //can maybe use an observer (?), not necessary though
-            //controller.getHeatingZones() should return all existing zones
-
-            //code to test without UI, dont forget to remove
-            Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
-            controller.createHeatingZone(zoneName.getText(), testRooms);
-
-            System.out.println(controller.getHeatingZones().get(0).getName());
-
-            dispose();
-        } else
-            CustomConsole.print("Make sure to name the heating zone you are creating, as well as select at least 1 room.");
+    public void addConfirmButtonListener(ActionListener al) {
+        this.buttonOK.addActionListener(al);
     }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
+    public void addCancelButtonListener(ActionListener al) {
+        this.buttonCancel.addActionListener(al);
     }
 
-    public static void main(String[] args) {
-        HeatZoneCreator dialog = new HeatZoneCreator(sController);
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    public String getZoneName() {
+        return this.heatZoneNameField.getText();
     }
 
     {
@@ -112,10 +58,10 @@ public class HeatZoneCreator extends JDialog {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
+        contentPane.setLayout(new GridLayoutManager(5, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        contentPane.add(panel1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
@@ -128,15 +74,48 @@ public class HeatZoneCreator extends JDialog {
         buttonCancel.setText("Cancel");
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        zoneName = new JTextField();
-        panel3.add(zoneName, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 12, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setText("Heat Zone Name");
+        panel3.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        heatZoneNameField = new JTextField();
+        panel3.add(heatZoneNameField, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final Spacer spacer2 = new Spacer();
-        panel3.add(spacer2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        zoneNameLabel = new JLabel();
-        zoneNameLabel.setText("Name for heating zone:");
-        panel3.add(zoneNameLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel3.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        roomPanel = new JPanel();
+        roomPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPane.add(roomPanel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$(null, Font.BOLD, 14, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
+        label2.setText("Room Selection");
+        contentPane.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JSeparator separator1 = new JSeparator();
+        contentPane.add(separator1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
     }
 
     /**

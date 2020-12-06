@@ -1,5 +1,6 @@
 package Models;
 
+import Controllers.HeatingController;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
@@ -489,6 +490,12 @@ public class EnvironmentModel {
   public void startSimulation() {
     simulationRunning = true;
     CustomConsole.print("The simulation has been started.");
+    handleRoomTemperatures(EnvironmentModel.getOutsideTemp());
+  }
+
+  private void handleRoomTemperatures(int newTemp) {
+    HeatingZone rooms = HeatingController.getStaticHeatingModel().getAllRoomsNotInZonesAsHeatingZones();
+    rooms.setTemperature(newTemp);
   }
 
   /**

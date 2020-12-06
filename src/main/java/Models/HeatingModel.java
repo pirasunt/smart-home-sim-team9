@@ -5,6 +5,7 @@ import Views.CustomConsole;
 import javax.swing.*;
 import java.time.MonthDay;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,10 +13,10 @@ import java.util.Date;
 public class HeatingModel {
 
   private final ArrayList<HeatingZone> heatingZones = new ArrayList<HeatingZone>();
-  private final SpinnerNumberModel awayTempSpinner;
-  private final SpinnerNumberModel dangerTempSpinner;
   private MonthDay summerStart;
   private MonthDay winterStart;
+  private final SpinnerNumberModel awayTempSpinner;
+  private final SpinnerNumberModel dangerTempSpinner;
 
   /** Instantiates a new Heating model. */
   public HeatingModel() {
@@ -41,7 +42,53 @@ public class HeatingModel {
    * @param name the name
    */
   public void createHeatingZone(Room[] rooms, String name) {
-    heatingZones.add(new HeatingZone(rooms, summerStart, winterStart, name, dangerTempSpinner));
+    heatingZones.add(new HeatingZone(rooms, this, name, dangerTempSpinner, false));
+  }
+
+  public MonthDay getSummerStartAsMD() {
+    return this.summerStart;
+  }
+
+  public MonthDay getWinterStartAsMD() {
+    return this.winterStart;
+  }
+
+  public ArrayList<HeatingZone> getAllHeatingZonesIncludingRooms() {
+    ArrayList<HeatingZone> temp = this.heatingZones;
+    for (Room r: Context.getHouse().getRooms()) {
+      if (!r.getIsInHeatingZone()) {
+        temp.add(new HeatingZone(new Room[] {r}, this, r.getName(), this.dangerTempSpinner, true));
+        r.setIsInHeatingZone(false);
+      }
+    }
+    return temp;
+  }
+
+  public HeatingZone getAllRoomsNotInZonesAsHeatingZones() {
+    ArrayList<Room> temp = new ArrayList<Room>();
+    for (Room r: Context.getHouse().getRooms()) {
+      if (!r.getIsInHeatingZone()) {
+        temp.add(r);
+      }
+    }
+    Room[] tempAsArray = new Room[temp.size()];
+    HeatingZone result = new HeatingZone(temp.toArray(tempAsArray), this, "All Rooms", this.dangerTempSpinner, true);
+
+    for (Room r: result.getRooms()) {
+      r.setIsInHeatingZone(false);
+    }
+    return result;
+  }
+
+  public HeatingZone getRoomAsHeatingZone(int roomdID) {
+    for (Room r: Context.getHouse().getRooms()) {
+      if (roomdID == r.getId()) {
+        HeatingZone result =  new HeatingZone(new Room[] {r}, this, r.getName(), this.dangerTempSpinner, true);
+        result.getRooms().get(0).setIsInHeatingZone(false);
+        return result;
+      }
+    }
+    return null;
   }
 
   /**

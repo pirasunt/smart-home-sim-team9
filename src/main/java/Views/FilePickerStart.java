@@ -75,8 +75,8 @@ public class FilePickerStart extends JFrame {
             }
 
 //            Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
-//            HeatingZone test = new HeatingZone(testRooms, MonthDay.now(), MonthDay.of(11,11), "testing");
-//            test.setTemperature(3214234);
+//            HeatingZone test = new HeatingZone(testRooms, new HeatingModel(), "testing", new SpinnerNumberModel());
+//            test.setTemperature(-100);
 
             Timer houseRefresher = new Timer(100, new ActionListener() {
               @Override
