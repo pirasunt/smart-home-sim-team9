@@ -19,11 +19,10 @@ public class HeatingZone {
   private final MonthDay summerStart;
   private final MonthDay winterStart;
   private final String name;
+  private final SpinnerNumberModel dangerTemp;
   private int temperature;
-  private int lastTemp;
   private boolean acOn;
   private boolean heaterOn;
-  private final SpinnerNumberModel dangerTemp;
   /**
    * Instantiates a new Heating zone.
    *
@@ -50,10 +49,6 @@ public class HeatingZone {
     this.name = name;
     this.temperature = EnvironmentModel.getOutsideTemp();
     this.dangerTemp = dangerTempSpinner;
-  }
-
-  public int getLastTemp() {
-    return lastTemp;
   }
 
   /**
@@ -163,9 +158,6 @@ public class HeatingZone {
       }
       return;
     }
-
-    lastTemp = temperature;
-    temperature = newTemp;
 
     HeatingZone zone = this;
 

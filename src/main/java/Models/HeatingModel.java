@@ -113,32 +113,41 @@ public class HeatingModel {
   public void setAwayModeTemp(boolean awayIsOn) {
 
     CustomConsole.print("DEBUG! -> SET AWAY MODE TEMP");
-    int tempToSet;
+//    int tempToSet;
+//
+//
+//    ArrayList<Room> allRooms = Context.getHouse().getRooms();
+//
+//    ArrayList<Room> copyRooms = new ArrayList<>();
+//    for (Room rm : allRooms ) {
+//        copyRooms.add(rm);
+//    }
+//
+//
+//    for (int i = 0; i < heatingZones.size(); i++) {
+//      for (int j = 0; j < copyRooms.size(); j++) {
+//
+//        if (heatingZones.get(i).containsRoom(copyRooms.get(j))) {
+//          copyRooms.remove(j);
+//        }
+//      }
+//      if (awayIsOn) {
+//        tempToSet = (int) awayTempSpinner.getValue();
+//      } else {
+//        tempToSet = heatingZones.get(i).getLastTemp();
+//      }
+//      heatingZones.get(i).setTemperature(tempToSet);
+//    }
 
-
-    ArrayList<Room> allRooms = Context.getHouse().getRooms();
-
-    ArrayList<Room> copyRooms = new ArrayList<>();
-    for (Room rm : allRooms ) {
-        copyRooms.add(rm);
-    }
-
-
-    for (int i = 0; i < heatingZones.size(); i++) {
-      for (int j = 0; j < copyRooms.size(); j++) {
-
-        if (heatingZones.get(i).containsRoom(copyRooms.get(j))) {
-          copyRooms.remove(j);
-        }
+    for (HeatingZone h : heatingZones ) {
+      System.out.println("iter");
+      if(awayIsOn){
+        h.setTemperature(66);
       }
-      if (awayIsOn) {
-        tempToSet = (int) awayTempSpinner.getValue();
-      } else {
-        tempToSet = heatingZones.get(i).getLastTemp();
+      else{
+        h.setTemperature(-66);
       }
-      heatingZones.get(i).setTemperature(tempToSet);
     }
-
     // TODO: Change room temps here
 
   }
