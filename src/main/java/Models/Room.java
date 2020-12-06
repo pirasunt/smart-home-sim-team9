@@ -1,6 +1,6 @@
 package Models;
 
-import Models.Walls.*;
+import Models.Walls.Wall;
 import Views.CustomConsole;
 
 import javax.swing.*;
@@ -18,6 +18,7 @@ public class Room {
   private boolean lightsOn = false;
   private boolean isInHeatingZone = false;
   private boolean isTempOverriden = false;
+
   /**
    * Instantiates a new Room.
    *
@@ -46,11 +47,21 @@ public class Room {
     return leftWall;
   }
 
-  public boolean isTempOverriden(){
+  /**
+   * Is temp overriden boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isTempOverriden() {
     return isTempOverriden;
   }
 
-  public void setRoomTempSetting(boolean value){
+  /**
+   * Set room temp setting.
+   *
+   * @param value the value
+   */
+  public void setRoomTempSetting(boolean value) {
     this.isTempOverriden = value;
   }
 
@@ -108,31 +119,39 @@ public class Room {
     return temperature;
   }
 
-  public JLabel getRoomTempLabel(){
-    return this.roomTempLabel;
-  }
   /**
    * Sets temperature of the room.
    *
    * @param temperature the temperature of the room
    */
   public void setTemperature(int temperature) {
-    if(!isTempOverriden) { //Can't auto-set room temp if temp setting is overridden
+    if (!isTempOverriden) { // Can't auto-set room temp if temp setting is overridden
       this.temperature = temperature;
-      if (roomTempLabel == null)
-        this.roomTempLabel = new JLabel();
+      if (roomTempLabel == null) this.roomTempLabel = new JLabel();
       this.roomTempLabel.setText(this.temperature + " °C");
     }
   }
 
-  public void manualSetTemperature(int newTemp){
+  /**
+   * Get room temp label j label.
+   *
+   * @return the j label
+   */
+  public JLabel getRoomTempLabel() {
+    return this.roomTempLabel;
+  }
 
-    if(!EnvironmentModel.getSimulationRunning()) {
+  /**
+   * Manual set temperature.
+   *
+   * @param newTemp the new temp
+   */
+  public void manualSetTemperature(int newTemp) {
+
+    if (!EnvironmentModel.getSimulationRunning()) {
       this.temperature = newTemp;
-      if(isTempOverriden)
-        this.roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
-      else
-        this.roomTempLabel.setText(temperature + " °C");
+      if (isTempOverriden) this.roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+      else this.roomTempLabel.setText(temperature + " °C");
 
     } else {
       new Timer(
@@ -144,27 +163,21 @@ public class Room {
                   if (temperature > newTemp) {
                     temperature--;
 
-                    if(isTempOverriden)
-                      roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
-                    else
-                      roomTempLabel.setText(temperature + " °C");
+                    if (isTempOverriden) roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else roomTempLabel.setText(temperature + " °C");
                   } else if (temperature < newTemp) {
                     temperature++;
 
-                    if(isTempOverriden)
-                      roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
-                    else
-                      roomTempLabel.setText(temperature + " °C");
+                    if (isTempOverriden) roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else roomTempLabel.setText(temperature + " °C");
                   } else if (temperature == newTemp) {
                     ((Timer) e.getSource()).stop();
                   }
-
                 }
-              }).start();
+              })
+          .start();
     }
-
   }
-
 
   /**
    * Get's a boolean value representing if the lights are on or not
@@ -223,19 +236,41 @@ public class Room {
     return users;
   }
 
-  public Wall[] getAllWalls(){
-    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
+  /**
+   * Get all walls wall [ ].
+   *
+   * @return the wall [ ]
+   */
+  public Wall[] getAllWalls() {
+    return new Wall[] {leftWall, rightWall, bottomWall, topWall};
   }
 
+  /**
+   * Is room in heating zone boolean.
+   *
+   * @return the boolean
+   */
   public boolean isRoomInHeatingZone() {
     return this.isInHeatingZone;
   }
 
+  /**
+   * Gets is in heating zone.
+   *
+   * @return the is in heating zone
+   */
+  public boolean getIsInHeatingZone() {
+    return this.isInHeatingZone;
+  }
+
+  /**
+   * Sets is in heating zone.
+   *
+   * @param value the value
+   */
   public void setIsInHeatingZone(boolean value) {
     this.isInHeatingZone = value;
   }
-
-  public boolean getIsInHeatingZone() { return this.isInHeatingZone; }
 
   @Override
   public String toString() {
