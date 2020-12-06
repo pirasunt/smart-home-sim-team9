@@ -61,12 +61,28 @@ public class HeatingModule {
     public void initializeView(Date summerStart,
                                Date winterStart,
                                SpinnerNumberModel awaySpinnerModel,
-                               SpinnerNumberModel dangerSpinnerModel) {
+                               SpinnerNumberModel dangerSpinnerModel,
+                               ArrayList<JLabel> roomNameLabels,
+                               ArrayList<JLabel> roomTempLabels,
+                               ArrayList<JButton> editRoomTempBtn) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd");
         this.summerStartLabel.setText(dateFormatter.format(summerStart));
         this.winterStartLabel.setText(dateFormatter.format(winterStart));
         awayTempSpinner.setModel(awaySpinnerModel);
         dangerTempSpinner.setModel(dangerSpinnerModel);
+
+        displayRoomSection(roomNameLabels, roomTempLabels, editRoomTempBtn);
+    }
+
+    private void displayRoomSection(ArrayList<JLabel> roomNameLabels, ArrayList<JLabel> roomTempLabels,  ArrayList<JButton> editRoomTempBtn){
+
+        this.roomPanel.setLayout(new GridLayout(0, 3, 5,5));
+
+        for(int i = 0; i < roomNameLabels.size(); i++){
+            this.roomPanel.add(roomNameLabels.get(i));
+            this.roomPanel.add(roomTempLabels.get(i));
+            this.roomPanel.add(editRoomTempBtn.get(i));
+        }
     }
 
     public void refreshCurrentHeatZones(ArrayList<JLabel> zoneLabels, ArrayList<JLabel> tempLabels ,ArrayList<JButton> zoneEditButtons) {

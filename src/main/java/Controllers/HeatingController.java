@@ -2,12 +2,11 @@ package Controllers;
 
 import Models.*;
 import Observers.AwayChangeObserver;
-import Views.CustomConsole;
-import Views.EditZone;
-import Views.HeatZoneCreator;
-import Views.HeatingModule;
+import Views.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -38,9 +37,11 @@ public class HeatingController implements AwayChangeObserver {
         sHeatingModel = m;
         SecurityModel.subscribe(this);
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
-        heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner());
         heatingView.createSummerChangeListener(new SummerChangeListener());
         heatingView.createWinterChangeListener(new WinterChangeListener());
+
+        createHeatingComponents();
+
     }
     public static HeatingModel getStaticHeatingModel() {
         return sHeatingModel;
@@ -49,6 +50,84 @@ public class HeatingController implements AwayChangeObserver {
         for(HeatingZone hz: sHeatingModel.getHeatingZones()){
             hz.updateTimePeriodTemp();
         }
+    }
+
+    private void createHeatingComponents(){
+
+         ArrayList<Room> rooms = Context.getHouse().getRooms();
+
+         ArrayList<JLabel> roomNames = new ArrayList<>();
+         ArrayList<JLabel> roomTemps = new ArrayList<>();
+         ArrayList<JButton> editRoomTempBtns = new ArrayList<>();
+
+         for(int i =0; i < rooms.size(); i++){
+             roomNames.add(new JLabel(rooms.get(i).getName()));
+             roomTemps.add(rooms.get(i).getRoomTempLabel());
+
+             JButton editRoomTempBtn = new JButton("Edit");
+
+             int index = i;
+             editRoomTempBtn.addActionListener(new ActionListener() {
+                 @Override
+                 public void actionPerformed(ActionEvent e) {
+                     Room r = rooms.get(index);
+                     EditRoomTemp ert = new EditRoomTemp(r);
+
+                     ert.addSaveListener(new ActionListener() {
+                         @Override
+                         public void actionPerformed(ActionEvent e) {
+
+                             if(ert.getYesRadioButton().isSelected()){
+                                 if(!r.isTempOverriden()) {
+                                     r.setRoomTempSetting(true);
+                                     r.getRoomTempLabel().setText(r.getRoomTempLabel().getText() + " [OVERRIDDEN]");
+                                 }
+                                 r.manualSetTemperature(ert.getNewTemp());
+                             } else {
+                                 int zoneTemp = r.getTemperature();
+                                 if(r.isTempOverriden()) {
+                                     r.setRoomTempSetting(false);
+
+                                     for (HeatingZone hz : sHeatingModel.getHeatingZones()) {
+                                         for (Room room : hz.getRooms()) {
+                                             if (r.getId() == room.getId())
+                                                 zoneTemp = hz.getTemperature();
+                                         }
+                                     }
+                                 }
+                                 r.manualSetTemperature(zoneTemp); //return room to its zoneTemp.
+                             }
+
+                             ert.dispose();
+                         }
+                     });
+
+                     ert.addTurnOffOverrideListener(new ActionListener() {
+                         @Override
+                         public void actionPerformed(ActionEvent e) {
+                             ert.getTempChangeDiag().setVisible(false);
+                         }
+                     });
+
+                     ert.addTurnOnOverrideListener(new ActionListener() {
+                         @Override
+                         public void actionPerformed(ActionEvent e) {
+                            ert.getTempChangeDiag().setVisible(true);
+
+                         }
+                     });
+
+                     ert.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                     ert.setLocationRelativeTo(null);
+                     ert.setVisible(true);
+                 }
+             });
+
+
+             editRoomTempBtns.add(editRoomTempBtn);
+         }
+
+        heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner(), roomNames, roomTemps, editRoomTempBtns);
     }
 
 

@@ -3,6 +3,9 @@ package Models;
 import Models.Walls.*;
 import Views.CustomConsole;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /** The type Room. */
@@ -11,9 +14,10 @@ public class Room {
   private final String name;
   private final int id;
   private int temperature = 0;
+  private JLabel roomTempLabel;
   private boolean lightsOn = false;
   private boolean isInHeatingZone = false;
-
+  private boolean isTempOverriden = false;
   /**
    * Instantiates a new Room.
    *
@@ -40,6 +44,14 @@ public class Room {
    */
   public Wall getLeftWall() {
     return leftWall;
+  }
+
+  public boolean isTempOverriden(){
+    return isTempOverriden;
+  }
+
+  public void setRoomTempSetting(boolean value){
+    this.isTempOverriden = value;
   }
 
   /**
@@ -96,14 +108,63 @@ public class Room {
     return temperature;
   }
 
+  public JLabel getRoomTempLabel(){
+    return this.roomTempLabel;
+  }
   /**
    * Sets temperature of the room.
    *
    * @param temperature the temperature of the room
    */
   public void setTemperature(int temperature) {
-    this.temperature = temperature;
+    if(!isTempOverriden) { //Can't auto-set room temp if temp setting is overridden
+      this.temperature = temperature;
+      if (roomTempLabel == null)
+        this.roomTempLabel = new JLabel();
+      this.roomTempLabel.setText(this.temperature + " °C");
+    }
   }
+
+  public void manualSetTemperature(int newTemp){
+
+    if(!EnvironmentModel.getSimulationRunning()) {
+      this.temperature = newTemp;
+      if(isTempOverriden)
+        this.roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+      else
+        this.roomTempLabel.setText(temperature + " °C");
+
+    } else {
+      new Timer(
+              Context.getDelay(),
+              new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  if (temperature > newTemp) {
+                    temperature--;
+
+                    if(isTempOverriden)
+                      roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else
+                      roomTempLabel.setText(temperature + " °C");
+                  } else if (temperature < newTemp) {
+                    temperature++;
+
+                    if(isTempOverriden)
+                      roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else
+                      roomTempLabel.setText(temperature + " °C");
+                  } else if (temperature == newTemp) {
+                    ((Timer) e.getSource()).stop();
+                  }
+
+                }
+              }).start();
+    }
+
+  }
+
 
   /**
    * Get's a boolean value representing if the lights are on or not
