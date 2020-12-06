@@ -162,9 +162,6 @@ public class HeatingZone {
       return;
     }
 
-    System.out.println(this.temperature);
-    System.out.println(newTemp);
-
     HeatingZone zone = this;
 
     Timer timer =
@@ -181,7 +178,6 @@ public class HeatingZone {
                     zone.incrementTemperature();
                 }
                 else if (zone.getTemperature() == newTemp) {
-                  CustomConsole.print(((Integer)(zone.getTemperature())).toString());
                   ((Timer)e.getSource()).stop();
                 }
 

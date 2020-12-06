@@ -159,14 +159,11 @@ public class HeatingModel {
    */
   public void setAwayModeTemp(boolean awayIsOn) {
 
-    CustomConsole.print("DEBUG! -> SET AWAY MODE TEMP");
-
     int tempToSet = (int) awayTempSpinner.getValue();
 
-    for (HeatingZone h : heatingZones ) {
+    for (HeatingZone h : getAllHeatingZonesIncludingRooms() ) {
       h.setTemperature(tempToSet);
     }
-    // TODO: Change room temps here
 
   }
 }
