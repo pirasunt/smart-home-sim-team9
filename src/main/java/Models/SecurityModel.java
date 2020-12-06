@@ -238,15 +238,7 @@ public class SecurityModel {
       authTimers.add(temp);
       authTasks.add(tempTask);
 
-      int timerDel = Context.getDelay();;
-      int multiplier = 1;
-      if (timerDel == 1000) {
-        multiplier = 1;
-      } else if (timerDel == 100) {
-        multiplier = 10;
-      } else if (timerDel == 10) {
-        multiplier = 100;
-      }
+      int multiplier = getMultiplier();
 
       Date envTime = Context.getDateObject();
       Calendar sCal = new GregorianCalendar();
@@ -259,6 +251,18 @@ public class SecurityModel {
           (sCal.getTimeInMillis() - (Context.getDateObject().getTime())) / multiplier;
       temp.schedule(tempTask, deltaStart);
     }
+  }
+
+  private static int getMultiplier(){
+    int timerDel = Context.getDelay();
+    if (timerDel == 1000) {
+      return 1;
+    } else if (timerDel == 100) {
+      return 10;
+    } else if (timerDel == 10) {
+      return 100;
+    }
+    return 1;
   }
 
   /** The type Start away lights. */
