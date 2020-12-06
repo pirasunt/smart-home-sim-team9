@@ -209,5 +209,4 @@ public class CoreView {
     public JComponent $$$getRootComponent$$$() {
         return topLevelPane;
     }
-
 }

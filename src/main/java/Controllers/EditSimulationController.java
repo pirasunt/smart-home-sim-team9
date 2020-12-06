@@ -1,10 +1,7 @@
 package Controllers;
 
 import Enums.ProfileType;
-import Models.Context;
-import Models.EnvironmentModel;
-import Models.Room;
-import Models.UserProfileModel;
+import Models.*;
 import Views.EditSimulationView;
 
 import javax.swing.*;

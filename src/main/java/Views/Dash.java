@@ -136,6 +136,10 @@ public class Dash extends JFrame implements TimeChangeObserver {
         return this.coreView;
     }
 
+    public HeatingModule getSHH() {
+        return this.SHH;
+    }
+
     @Override
     public void repaint() {
         setSHPVisibility();
@@ -409,5 +413,4 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public JComponent $$$getRootComponent$$$() {
         return smartModulesPanel;
     }
-
 }

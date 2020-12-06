@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class HeatingModule extends JPanel {
-    HeatingController hc;
     Room[] roomsInHouse = new Room[Context.getHouse().getRooms().size()];
 
     private JButton createNewHeatingZoneButton;
@@ -46,16 +45,20 @@ public class HeatingModule extends JPanel {
     private JFrame datePickerWindow;
 
     public HeatingModule() {
-        HeatingModel model = new HeatingModel();
-        hc = new HeatingController(model, this);
         roomsInHouse = Context.getHouse().getRooms().toArray(roomsInHouse);
 
         DefaultListModel<String> lm = new DefaultListModel<>();
         heatingZones = new JList<String>(lm);
-        awayTempSpinner.setModel(model.getAwayTempSpinner());
-        dangerTempSpinner.setModel(model.getDangerTempSpinner());
-
     }
+
+    public void initializeView(Date summerStart, Date winterStart, SpinnerNumberModel awaySpinnerModel, SpinnerNumberModel dangerSpinnerModel) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd");
+        this.summerStartLabel.setText(dateFormatter.format(summerStart));
+        this.winterStartLabel.setText(dateFormatter.format(winterStart));
+        awayTempSpinner.setModel(awaySpinnerModel);
+        dangerTempSpinner.setModel(dangerSpinnerModel);
+    }
+
 
     public void createHeatingZoneListener(ActionListener createHeatingZoneListener) {
         this.createNewHeatingZoneButton.addActionListener(createHeatingZoneListener);
@@ -101,13 +104,6 @@ public class HeatingModule extends JPanel {
 
     public JList<String> getList() {
         return this.heatingZones;
-    }
-
-
-    public void initializeView(Date summerStart, Date winterStart) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd");
-        this.summerStartLabel.setText(dateFormatter.format(summerStart));
-        this.winterStartLabel.setText(dateFormatter.format(winterStart));
     }
 
     public void updateSummerStartLabel(String date) {
@@ -271,5 +267,4 @@ public class HeatingModule extends JPanel {
     public JComponent $$$getRootComponent$$$() {
         return panel;
     }
-
 }

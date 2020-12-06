@@ -22,16 +22,23 @@ enum Season {
 public class HeatingController {
 
     private HeatingModel heatingModel;
+    private static HeatingModel sHeatingModel;
     private HeatingModule heatingView;
+    private HeatZoneCreator heatZoneDialog;
 
     public HeatingController(HeatingModel m, HeatingModule v) {
         this.heatingModel = m;
         this.heatingView = v;
+        sHeatingModel = m;
 
         heatingView.createHeatingZoneListener(new HeatingZoneCreationListener());
-        heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart());
+        heatingView.initializeView(heatingModel.getSummerStart(), heatingModel.getWinterStart(), heatingModel.getAwayTempSpinner(), heatingModel.getDangerTempSpinner());
         heatingView.createSummerChangeListener(new SummerChangeListener());
         heatingView.createWinterChangeListener(new WinterChangeListener());
+    }
+
+    public static HeatingModel getStaticHeatingModel() {
+        return sHeatingModel;
     }
 
     public void createHeatingZone(String zoneName, Room[] rooms) {
@@ -71,9 +78,53 @@ public class HeatingController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            HeatZoneCreator heatZoneDialog = new HeatZoneCreator(new HeatingController(heatingModel, heatingView));
+            heatZoneDialog = new HeatZoneCreator();
+            heatZoneDialog.addCancelButtonListener(new ZoneCancelButtonListener());
+            heatZoneDialog.addConfirmButtonListener(new ZoneConfirmButtonListener());
+
+            heatZoneDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             heatZoneDialog.setLocationRelativeTo(null);
             heatZoneDialog.setVisible(true);
+        }
+
+        private class ZoneCancelButtonListener implements ActionListener {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                heatZoneDialog.dispose();
+            }
+        }
+
+        private class ZoneConfirmButtonListener implements ActionListener {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (heatZoneDialog.getZoneName().length()>0/*&& some rooms are selected*/) {
+
+                    //call controller.createHeatingZone(zoneName.getText(), rooms);
+
+                    //refresh the SHH to display a list of all existing zones
+                    //can maybe use an observer (?), not necessary though
+                    //controller.getHeatingZones() should return all existing zones
+
+                    //code to test without UI, dont forget to remove
+                    Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
+                    createHeatingZone(heatZoneDialog.getZoneName(), testRooms);
+
+                    System.out.println(getHeatingZones().get(0).getName());
+
+                    heatZoneDialog.dispose();
+                } else
+                    CustomConsole.print("Make sure to name the heating zone you are creating, as well as select at least 1 room.");
+            }
         }
     }
 
