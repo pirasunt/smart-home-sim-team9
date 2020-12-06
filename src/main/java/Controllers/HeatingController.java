@@ -9,6 +9,9 @@ import Views.HeatingModule;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class HeatingController implements AwayChangeObserver {
     private static HeatingModel sHeatingModel;
     private HeatingModule heatingView;
     private HeatZoneCreator heatZoneDialog;
+    private ArrayList<Room> selectedRoomsMemory;
 
     public HeatingController(HeatingModel m, HeatingModule v) {
         this.heatingModel = m;
@@ -37,12 +41,10 @@ public class HeatingController implements AwayChangeObserver {
         heatingView.createSummerChangeListener(new SummerChangeListener());
         heatingView.createWinterChangeListener(new WinterChangeListener());
     }
-
     public static HeatingModel getStaticHeatingModel() {
         return sHeatingModel;
     }
-
-    public void createHeatingZone(String zoneName, Room[] rooms) {
+    private void createHeatingZone(String zoneName, Room[] rooms) {
         heatingModel.createHeatingZone(rooms, zoneName);
     }
 
@@ -50,7 +52,33 @@ public class HeatingController implements AwayChangeObserver {
         return this.heatingModel.getHeatingZones();
     }
 
-    public Room[] getAvailableRooms() {
+    private void refreshHeatZones(){
+        ArrayList<HeatingZone> allZones = this.heatingModel.getHeatingZones();
+
+        ArrayList<JLabel> zoneNames = new ArrayList<>();
+        ArrayList<JLabel> zoneTemps = new ArrayList<>();
+        ArrayList<JButton> editZoneButtons = new ArrayList<>();
+
+        for(int i = 0; i < allZones.size(); i++){
+            zoneNames.add(new JLabel(allZones.get(i).getName()));
+            zoneTemps.add(new JLabel(allZones.get(i).getTemperature() + " °C"));
+
+            JButton editBtn = new JButton("Edit");
+
+            int index = i;
+            editBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CustomConsole.print("EDIT BUTTON WORKS FOR " + allZones.get(index).getName());
+                }
+            });
+
+            editZoneButtons.add(editBtn);
+        }
+        heatingView.refreshCurrentHeatZones(zoneNames, zoneTemps, editZoneButtons);
+    }
+
+    private Room[] getAvailableRooms() {
         ArrayList<Room> allRooms = Context.getHouse().getRooms();
         ArrayList<Room> result = new ArrayList<>();
 
@@ -61,6 +89,8 @@ public class HeatingController implements AwayChangeObserver {
         }
 
         Room[] resultArr = new Room[result.size()];
+        for(int i =0; i < resultArr.length; i++)
+            resultArr[i] = result.get(i);
         return resultArr;
     }
 
@@ -97,9 +127,39 @@ public class HeatingController implements AwayChangeObserver {
             heatZoneDialog.addCancelButtonListener(new ZoneCancelButtonListener());
             heatZoneDialog.addConfirmButtonListener(new ZoneConfirmButtonListener());
 
+            createAvailableRoomUIComponents();
+
             heatZoneDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             heatZoneDialog.setLocationRelativeTo(null);
             heatZoneDialog.setVisible(true);
+        }
+
+        private void createAvailableRoomUIComponents(){
+
+            Room[] availRoom = getAvailableRooms();
+            ArrayList<JLabel> roomLabels = new ArrayList<>();
+            ArrayList<JCheckBox> roomCheckboxes = new ArrayList<>();
+            selectedRoomsMemory = new ArrayList<>();
+
+            for(Room r: availRoom){
+                roomLabels.add(new JLabel(r.getName()));
+                JCheckBox roomCheck = new JCheckBox();
+
+                roomCheck.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if(e.getStateChange() == ItemEvent.SELECTED){
+                            selectedRoomsMemory.add(r);
+                        } else{
+                            selectedRoomsMemory.remove(r);
+                        }
+                    }
+                });
+
+                roomCheckboxes.add(roomCheck);
+            }
+
+            heatZoneDialog.addAvailableRoomsToUI(roomLabels, roomCheckboxes);
         }
 
         private class ZoneCancelButtonListener implements ActionListener {
@@ -122,19 +182,15 @@ public class HeatingController implements AwayChangeObserver {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (heatZoneDialog.getZoneName().length()>0/*&& some rooms are selected*/) {
+                if (heatZoneDialog.getZoneName().length()>0 && selectedRoomsMemory.size() > 0) {
+                    
+                    Room[] selectedRooms = new Room[selectedRoomsMemory.size()];
+                    for(int i =0; i < selectedRooms.length; i++)
+                        selectedRooms[i] = selectedRoomsMemory.get(i);
 
-                    //call controller.createHeatingZone(zoneName.getText(), rooms);
+                    createHeatingZone(heatZoneDialog.getZoneName(), selectedRooms);
 
-                    //refresh the SHH to display a list of all existing zones
-                    //can maybe use an observer (?), not necessary though
-                    //controller.getHeatingZones() should return all existing zones
-
-                    //code to test without UI, dont forget to remove
-                    Room[] testRooms = {Context.getHouse().getRooms().get(1), Context.getHouse().getRooms().get(2)};
-                    createHeatingZone(heatZoneDialog.getZoneName(), testRooms);
-
-                    System.out.println(getHeatingZones().get(0).getName());
+                    refreshHeatZones();
 
                     heatZoneDialog.dispose();
                 } else
@@ -221,7 +277,7 @@ public class HeatingController implements AwayChangeObserver {
                         heatingModel.updateWinterStart(cal.getTime());
                     }
                 }
-                heatingView.disposeDatePicker();
+                refreshHeatZones();
 
                 return dateFormatter.format(cal.getTime());
             }
