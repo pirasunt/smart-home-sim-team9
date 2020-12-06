@@ -3,6 +3,7 @@ package Controllers;
 import Models.*;
 import Observers.AwayChangeObserver;
 import Views.CustomConsole;
+import Views.EditZone;
 import Views.HeatZoneCreator;
 import Views.HeatingModule;
 
@@ -72,7 +73,29 @@ public class HeatingController implements AwayChangeObserver {
             editBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CustomConsole.print("EDIT BUTTON WORKS FOR " + allZones.get(index).getName());
+                    EditZone editZoneDiag = new EditZone(allZones.get(index));
+                    editZoneDiag.addEditCancelButtonListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            editZoneDiag.dispose();
+                        }
+                    });
+
+                    editZoneDiag.addEditConfirmButtonListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            allZones.get(index).setMorningTemp(editZoneDiag.getUpdatedMorningTemp());
+                            allZones.get(index).setAfternoonTemp(editZoneDiag.getUpdatedAfternoonTemp());
+                            allZones.get(index).setNightTemp(editZoneDiag.getUpdatedNightTemp());
+
+                            editZoneDiag.dispose();
+                        }
+                    });
+
+                    editZoneDiag.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    editZoneDiag.setLocationRelativeTo(null);
+                    editZoneDiag.setVisible(true);
+
                 }
             });
 

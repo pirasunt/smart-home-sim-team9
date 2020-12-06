@@ -67,6 +67,29 @@ public class HeatingZone {
     this.dangerTemp = dangerTempSpinner;
   }
 
+  public int getMorningTemp(){
+    return this.morningTemp;
+  }
+  public int getAfternoonTemp(){
+    return this.afternoonTemp;
+  }
+  public int getNightTemp(){
+    return this.nightTemp;
+  }
+
+  public void setMorningTemp(int newTemp){
+   this.morningTemp = newTemp;
+    updateTimePeriodTemp();
+  }
+  public void setAfternoonTemp(int newTemp){
+    this.afternoonTemp = newTemp;
+    updateTimePeriodTemp();
+  }
+  public void setNightTemp(int newTemp){
+    this.nightTemp = newTemp;
+    updateTimePeriodTemp();
+  }
+
   public void updateTimePeriodTemp(){
     Date currentTime = Context.getDateObject();
 
