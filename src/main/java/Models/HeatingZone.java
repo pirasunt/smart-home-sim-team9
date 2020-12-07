@@ -98,6 +98,7 @@ public class HeatingZone {
       total += r.getTemperature();
       count++;
     }
+    this.tempLabel = new JLabel();
 
     this.temperature = total / count;
     for (Room r : rooms) {
