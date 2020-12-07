@@ -36,6 +36,7 @@ public class Room {
     this.topWall = top;
     this.bottomWall = bottom;
     this.id = id;
+    this.roomTempLabel = new JLabel();
   }
 
   /**
