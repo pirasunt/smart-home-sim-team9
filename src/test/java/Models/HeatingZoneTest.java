@@ -1,12 +1,27 @@
 package Models;
 
+import Custom.CustomXStream.CustomHouseXStream;
+import Enums.ProfileType;
 import Models.Walls.Wall;
 import Models.Walls.WindowWall;
 import Views.CustomConsole;
+import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public class HeatingZoneTest {
+    @BeforeEach
+    void init(){
+        CustomHouseXStream cxs = new CustomHouseXStream();
+        House testHouse;
+        testHouse = (House) cxs.fromXML(new File("House.xml"));
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
+        EnvironmentModel env =
+                EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
+    }
+
     @Test
     void AddRoomTest(){
         HeatingModel test = new HeatingModel();
