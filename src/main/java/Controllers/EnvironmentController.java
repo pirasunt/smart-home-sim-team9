@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * The EnvironmentController handles all operations requested in {@link EnvironmentView} and makes
@@ -215,6 +216,18 @@ public class EnvironmentController {
                         int second = Integer.parseInt(Context.getTimeString().substring(6, 8));
                         String amPM = Context.getTimeString().substring(8);
                         amPM = amPM.replaceAll(" ", "");
+
+                        Date currentTime = Context.getDateObject();
+                        if(currentTime.getHours() == 6 && currentTime.getMinutes() == 0 && currentTime.getSeconds() == 0){
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now Morning. Changing Temperature to Morning Settings");
+                        } else if(currentTime.getHours() == 12 && currentTime.getMinutes() == 1 && currentTime.getSeconds() == 0) {
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now the Afternoon. Changing Temperature to Afternoon Settings");
+                        } else if(currentTime.getHours() == 18 && currentTime.getMinutes() == 1 && currentTime.getSeconds() == 0){
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now Nighttime. Changing Temperature to Nighttime Settings");
+                        }
 
                         String hourString;
                         String minuteString;

@@ -5,7 +5,6 @@ import Views.CustomConsole;
 import javax.swing.*;
 import java.time.MonthDay;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,10 +12,10 @@ import java.util.Date;
 public class HeatingModel {
 
   private final ArrayList<HeatingZone> heatingZones = new ArrayList<HeatingZone>();
-  private MonthDay summerStart;
-  private MonthDay winterStart;
   private final SpinnerNumberModel awayTempSpinner;
   private final SpinnerNumberModel dangerTempSpinner;
+  private MonthDay summerStart;
+  private MonthDay winterStart;
 
   /** Instantiates a new Heating model. */
   public HeatingModel() {
@@ -40,22 +39,43 @@ public class HeatingModel {
    *
    * @param rooms the rooms
    * @param name the name
+   * @param morningTemp the morning temp
+   * @param afternoonTemp the afternoon temp
+   * @param nightTemp the night temp
    */
-  public void createHeatingZone(Room[] rooms, String name) {
-    heatingZones.add(new HeatingZone(rooms, this, name, dangerTempSpinner));
+  public void createHeatingZone(
+      Room[] rooms, String name, int morningTemp, int afternoonTemp, int nightTemp) {
+    heatingZones.add(
+        new HeatingZone(
+            rooms, this, name, dangerTempSpinner, morningTemp, afternoonTemp, nightTemp));
   }
 
+  /**
+   * Gets summer start as md.
+   *
+   * @return the summer start as md
+   */
   public MonthDay getSummerStartAsMD() {
     return this.summerStart;
   }
 
+  /**
+   * Gets winter start as md.
+   *
+   * @return the winter start as md
+   */
   public MonthDay getWinterStartAsMD() {
     return this.winterStart;
   }
 
+  /**
+   * Gets all heating zones including rooms.
+   *
+   * @return the all heating zones including rooms
+   */
   public ArrayList<HeatingZone> getAllHeatingZonesIncludingRooms() {
     ArrayList<HeatingZone> temp = this.heatingZones;
-    for (Room r: Context.getHouse().getRooms()) {
+    for (Room r : Context.getHouse().getRooms()) {
       if (!r.getIsInHeatingZone()) {
         temp.add(new HeatingZone(new Room[] {r}, this, r.getName(), this.dangerTempSpinner, true));
         r.setIsInHeatingZone(false);
@@ -64,26 +84,39 @@ public class HeatingModel {
     return temp;
   }
 
+  /**
+   * Gets all rooms not in zones as heating zones.
+   *
+   * @return the all rooms not in zones as heating zones
+   */
   public HeatingZone getAllRoomsNotInZonesAsHeatingZones() {
     ArrayList<Room> temp = new ArrayList<Room>();
-    for (Room r: Context.getHouse().getRooms()) {
+    for (Room r : Context.getHouse().getRooms()) {
       if (!r.getIsInHeatingZone()) {
         temp.add(r);
       }
     }
     Room[] tempAsArray = new Room[temp.size()];
-    HeatingZone result = new HeatingZone(temp.toArray(tempAsArray), this, "All Rooms", this.dangerTempSpinner, true);
+    HeatingZone result =
+        new HeatingZone(temp.toArray(tempAsArray), this, "All Rooms", this.dangerTempSpinner, true);
 
-    for (Room r: result.getRooms()) {
+    for (Room r : result.getRooms()) {
       r.setIsInHeatingZone(false);
     }
     return result;
   }
 
+  /**
+   * Gets room as heating zone.
+   *
+   * @param roomdID the roomd id
+   * @return the room as heating zone
+   */
   public HeatingZone getRoomAsHeatingZone(int roomdID) {
-    for (Room r: Context.getHouse().getRooms()) {
+    for (Room r : Context.getHouse().getRooms()) {
       if (roomdID == r.getId()) {
-        HeatingZone result =  new HeatingZone(new Room[] {r}, this, r.getName(), this.dangerTempSpinner, true);
+        HeatingZone result =
+            new HeatingZone(new Room[] {r}, this, r.getName(), this.dangerTempSpinner, true);
         result.getRooms().get(0).setIsInHeatingZone(false);
         return result;
       }
@@ -121,6 +154,7 @@ public class HeatingModel {
 
     return cal.getTime();
   }
+
   /**
    * Update summer start.
    *
@@ -130,6 +164,7 @@ public class HeatingModel {
     this.summerStart = MonthDay.of(date.getMonth() + 1, date.getDate());
     CustomConsole.print("Summer start date has been set to: " + this.summerStart.toString());
   }
+
   /**
    * Update winter start.
    *
@@ -156,14 +191,15 @@ public class HeatingModel {
   /**
    * Set away mode temp. First we get all rooms. Then we remove all the rooms that are contained
    * within a zone. We set the temp of the zones. We then set the temps of the loner rooms.
+   *
+   * @param awayIsOn the away is on
    */
   public void setAwayModeTemp(boolean awayIsOn) {
 
     int tempToSet = (int) awayTempSpinner.getValue();
 
-    for (HeatingZone h : getAllHeatingZonesIncludingRooms() ) {
+    for (HeatingZone h : getAllHeatingZonesIncludingRooms()) {
       h.setTemperature(tempToSet);
     }
-
   }
 }

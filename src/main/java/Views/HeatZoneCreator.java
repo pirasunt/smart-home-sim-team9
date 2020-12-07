@@ -1,26 +1,31 @@
 package Views;
 
-import Controllers.HeatingController;
-import Models.Context;
-import Models.HeatingModel;
-import Models.Room;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+/**
+ * The type Heat zone creator.
+ */
 public class HeatZoneCreator extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel roomPanel;
     private JTextField heatZoneNameField;
+    private JSpinner morningTemp;
+    private JSpinner afternoonTemp;
+    private JSpinner nightTemp;
     private JTextField zoneName;
 
-
+    /**
+     * Instantiates a new Heat zone creator.
+     */
     public HeatZoneCreator() {
 
         setContentPane(contentPane);
@@ -30,16 +35,73 @@ public class HeatZoneCreator extends JDialog {
         setSize(400, 600);
     }
 
+    /**
+     * Add available rooms to ui.
+     *
+     * @param allLabels  the all labels
+     * @param checkBoxes the check boxes
+     */
+    public void addAvailableRoomsToUI(ArrayList<JLabel> allLabels, ArrayList<JCheckBox> checkBoxes) {
+        this.roomPanel.setLayout(new GridLayout(0, 2, 10, 5));
+
+        for (int i = 0; i < allLabels.size(); i++) {
+            this.roomPanel.add(allLabels.get(i));
+            this.roomPanel.add(checkBoxes.get(i));
+        }
+    }
+
+    /**
+     * Add confirm button listener.
+     *
+     * @param al the al
+     */
     public void addConfirmButtonListener(ActionListener al) {
         this.buttonOK.addActionListener(al);
     }
 
+    /**
+     * Add cancel button listener.
+     *
+     * @param al the al
+     */
     public void addCancelButtonListener(ActionListener al) {
         this.buttonCancel.addActionListener(al);
     }
 
+    /**
+     * Gets zone name.
+     *
+     * @return the zone name
+     */
     public String getZoneName() {
         return this.heatZoneNameField.getText();
+    }
+
+    /**
+     * Get morning temp int.
+     *
+     * @return the int
+     */
+    public int getMorningTemp() {
+        return (Integer) this.morningTemp.getValue();
+    }
+
+    /**
+     * Get afternoon temp int.
+     *
+     * @return the int
+     */
+    public int getAfternoonTemp() {
+        return (Integer) this.afternoonTemp.getValue();
+    }
+
+    /**
+     * Get night temp int.
+     *
+     * @return the int
+     */
+    public int getNightTemp() {
+        return (Integer) this.nightTemp.getValue();
     }
 
     {
@@ -58,10 +120,10 @@ public class HeatZoneCreator extends JDialog {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(5, 1, new Insets(10, 10, 10, 10), -1, -1));
+        contentPane.setLayout(new GridLayoutManager(9, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        contentPane.add(panel1, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
@@ -75,7 +137,7 @@ public class HeatZoneCreator extends JDialog {
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 12, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
@@ -88,7 +150,7 @@ public class HeatZoneCreator extends JDialog {
         final Spacer spacer3 = new Spacer();
         panel3.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         roomPanel = new JPanel();
-        roomPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        roomPanel.setLayout(new GridLayoutManager(1, 1, new Insets(10, 0, 10, 0), -1, -1));
         contentPane.add(roomPanel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         Font label2Font = this.$$$getFont$$$(null, Font.BOLD, 14, label2.getFont());
@@ -97,6 +159,43 @@ public class HeatZoneCreator extends JDialog {
         contentPane.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JSeparator separator1 = new JSeparator();
         contentPane.add(separator1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JSeparator separator2 = new JSeparator();
+        contentPane.add(separator2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JLabel label3 = new JLabel();
+        Font label3Font = this.$$$getFont$$$(null, Font.BOLD, 14, label3.getFont());
+        if (label3Font != null) label3.setFont(label3Font);
+        label3.setText("Temperature per Time Period ");
+        contentPane.add(label3, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JSeparator separator3 = new JSeparator();
+        contentPane.add(separator3, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new GridLayoutManager(3, 4, new Insets(10, 0, 10, 0), -1, -1));
+        contentPane.add(panel4, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        Font label4Font = this.$$$getFont$$$(null, Font.BOLD, 11, label4.getFont());
+        if (label4Font != null) label4.setFont(label4Font);
+        label4.setText("Morning (6AM to  11:59AM)");
+        panel4.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        morningTemp = new JSpinner();
+        panel4.add(morningTemp, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel4.add(spacer4, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        panel4.add(spacer5, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$(null, Font.BOLD, 11, label5.getFont());
+        if (label5Font != null) label5.setFont(label5Font);
+        label5.setText("Afternoon (12:00PM to 5:59PM)");
+        panel4.add(label5, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        afternoonTemp = new JSpinner();
+        panel4.add(afternoonTemp, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label6 = new JLabel();
+        Font label6Font = this.$$$getFont$$$(null, Font.BOLD, 11, label6.getFont());
+        if (label6Font != null) label6.setFont(label6Font);
+        label6.setText("Night (6:00PM to 5:59AM)");
+        panel4.add(label6, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        nightTemp = new JSpinner();
+        panel4.add(nightTemp, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
