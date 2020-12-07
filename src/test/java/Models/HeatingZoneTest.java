@@ -1,12 +1,23 @@
 package Models;
 
+import Enums.ProfileType;
 import Models.Walls.Wall;
 import Models.Walls.WindowWall;
 import Views.CustomConsole;
+import Views.HouseGraphic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class HeatingZoneTest {
+
+    @BeforeEach
+    void DoIt(){
+        UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", -1);
+        House house = new House();
+        HouseGraphic hg = new HouseGraphic(house);
+        EnvironmentModel env = EnvironmentModel.createSimulation(house, hg, u);
+    }
+
     @Test
     void AddRoomTest(){
         HeatingModel test = new HeatingModel();
