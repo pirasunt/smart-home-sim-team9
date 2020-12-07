@@ -1,10 +1,7 @@
 package Controllers;
 
 import Enums.ProfileType;
-import Models.Context;
-import Models.EnvironmentModel;
-import Models.Room;
-import Models.UserProfileModel;
+import Models.*;
 import Views.CustomConsole;
 import Views.Dash;
 import Views.EnvironmentView;
@@ -16,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * The EnvironmentController handles all operations requested in {@link EnvironmentView} and makes
@@ -219,6 +217,18 @@ public class EnvironmentController {
                         String amPM = Context.getTimeString().substring(8);
                         amPM = amPM.replaceAll(" ", "");
 
+                        Date currentTime = Context.getDateObject();
+                        if(currentTime.getHours() == 6 && currentTime.getMinutes() == 0 && currentTime.getSeconds() == 0){
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now Morning. Changing Temperature to Morning Settings");
+                        } else if(currentTime.getHours() == 12 && currentTime.getMinutes() == 1 && currentTime.getSeconds() == 0) {
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now the Afternoon. Changing Temperature to Afternoon Settings");
+                        } else if(currentTime.getHours() == 18 && currentTime.getMinutes() == 1 && currentTime.getSeconds() == 0){
+                            HeatingController.updateTimePeriodTemps();
+                            CustomConsole.print("INFO: It is now Nighttime. Changing Temperature to Nighttime Settings");
+                        }
+
                         String hourString;
                         String minuteString;
                         String secondString;
@@ -265,6 +275,8 @@ public class EnvironmentController {
                 new DashController(theModel, dashView);
 
                 new CoreController(dashView.getSHC(), theModel);
+
+                new HeatingController(new HeatingModel(), dashView.getSHH());
 
             } else {
                 CustomConsole.print("ERROR: Please Select a User Profile before Entering the Simulation");

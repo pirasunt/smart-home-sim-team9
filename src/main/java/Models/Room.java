@@ -1,8 +1,11 @@
 package Models;
 
-import Models.Walls.*;
+import Models.Walls.Wall;
 import Views.CustomConsole;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /** The type Room. */
@@ -10,8 +13,11 @@ public class Room {
   private final Wall leftWall, rightWall, topWall, bottomWall;
   private final String name;
   private final int id;
-  private int temperature = 20;
+  private int temperature = 0;
+  private JLabel roomTempLabel;
   private boolean lightsOn = false;
+  private boolean isInHeatingZone = false;
+  private boolean isTempOverriden = false;
 
   /**
    * Instantiates a new Room.
@@ -30,6 +36,7 @@ public class Room {
     this.topWall = top;
     this.bottomWall = bottom;
     this.id = id;
+    this.roomTempLabel = new JLabel();
   }
 
   /**
@@ -39,6 +46,24 @@ public class Room {
    */
   public Wall getLeftWall() {
     return leftWall;
+  }
+
+  /**
+   * Is temp overriden boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isTempOverriden() {
+    return isTempOverriden;
+  }
+
+  /**
+   * Set room temp setting.
+   *
+   * @param value the value
+   */
+  public void setRoomTempSetting(boolean value) {
+    this.isTempOverriden = value;
   }
 
   /**
@@ -101,7 +126,58 @@ public class Room {
    * @param temperature the temperature of the room
    */
   public void setTemperature(int temperature) {
-    this.temperature = temperature;
+    if (!isTempOverriden) { // Can't auto-set room temp if temp setting is overridden
+      this.temperature = temperature;
+      if (roomTempLabel == null) this.roomTempLabel = new JLabel();
+      this.roomTempLabel.setText(this.temperature + " °C");
+    }
+  }
+
+  /**
+   * Get room temp label j label.
+   *
+   * @return the j label
+   */
+  public JLabel getRoomTempLabel() {
+    return this.roomTempLabel;
+  }
+
+  /**
+   * Manual set temperature.
+   *
+   * @param newTemp the new temp
+   */
+  public void manualSetTemperature(int newTemp) {
+
+    if (!EnvironmentModel.getSimulationRunning()) {
+      this.temperature = newTemp;
+      if (isTempOverriden) this.roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+      else this.roomTempLabel.setText(temperature + " °C");
+
+    } else {
+      new Timer(
+              Context.getDelay(),
+              new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  if (temperature > newTemp) {
+                    temperature--;
+
+                    if (isTempOverriden) roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else roomTempLabel.setText(temperature + " °C");
+                  } else if (temperature < newTemp) {
+                    temperature++;
+
+                    if (isTempOverriden) roomTempLabel.setText(temperature + " °C [OVERRIDDEN]");
+                    else roomTempLabel.setText(temperature + " °C");
+                  } else if (temperature == newTemp) {
+                    ((Timer) e.getSource()).stop();
+                  }
+                }
+              })
+          .start();
+    }
   }
 
   /**
@@ -161,8 +237,40 @@ public class Room {
     return users;
   }
 
-  public Wall[] getAllWalls(){
-    return new Wall[]{leftWall, rightWall, bottomWall, topWall};
+  /**
+   * Get all walls wall [ ].
+   *
+   * @return the wall [ ]
+   */
+  public Wall[] getAllWalls() {
+    return new Wall[] {leftWall, rightWall, bottomWall, topWall};
+  }
+
+  /**
+   * Is room in heating zone boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isRoomInHeatingZone() {
+    return this.isInHeatingZone;
+  }
+
+  /**
+   * Gets is in heating zone.
+   *
+   * @return the is in heating zone
+   */
+  public boolean getIsInHeatingZone() {
+    return this.isInHeatingZone;
+  }
+
+  /**
+   * Sets is in heating zone.
+   *
+   * @param value the value
+   */
+  public void setIsInHeatingZone(boolean value) {
+    this.isInHeatingZone = value;
   }
 
   @Override

@@ -2,6 +2,8 @@ dist: xenial
 services:
   - xvfb
 language: java
+jdk:
+  - oraclejdk15
 notifications:
   email: false
   before_script:

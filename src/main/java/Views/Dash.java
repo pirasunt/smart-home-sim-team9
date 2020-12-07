@@ -10,10 +10,13 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Locale;
 
 /**
  * The type Dash.
@@ -79,10 +82,12 @@ public class Dash extends JFrame implements TimeChangeObserver {
     private SecurityView shp;
     private CoreView coreView;
     private JPanel shpTab;
+    private JPanel SHHTab;
+    private HeatingModule SHH;
 
 
     /**
-     * Instantiates a new Dashboard frame.
+     * Instantiates temp Label new Dashboard frame.
      *
      * @param temp  the temp
      * @param date  the date
@@ -120,6 +125,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
 
         setSHPVisibility();
         setSHCVisibility();
+        setSHHVisibility();
     }
 
     /**
@@ -131,10 +137,15 @@ public class Dash extends JFrame implements TimeChangeObserver {
         return this.coreView;
     }
 
+    public HeatingModule getSHH() {
+        return this.SHH;
+    }
+
     @Override
     public void repaint() {
         setSHPVisibility();
         setSHCVisibility();
+        setSHHVisibility();
 
         super.repaint();
     }
@@ -143,7 +154,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
      * Adds the specified {@link UserProfileModel} to the Dashboard User Dropdown Menu
      *
      * @param profile       The {@link UserProfileModel} to add to the User Dropdown
-     * @param isCurrentUser boolean indicating whether a current user is set in the {@link
+     * @param isCurrentUser boolean indicating whether teampLabel current user is set in the {@link
      *                      EnvironmentModel}
      */
     public void addProfileToDropDown(UserProfileModel profile, boolean isCurrentUser) {
@@ -261,6 +272,17 @@ public class Dash extends JFrame implements TimeChangeObserver {
         }
     }
 
+    private void setSHHVisibility() {
+        if (Context.getCurrentUser().getProfileType() != ProfileType.ADULT) {
+            tabbedPane1.setEnabledAt(2, false);
+            SHH.getWrapper().setVisible(false);
+
+        } else {
+            tabbedPane1.setEnabledAt(2, true);
+            SHH.getWrapper().setVisible(true);
+        }
+    }
+
     private void setSHPVisibility() {
         if (Context.getCurrentUser().getProfileType() != ProfileType.ADULT) {
             tabbedPane1.setEnabledAt(1, false);
@@ -362,7 +384,7 @@ public class Dash extends JFrame implements TimeChangeObserver {
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel2.setVerifyInputWhenFocusTarget(true);
-        panel2.setVisible(true);
+        panel2.setVisible(false);
         tabbedPane1.addTab("SHC", panel2);
         coreView = new CoreView();
         panel2.add(coreView.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -371,7 +393,12 @@ public class Dash extends JFrame implements TimeChangeObserver {
         shpTab.setVisible(false);
         tabbedPane1.addTab("SHP", shpTab);
         shp = new SecurityView();
-        shpTab.add(shp.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        shpTab.add(shp.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        SHHTab = new JPanel();
+        SHHTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbedPane1.addTab("SHH", SHHTab);
+        SHH = new HeatingModule();
+        SHHTab.add(SHH.$$$getRootComponent$$$(), new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -399,5 +426,4 @@ public class Dash extends JFrame implements TimeChangeObserver {
     public JComponent $$$getRootComponent$$$() {
         return smartModulesPanel;
     }
-
 }

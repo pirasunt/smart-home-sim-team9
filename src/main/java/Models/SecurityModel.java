@@ -3,6 +3,8 @@ package Models;
 import Enums.WallType;
 import Models.Walls.OutsideWall;
 import Models.Walls.Wall;
+import Observers.AwayChangeObserver;
+import Observers.RoomChangeObserver;
 import Tools.CustomTimer;
 import Views.CustomConsole;
 
@@ -25,6 +27,8 @@ public class SecurityModel {
   private final Date endDate;
   private final ArrayList<CustomTimer> authTimers;
   private final ArrayList<NotifyAuthTask> authTasks;
+  private static ArrayList<AwayChangeObserver> awayChangeObservers;
+
   /** The Interval model. */
   SpinnerNumberModel intervalModel;
   /** Instantiates a new Security model. */
@@ -38,6 +42,7 @@ public class SecurityModel {
     authTimers = new ArrayList<>();
     authTasks = new ArrayList<>();
     roomsToLight = new ArrayList<>();
+    awayChangeObservers = new ArrayList<>();
   }
 
   /** Start away timer. */
@@ -81,34 +86,8 @@ public class SecurityModel {
     long deltaEnd = (endCal.getTimeInMillis() - (envTime.getTimeInMillis())) / multiplier;
     long dayLen = 1000 * 60 * 60 * 24 / multiplier;
 
-    if (deltaStart < 0 && deltaEnd < 0) {
-      // verify if both events are in the past, then we schedule them "tommorow"
-      startExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new StartAwayLights(), deltaStart + dayLen, dayLen, TimeUnit.MILLISECONDS);
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new EndAwayLights(), deltaEnd + dayLen, dayLen, TimeUnit.MILLISECONDS);
+    handleStartAwayTimerLogic(deltaStart, deltaEnd, dayLen);
 
-    } else if (deltaStart < 0) {
-      // if the end is in the future but lights should be on
-      new StartAwayLights().turnOnSelectedLights();
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
-      //      endExec.scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen,
-      // TimeUnit.MILLISECONDS);
-    } else {
-      startExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(
-                  new StartAwayLights(), deltaStart, dayLen, TimeUnit.MILLISECONDS);
-      endExec =
-          Executors.newSingleThreadScheduledExecutor()
-              .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
-    }
     CustomConsole.print("Away Mode lighting has been set!");
   }
 
@@ -135,7 +114,44 @@ public class SecurityModel {
       cancelAllTimers();
     }
     awayOn = shouldTurnAwayOn;
+    notifyObservers();
   }
+
+  private static void handleStartAwayTimerLogic(long deltaStart, long deltaEnd, long dayLen) {
+    if (deltaStart < 0 && deltaEnd < 0) {
+      // verify if both events are in the past, then we schedule them "tommorow"
+      startExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new StartAwayLights(), deltaStart + dayLen, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new EndAwayLights(), deltaEnd + dayLen, dayLen, TimeUnit.MILLISECONDS);
+
+    } else if (deltaStart < 0) {
+      // if the end is in the future but lights should be on
+      new StartAwayLights().turnOnSelectedLights();
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
+      //      endExec.scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen,
+      // TimeUnit.MILLISECONDS);
+    } else {
+      startExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(
+                              new StartAwayLights(), deltaStart, dayLen, TimeUnit.MILLISECONDS);
+      endExec =
+              Executors.newSingleThreadScheduledExecutor()
+                      .scheduleAtFixedRate(new EndAwayLights(), deltaEnd, dayLen, TimeUnit.MILLISECONDS);
+    }
+  }
+
+  public static void subscribe(AwayChangeObserver aw){
+    awayChangeObservers.add(aw);
+  }
+
 
   /** Cancel all timers. */
   public static void cancelAllTimers() {
@@ -222,15 +238,7 @@ public class SecurityModel {
       authTimers.add(temp);
       authTasks.add(tempTask);
 
-      int timerDel = Context.getDelay();;
-      int multiplier = 1;
-      if (timerDel == 1000) {
-        multiplier = 1;
-      } else if (timerDel == 100) {
-        multiplier = 10;
-      } else if (timerDel == 10) {
-        multiplier = 100;
-      }
+      int multiplier = getMultiplier();
 
       Date envTime = Context.getDateObject();
       Calendar sCal = new GregorianCalendar();
@@ -243,6 +251,18 @@ public class SecurityModel {
           (sCal.getTimeInMillis() - (Context.getDateObject().getTime())) / multiplier;
       temp.schedule(tempTask, deltaStart);
     }
+  }
+
+  private static int getMultiplier(){
+    int timerDel = Context.getDelay();
+    if (timerDel == 1000) {
+      return 1;
+    } else if (timerDel == 100) {
+      return 10;
+    } else if (timerDel == 10) {
+      return 100;
+    }
+    return 1;
   }
 
   /** The type Start away lights. */
@@ -296,6 +316,12 @@ public class SecurityModel {
         }
       }
       Context.repaintHouseGraphic();
+    }
+  }
+
+  private void notifyObservers(){
+    for (AwayChangeObserver a : awayChangeObservers ) {
+        a.update(this.isAwayOn());
     }
   }
 

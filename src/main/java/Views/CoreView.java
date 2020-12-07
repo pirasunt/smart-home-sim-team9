@@ -5,9 +5,12 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CoreView {
     private final ArrayList<JRadioButton> lightsRadioButtons = new ArrayList<>();
@@ -206,5 +209,4 @@ public class CoreView {
     public JComponent $$$getRootComponent$$$() {
         return topLevelPane;
     }
-
 }

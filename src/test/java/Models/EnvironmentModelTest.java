@@ -73,21 +73,6 @@ public class EnvironmentModelTest {
     assert Context.getDateObject().equals(d);
   }
 
-  // unit test 3.1
-  @Test
-  void startStopSim() {
-    CustomHouseXStream cxs = new CustomHouseXStream();
-    House testHouse;
-    testHouse = (House) cxs.fromXML(new File("House.xml"));
-    UserProfileModel u = new UserProfileModel(ProfileType.ADULT, "James", 2);
-    EnvironmentModel env =
-            EnvironmentModel.createSimulation(testHouse, new HouseGraphic(testHouse), u);
-    env.stopSimulation();
-    assert env.getSimulationRunning() == false;
-    env.startSimulation();
-    assert env.getSimulationRunning() == true;
-  }
-
   // use case 3 delivery 2
   @Test
   void testTimer() {

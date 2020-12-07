@@ -15,6 +15,7 @@ import java.io.File;
 public class HouseTest {
 
   CoreView cv = new CoreView();
+
   @BeforeEach
   public void initEach() {
     CustomConsole.init();

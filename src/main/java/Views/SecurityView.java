@@ -14,204 +14,204 @@ import java.util.ArrayList;
  * The type Security view.
  */
 public class SecurityView {
-  private final ArrayList<JRadioButton> lightsRadioButtons = new ArrayList<>();
-  SecurityModel sModel;
-  SecurityController sc;
-  /**
-   * The model.
-   */
+    private final ArrayList<JRadioButton> lightsRadioButtons = new ArrayList<>();
+    SecurityModel sModel;
+    SecurityController sc;
+    /**
+     * The model.
+     */
 
-  /**
-   * The controller.
-   */
+    /**
+     * The controller.
+     */
 
-  private JPanel shpWrap;
-  private JPanel Tab1;
-  private JSpinner intervalSpinner;
-  private JButton awayModeButton;
-  private JSpinner startTime;
-  private JSpinner endTime;
-  private JLabel endLabel;
-  private JLabel alertAuthoritiesAfterThisLabel;
-  private JPanel jpWrap;
-  private JPanel lightPanel;
+    private JPanel shpWrap;
+    private JPanel Tab1;
+    private JSpinner intervalSpinner;
+    private JButton awayModeButton;
+    private JSpinner startTime;
+    private JSpinner endTime;
+    private JLabel endLabel;
+    private JLabel alertAuthoritiesAfterThisLabel;
+    private JPanel jpWrap;
+    private JPanel lightPanel;
 
-  /**
-   * Instantiates a new Security view.
-   */
-  public SecurityView() {
-    sModel = new SecurityModel();
-    sc = new SecurityController(sModel, this);
+    /**
+     * Instantiates a new Security view.
+     */
+    public SecurityView() {
+        sModel = new SecurityModel();
+        sc = new SecurityController(sModel, this);
 
-    startTime.setModel(sModel.getStartModel());
-    JSpinner.DateEditor de = new JSpinner.DateEditor(startTime, "hh:mm a");
-    de.getTextField().setEditable(false);
-    startTime.setEditor(de);
+        startTime.setModel(sModel.getStartModel());
+        JSpinner.DateEditor de = new JSpinner.DateEditor(startTime, "hh:mm a");
+        de.getTextField().setEditable(false);
+        startTime.setEditor(de);
 
-    endTime.setModel(sModel.getEndModel());
-    JSpinner.DateEditor de1 = new JSpinner.DateEditor(endTime, "hh:mm a");
-    de1.getTextField().setEditable(false);
-    endTime.setEditor(de1);
+        endTime.setModel(sModel.getEndModel());
+        JSpinner.DateEditor de1 = new JSpinner.DateEditor(endTime, "hh:mm a");
+        de1.getTextField().setEditable(false);
+        endTime.setEditor(de1);
 
-    intervalSpinner.setModel(sModel.getIntervalModel());
-  }
-
-  /**
-   * Add away listener.
-   *
-   * @param l the l
-   */
-  public void addAwayListener(ActionListener l) {
-    this.awayModeButton.addActionListener(l);
-  }
-
-  /**
-   * Change away mode text.
-   *
-   * @param s the s
-   */
-  public void changeAwayModeText(String s) {
-    awayModeButton.setText(s);
-  }
-
-  /**
-   * Gets start time.
-   *
-   * @return the start time
-   */
-  public JSpinner getStartTime() {
-    return startTime;
-  }
-
-  /**
-   * Gets end time.
-   *
-   * @return the end time
-   */
-  public JSpinner getEndTime() {
-    return endTime;
-  }
-
-  /**
-   * Toggle spinners.
-   *
-   * @param shouldAllowEdit boolean indicating if editable
-   */
-  public void toggleSpinners(boolean shouldAllowEdit) {
-    startTime.setEnabled(shouldAllowEdit);
-    endTime.setEnabled(shouldAllowEdit);
-    intervalSpinner.setEnabled(shouldAllowEdit);
-  }
-
-  /**
-   * Gets wrapper.
-   *
-   * @return the wrapper
-   */
-  public JPanel getWrapper() {
-    return this.shpWrap;
-  }
-
-  /**
-   * Display lights section.
-   *
-   * @param lightLabels the light labels
-   * @param onButtons   the on buttons
-   * @param offButtons  the off buttons
-   */
-  public void displayLightsSection(
-          ArrayList<JLabel> lightLabels,
-          ArrayList<JRadioButton> onButtons,
-          ArrayList<JRadioButton> offButtons) {
-    this.lightPanel.setLayout(new GridLayout(0, 3, 1, 20));
-    this.lightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-    // labels ArrayList same length as buttons ArrayList
-    for (int i = 0; i < lightLabels.size(); i++) {
-      this.lightPanel.add(lightLabels.get(i));
-      this.lightPanel.add(onButtons.get(i));
-      this.lightPanel.add(offButtons.get(i));
+        intervalSpinner.setModel(sModel.getIntervalModel());
     }
 
-    this.lightsRadioButtons.addAll(onButtons);
-    this.lightsRadioButtons.addAll(offButtons);
-  }
-
-  /**
-   * Toggle radios.
-   *
-   * @param shouldEnable the should enable boolean
-   */
-  public void toggleRadios(boolean shouldEnable) {
-    for (JRadioButton jr : lightsRadioButtons) {
-      jr.setEnabled(shouldEnable);
+    /**
+     * Add away listener.
+     *
+     * @param l the l
+     */
+    public void addAwayListener(ActionListener l) {
+        this.awayModeButton.addActionListener(l);
     }
-  }
 
-  {
+    /**
+     * Change away mode text.
+     *
+     * @param s the s
+     */
+    public void changeAwayModeText(String s) {
+        awayModeButton.setText(s);
+    }
+
+    /**
+     * Gets start time.
+     *
+     * @return the start time
+     */
+    public JSpinner getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * Gets end time.
+     *
+     * @return the end time
+     */
+    public JSpinner getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * Toggle spinners.
+     *
+     * @param shouldAllowEdit boolean indicating if editable
+     */
+    public void toggleSpinners(boolean shouldAllowEdit) {
+        startTime.setEnabled(shouldAllowEdit);
+        endTime.setEnabled(shouldAllowEdit);
+        intervalSpinner.setEnabled(shouldAllowEdit);
+    }
+
+    /**
+     * Gets wrapper.
+     *
+     * @return the wrapper
+     */
+    public JPanel getWrapper() {
+        return this.shpWrap;
+    }
+
+    /**
+     * Display lights section.
+     *
+     * @param lightLabels the light labels
+     * @param onButtons   the on buttons
+     * @param offButtons  the off buttons
+     */
+    public void displayLightsSection(
+            ArrayList<JLabel> lightLabels,
+            ArrayList<JRadioButton> onButtons,
+            ArrayList<JRadioButton> offButtons) {
+        this.lightPanel.setLayout(new GridLayout(0, 3, 1, 20));
+        this.lightPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        // labels ArrayList same length as buttons ArrayList
+        for (int i = 0; i < lightLabels.size(); i++) {
+            this.lightPanel.add(lightLabels.get(i));
+            this.lightPanel.add(onButtons.get(i));
+            this.lightPanel.add(offButtons.get(i));
+        }
+
+        this.lightsRadioButtons.addAll(onButtons);
+        this.lightsRadioButtons.addAll(offButtons);
+    }
+
+    /**
+     * Toggle radios.
+     *
+     * @param shouldEnable the should enable boolean
+     */
+    public void toggleRadios(boolean shouldEnable) {
+        for (JRadioButton jr : lightsRadioButtons) {
+            jr.setEnabled(shouldEnable);
+        }
+    }
+
+    {
 // GUI initializer generated by IntelliJ IDEA GUI Designer
 // >>> IMPORTANT!! <<<
 // DO NOT EDIT OR ADD ANY CODE HERE!
-    $$$setupUI$$$();
-  }
+        $$$setupUI$$$();
+    }
 
-  /**
-   * Method generated by IntelliJ IDEA GUI Designer
-   * >>> IMPORTANT!! <<<
-   * DO NOT edit this method OR call it in your code!
-   *
-   * @noinspection ALL
-   */
-  private void $$$setupUI$$$() {
-    shpWrap = new JPanel();
-    shpWrap.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-    shpWrap.setEnabled(true);
-    final JPanel panel1 = new JPanel();
-    panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-    shpWrap.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-    Tab1 = new JPanel();
-    Tab1.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
-    Tab1.setEnabled(true);
-    panel1.add(Tab1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-    final JLabel label1 = new JLabel();
-    label1.setText("Away Mode");
-    Tab1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    final JLabel label2 = new JLabel();
-    label2.setText("Lights to keep on");
-    Tab1.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    final JPanel panel2 = new JPanel();
-    panel2.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-    Tab1.add(panel2, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-    intervalSpinner = new JSpinner();
-    panel2.add(intervalSpinner, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    alertAuthoritiesAfterThisLabel = new JLabel();
-    alertAuthoritiesAfterThisLabel.setText("Alert authorities after this many minutes");
-    panel2.add(alertAuthoritiesAfterThisLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    jpWrap = new JPanel();
-    jpWrap.setLayout(new GridLayoutManager(1, 4, new Insets(0, 2, 0, 2), -1, -1));
-    panel2.add(jpWrap, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-    startTime = new JSpinner();
-    jpWrap.add(startTime, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    endTime = new JSpinner();
-    jpWrap.add(endTime, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    final JLabel label3 = new JLabel();
-    label3.setText("Start:");
-    jpWrap.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    endLabel = new JLabel();
-    endLabel.setText("End:");
-    jpWrap.add(endLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    awayModeButton = new JButton();
-    awayModeButton.setText("Turn on Away Mode");
-    Tab1.add(awayModeButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    lightPanel = new JPanel();
-    lightPanel.setLayout(new CardLayout(0, 0));
-    Tab1.add(lightPanel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-  }
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        shpWrap = new JPanel();
+        shpWrap.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        shpWrap.setEnabled(true);
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        shpWrap.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        Tab1 = new JPanel();
+        Tab1.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        Tab1.setEnabled(true);
+        panel1.add(Tab1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("Away Mode");
+        Tab1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("Lights to keep on");
+        Tab1.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        Tab1.add(panel2, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        intervalSpinner = new JSpinner();
+        panel2.add(intervalSpinner, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        alertAuthoritiesAfterThisLabel = new JLabel();
+        alertAuthoritiesAfterThisLabel.setText("Alert authorities after this many minutes");
+        panel2.add(alertAuthoritiesAfterThisLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        jpWrap = new JPanel();
+        jpWrap.setLayout(new GridLayoutManager(1, 4, new Insets(0, 2, 0, 2), -1, -1));
+        panel2.add(jpWrap, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        startTime = new JSpinner();
+        jpWrap.add(startTime, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        endTime = new JSpinner();
+        jpWrap.add(endTime, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label3 = new JLabel();
+        label3.setText("Start:");
+        jpWrap.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        endLabel = new JLabel();
+        endLabel.setText("End:");
+        jpWrap.add(endLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        awayModeButton = new JButton();
+        awayModeButton.setText("Turn on Away Mode");
+        Tab1.add(awayModeButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        lightPanel = new JPanel();
+        lightPanel.setLayout(new CardLayout(0, 0));
+        Tab1.add(lightPanel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+    }
 
-  /**
-   * @noinspection ALL
-   */
-  public JComponent $$$getRootComponent$$$() {
-    return shpWrap;
-  }
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return shpWrap;
+    }
 }

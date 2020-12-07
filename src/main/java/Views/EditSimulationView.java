@@ -13,10 +13,13 @@ import org.jdatepicker.impl.SqlDateModel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 
 public class EditSimulationView extends JFrame {
@@ -380,5 +383,4 @@ public class EditSimulationView extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
-
 }

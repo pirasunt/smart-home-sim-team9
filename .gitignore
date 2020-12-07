@@ -3,7 +3,6 @@
 /.idea/
 *.iml
 /target
-UserProfiles.xml
 log.txt
 /src/test/UserProfileTests.xml
 

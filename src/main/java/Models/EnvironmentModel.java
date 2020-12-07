@@ -1,5 +1,6 @@
 package Models;
 
+import Controllers.HeatingController;
 import Custom.CustomXStream.CustomUserXStream;
 import Custom.NonExistantUserProfileException;
 import Enums.ProfileType;
@@ -33,7 +34,7 @@ public class EnvironmentModel {
   private static ArrayList<RoomChangeObserver> roomChangeObservers;
   private static ArrayList<CurrentUserObserver> currentUserObservers;
   private boolean windowsObstructed = false;
-  private int outsideTemperature;
+  private static int outsideTemperature;
   private boolean automaticLights;
   private final Context c;
 
@@ -45,7 +46,7 @@ public class EnvironmentModel {
       ArrayList<UserProfileModel> profileList) {
     house = h;
     houseGraphic = hg;
-    this.outsideTemperature = temperature;
+    outsideTemperature = temperature;
     userProfileModelList = profileList;
     currentUser = null;
     automaticLights = false;
@@ -175,7 +176,7 @@ public class EnvironmentModel {
    * @param newTemp is the new temperature
    */
   public void setTemperature(int newTemp) {
-    this.outsideTemperature = newTemp;
+    outsideTemperature = newTemp;
   }
 
   /**
@@ -375,8 +376,8 @@ public class EnvironmentModel {
    *
    * @return temperature value
    */
-  public int getOutsideTemp() {
-    return this.outsideTemperature;
+  public static int getOutsideTemp() {
+    return outsideTemperature;
   }
 
   /**
@@ -489,6 +490,12 @@ public class EnvironmentModel {
   public void startSimulation() {
     simulationRunning = true;
     CustomConsole.print("The simulation has been started.");
+    handleRoomTemperatures(EnvironmentModel.getOutsideTemp());
+  }
+
+  private void handleRoomTemperatures(int newTemp) {
+    HeatingZone rooms = HeatingController.getStaticHeatingModel().getAllRoomsNotInZonesAsHeatingZones();
+    rooms.setTemperature(newTemp);
   }
 
   /**
